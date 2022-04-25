@@ -65,9 +65,9 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 75.0, bottom: 20.0),
-                child: const Text(
+              const Padding(
+                padding: EdgeInsets.only(top: 75.0, bottom: 20.0),
+                child: Text(
                   'Pirate Game',
                   style: TextStyle(fontSize: 45),
                 ),
@@ -80,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: TextField(
                   controller: _inputController,
                   maxLines: 1,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Gamertag',
                   ),
                 ),
@@ -100,7 +100,7 @@ class _LoginPageState extends State<LoginPage> {
                                   Navigator.pushNamed(context, '/home');
                                 }
                               : null,
-                          child: Text('Go'),
+                          child: const Text('Go'),
                         ),
                       ],
                     ),
