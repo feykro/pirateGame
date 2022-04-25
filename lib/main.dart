@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pirate_app/homePage.dart';
 
+import 'gameRoom.dart';
 import 'globals.dart' as globals;
 
 void main() {
@@ -19,7 +20,11 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         initialRoute: '/',
-        routes: {'/': (context) => const LoginPage(title: "Login"), '/home': (context) => const HomePage()});
+        routes: {
+          '/': (context) => const LoginPage(title: "Login"),
+          '/home': (context) => const HomePage(),
+          'lobby': (context) => const GameRoomPage(),
+        });
   }
 }
 
@@ -42,8 +47,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool canGo = false;
-
   @override
   Widget build(BuildContext context) {
     final _inputController = TextEditingController();
