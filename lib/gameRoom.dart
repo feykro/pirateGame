@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class GameRoomPage extends StatefulWidget {
-  const GameRoomPage({Key? key}) : super(key: key);
+  const GameRoomPage({Key? key, required String this.roomName}) : super(key: key);
+
+  final String roomName;
 
   @override
   State<GameRoomPage> createState() => _GameRoomPageState();
@@ -13,7 +15,6 @@ class _GameRoomPageState extends State<GameRoomPage> {
   bool isReady = false;
   @override
   Widget build(BuildContext context) {
-    String roomName = "room test 1";
     List<PlayerEntity> playerList = [
       PlayerEntity("Etienne", true),
       PlayerEntity("Tom", true),
@@ -22,7 +23,7 @@ class _GameRoomPageState extends State<GameRoomPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(roomName),
+        title: Text(widget.roomName),
       ),
       floatingActionButton: FloatingActionButton.extended(
         label: isReady ? Text("Attendez !") : Text("Je suis pret !"),

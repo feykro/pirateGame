@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'gameRoom.dart';
 import 'globals.dart' as globals;
 
 class HomePage extends StatefulWidget {
@@ -165,7 +166,12 @@ class RoomCard extends StatelessWidget {
                 child: TextButton(
                   child: const Text('Join room'),
                   onPressed: () {
-                    Navigator.pushNamed(context, "lobby");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => GameRoomPage(roomName: roomName),
+                      ),
+                    );
                   },
                 ),
               ),
