@@ -1,0 +1,11 @@
+{
+    "hosting": {
+        "site": "skullking-e6a1f",
+        "public": "build/web",
+        "ignore": [
+            "firebase.json",
+            "**/.*",
+            "**/node_modules/**"
+        ]
+    }
+}
