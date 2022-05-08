@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "14919150628",
+    "firebase_url": "https://skullking-e6a1f-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "skullking-e6a1f",
+    "storage_bucket": "skullking-e6a1f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:14919150628:android:ef4221b57fe56e5f237cb1",
+        "android_client_info": {
+          "package_name": "com.example.pirate_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "14919150628-k8599ul9mivu2e6aps1g6h80npd16jic.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAS03hdL0tsoom0pmHjxmPd6mXqrYnRvGs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "14919150628-k8599ul9mivu2e6aps1g6h80npd16jic.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "14919150628-i31h2jor57e0gcfcau2mqo59ocqog4dg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.pirateApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

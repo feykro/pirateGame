@@ -1,9 +1,14 @@
+import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'globals.dart' as globals;
 
 class GameRoomPage extends StatefulWidget {
-  const GameRoomPage({Key? key, required String this.roomName}) : super(key: key);
+  const GameRoomPage({Key? key, required this.roomName, required this.roomId})
+      : super(key: key);
 
   final String roomName;
+  final String roomId;
 
   @override
   State<GameRoomPage> createState() => _GameRoomPageState();
@@ -13,34 +18,74 @@ class GameRoomPage extends StatefulWidget {
 
 class _GameRoomPageState extends State<GameRoomPage> {
   bool isReady = false;
+  late DatabaseReference ref;
+
   @override
   Widget build(BuildContext context) {
-    List<PlayerEntity> playerList = [
-      PlayerEntity("Etienne", true),
-      PlayerEntity("Tom", true),
-      PlayerEntity("Dorian", false)
-    ];
-
+    ref = FirebaseDatabase.instance.ref('rooms/${widget.roomId}/players');
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.roomName),
-      ),
+          title: Text(widget.roomName),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              deletePlayerFromRoom();
+              Navigator.pop(context);
+            },
+          )),
       floatingActionButton: FloatingActionButton.extended(
-        label: isReady ? Text("Attendez !") : Text("Je suis pret !"),
-        icon: isReady ? Icon(Icons.cancel_outlined) : Icon(Icons.check),
+        label:
+            isReady ? const Text("Attendez !") : const Text("Je suis pret !"),
+        icon: isReady
+            ? const Icon(Icons.cancel_outlined)
+            : const Icon(Icons.check),
         onPressed: () {
           setState(() {
             isReady = !isReady;
+            final postData = {'name': globals.username, 'isReady': isReady};
+            final Map<String, Map> updates = {};
+            updates[globals.userId] = postData;
+            ref.update(updates);
           });
         },
       ),
       body: Column(
         children: [
-          for (PlayerEntity player in playerList) GameRoomCard(player.name, player.isReady),
-          GameRoomCard("Me", isReady)
+          Flexible(
+            child: FirebaseAnimatedList(
+                query: ref,
+                itemBuilder: (BuildContext context, DataSnapshot snapshot_,
+                    Animation<double> animation, int index) {
+                  Map players = snapshot_.value as Map;
+                  players['key'] = snapshot_.key;
+                  return FutureBuilder<DataSnapshot>(
+                    builder: (BuildContext context, snapshot) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          ListTile(
+                            leading: Icon(players['isReady']
+                                ? Icons.check_circle
+                                : Icons.person_outline),
+                            title: Text(players['name']),
+                            subtitle: Text(players['isReady']
+                                ? 'is ready'
+                                : 'is not ready yet'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }),
+          )
         ],
       ),
     );
+  }
+
+  void deletePlayerFromRoom() {
+    print(globals.userId);
+    ref.child(globals.userId).remove();
   }
 }
 
