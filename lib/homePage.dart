@@ -1,4 +1,6 @@
+import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 import 'gameRoom.dart';
 import 'globals.dart' as globals;
@@ -12,16 +14,27 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool lockedRoom = false;
+  DatabaseReference ref = FirebaseDatabase.instance.ref('rooms');
+  List<GameRoom> roomList = [];
+
+  createRoom(GameRoom room) {
+    ref.push().set(room.toJson());
+  }
 
   @override
   Widget build(BuildContext context) {
     //  Todo: get les rooms depuis le réseau
     //  Todo: ajouter la search bar
     //  Todo optionnel: ajouter un will pop scope en cas de retour arrière pour faire une déconnexion
-    List<GameRoom> roomList = [
-      GameRoom("Room test 1", "Etienne", false),
-      GameRoom("Private Room 1", "Tom", true, "password")
-    ];
+
+    ref.onChildAdded.listen((event) {
+      roomList.add(GameRoom.fromJson(event.snapshot.value));
+    });
+
+    ref.onChildRemoved.listen((event) {
+      roomList.remove(GameRoom.fromJson(event.snapshot.value));
+    });
+
     final _roomNameController = TextEditingController();
     final _roomPasswordController = TextEditingController();
 
@@ -60,7 +73,8 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         StatefulBuilder(
-                          builder: (BuildContext context, StateSetter stateSetter) {
+                          builder:
+                              (BuildContext context, StateSetter stateSetter) {
                             return Column(
                               children: [
                                 SwitchListTile(
@@ -69,10 +83,13 @@ class _HomePageState extends State<HomePage> {
                                   onChanged: (val) {
                                     stateSetter(() => lockedRoom = val);
                                   },
-                                  secondary: Icon(lockedRoom ? Icons.lock : Icons.lock_open),
+                                  secondary: Icon(lockedRoom
+                                      ? Icons.lock
+                                      : Icons.lock_open),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15.0),
                                   child: Visibility(
                                     visible: lockedRoom,
                                     child: TextField(
@@ -100,10 +117,18 @@ class _HomePageState extends State<HomePage> {
                           child: ElevatedButton(
                               onPressed: () {
                                 //TODO: create the room and go in it
-                                print("Salle ${_roomNameController.text} créée. Is locked = ${lockedRoom}");
+                                print(
+                                    "Salle ${_roomNameController.text} créée. Is locked = ${lockedRoom}");
                                 if (lockedRoom) {
-                                  print("Mot de passe : ${_roomPasswordController.text}");
+                                  print(
+                                      "Mot de passe : ${_roomPasswordController.text}");
                                 }
+                                GameRoom room = GameRoom(
+                                    _roomNameController.text,
+                                    globals.username,
+                                    lockedRoom,
+                                    _roomPasswordController.text);
+                                createRoom(room);
                                 setState(() {
                                   lockedRoom = false;
                                 });
@@ -119,16 +144,66 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         children: [
           TextButton(onPressed: () {}, child: Text("Ici searchbar")),
-          Column(
-            children: [
-              for (GameRoom room in roomList) RoomCard(room.name, room.owner, room.hasPassword, room.password)
-            ],
-          ),
+          Flexible(
+            child: FirebaseAnimatedList(
+                query: ref,
+                itemBuilder: (BuildContext context, DataSnapshot snapshot,
+                    Animation<double> animation, int index) {
+                  return FutureBuilder<DataSnapshot>(
+                    builder: (BuildContext context, snapshot) {
+                      return Card(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            ListTile(
+                              leading: Icon(roomList[index].hasPassword
+                                  ? Icons.lock
+                                  : Icons.lock_open),
+                              title: Text(roomList[index].name),
+                              subtitle:
+                                  Text("owner : ${roomList[index].owner}"),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      bottom: 10.0, right: 10.0),
+                                  child: TextButton(
+                                    child: const Text('Join room'),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => GameRoomPage(
+                                              roomName: roomList[index].name),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                }),
+          )
         ],
       ),
     );
   }
 }
+
+/*
+                      builder: (context, snapshot) => RoomCard(
+                          roomList[index].name,
+                          roomList[index].owner,
+                          roomList[index].hasPassword,
+                          roomList[index].password));
+*/
 
 class GameRoom {
   String name;
@@ -137,6 +212,21 @@ class GameRoom {
   bool hasPassword;
 
   GameRoom(this.name, this.owner, this.hasPassword, [this.password]);
+
+  Object? toJson() {
+    return {
+      "name": name,
+      "owner": owner,
+      "hasPassword": hasPassword,
+      if (hasPassword) "password": password
+    };
+  }
+
+  static GameRoom fromJson(Object? value) {
+    Map<String, Object?> map = value as Map<String, Object?>;
+    return GameRoom(map["name"] as String, map["owner"] as String,
+        map["hasPassword"] as bool, map["password"] as String?);
+  }
 }
 
 class RoomCard extends StatelessWidget {
@@ -145,7 +235,9 @@ class RoomCard extends StatelessWidget {
   bool hasPassword;
   String? password;
 
-  RoomCard(this.roomName, this.ownerName, this.hasPassword, this.password, {Key? key}) : super(key: key);
+  RoomCard(this.roomName, this.ownerName, this.hasPassword, this.password,
+      {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
