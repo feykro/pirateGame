@@ -1,9 +1,13 @@
+import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class GameRoomPage extends StatefulWidget {
-  const GameRoomPage({Key? key, required String this.roomName}) : super(key: key);
+  const GameRoomPage({Key? key, required this.roomName, required this.roomId})
+      : super(key: key);
 
   final String roomName;
+  final String? roomId;
 
   @override
   State<GameRoomPage> createState() => _GameRoomPageState();
@@ -13,21 +17,38 @@ class GameRoomPage extends StatefulWidget {
 
 class _GameRoomPageState extends State<GameRoomPage> {
   bool isReady = false;
+  DatabaseReference ref =
+      FirebaseDatabase.instance.ref('rooms/$roomId/players');
+
+  List<PlayerEntity> playerList = [];
+  static get roomId => null;
+
   @override
   Widget build(BuildContext context) {
-    List<PlayerEntity> playerList = [
-      PlayerEntity("Etienne", true),
-      PlayerEntity("Tom", true),
-      PlayerEntity("Dorian", false)
-    ];
+    ref.onChildAdded.listen((event) {
+      playerList.add(PlayerEntity.fromJson(event.snapshot.value));
+    });
+
+    ref.onChildRemoved.listen((event) {
+      playerList.remove(PlayerEntity.fromJson(event.snapshot.value));
+    });
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.roomName),
-      ),
+          title: Text(widget.roomName),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              //deletePlayerFromRoom();
+              Navigator.pop(context);
+            },
+          )),
       floatingActionButton: FloatingActionButton.extended(
-        label: isReady ? Text("Attendez !") : Text("Je suis pret !"),
-        icon: isReady ? Icon(Icons.cancel_outlined) : Icon(Icons.check),
+        label:
+            isReady ? const Text("Attendez !") : const Text("Je suis pret !"),
+        icon: isReady
+            ? const Icon(Icons.cancel_outlined)
+            : const Icon(Icons.check),
         onPressed: () {
           setState(() {
             isReady = !isReady;
@@ -36,8 +57,31 @@ class _GameRoomPageState extends State<GameRoomPage> {
       ),
       body: Column(
         children: [
-          for (PlayerEntity player in playerList) GameRoomCard(player.name, player.isReady),
-          GameRoomCard("Me", isReady)
+          Flexible(
+            child: FirebaseAnimatedList(
+                query: ref,
+                itemBuilder: (BuildContext context, DataSnapshot snapshot,
+                    Animation<double> animation, int index) {
+                  return FutureBuilder<DataSnapshot>(
+                    builder: (BuildContext context, snapshot) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          ListTile(
+                            leading: Icon(playerList[index].isReady
+                                ? Icons.check_circle
+                                : Icons.person_outline),
+                            title: Text(playerList[index].name),
+                            subtitle: Text(playerList[index].isReady
+                                ? 'is ready'
+                                : 'is not ready yet'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }),
+          )
         ],
       ),
     );
@@ -49,6 +93,11 @@ class PlayerEntity {
   bool isReady;
 
   PlayerEntity(this.name, this.isReady);
+
+  static PlayerEntity fromJson(Object? value) {
+    Map<String, Object?> map = value as Map<String, Object?>;
+    return PlayerEntity(map["name"] as String, map["isReady"] as bool);
+  }
 }
 
 class GameRoomCard extends StatelessWidget {

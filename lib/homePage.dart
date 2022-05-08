@@ -15,7 +15,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   bool lockedRoom = false;
   DatabaseReference ref = FirebaseDatabase.instance.ref('rooms');
-  List<GameRoom> roomList = [];
 
   createRoom(GameRoom room) {
     ref.push().set(room.toJson());
@@ -26,14 +25,6 @@ class _HomePageState extends State<HomePage> {
     //  Todo: get les rooms depuis le réseau
     //  Todo: ajouter la search bar
     //  Todo optionnel: ajouter un will pop scope en cas de retour arrière pour faire une déconnexion
-
-    ref.onChildAdded.listen((event) {
-      roomList.add(GameRoom.fromJson(event.snapshot.value));
-    });
-
-    ref.onChildRemoved.listen((event) {
-      roomList.remove(GameRoom.fromJson(event.snapshot.value));
-    });
 
     final _roomNameController = TextEditingController();
     final _roomPasswordController = TextEditingController();
@@ -143,12 +134,14 @@ class _HomePageState extends State<HomePage> {
           }),
       body: Column(
         children: [
-          TextButton(onPressed: () {}, child: Text("Ici searchbar")),
+          TextButton(onPressed: () {}, child: const Text("Ici searchbar")),
           Flexible(
             child: FirebaseAnimatedList(
                 query: ref,
-                itemBuilder: (BuildContext context, DataSnapshot snapshot,
+                itemBuilder: (BuildContext context, DataSnapshot snapshot_,
                     Animation<double> animation, int index) {
+                  Map rooms = snapshot_.value as Map;
+                  rooms['key'] = snapshot_.key;
                   return FutureBuilder<DataSnapshot>(
                     builder: (BuildContext context, snapshot) {
                       return Card(
@@ -156,12 +149,11 @@ class _HomePageState extends State<HomePage> {
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
                             ListTile(
-                              leading: Icon(roomList[index].hasPassword
+                              leading: Icon(rooms['hasPassword']
                                   ? Icons.lock
                                   : Icons.lock_open),
-                              title: Text(roomList[index].name),
-                              subtitle:
-                                  Text("owner : ${roomList[index].owner}"),
+                              title: Text(rooms['name']),
+                              subtitle: Text("owner : ${rooms['owner']}"),
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
@@ -172,11 +164,16 @@ class _HomePageState extends State<HomePage> {
                                   child: TextButton(
                                     child: const Text('Join room'),
                                     onPressed: () {
+                                      ref
+                                          .child('${snapshot_.key}/players')
+                                          .push()
+                                          .set({"name": globals.username});
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => GameRoomPage(
-                                              roomName: roomList[index].name),
+                                              roomName: rooms['name'],
+                                              roomId: rooms['key']),
                                         ),
                                       );
                                     },
@@ -221,12 +218,6 @@ class GameRoom {
       if (hasPassword) "password": password
     };
   }
-
-  static GameRoom fromJson(Object? value) {
-    Map<String, Object?> map = value as Map<String, Object?>;
-    return GameRoom(map["name"] as String, map["owner"] as String,
-        map["hasPassword"] as bool, map["password"] as String?);
-  }
 }
 
 class RoomCard extends StatelessWidget {
@@ -261,7 +252,8 @@ class RoomCard extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => GameRoomPage(roomName: roomName),
+                        builder: (context) =>
+                            GameRoomPage(roomName: roomName, roomId: null),
                       ),
                     );
                   },
