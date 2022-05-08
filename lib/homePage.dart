@@ -164,10 +164,16 @@ class _HomePageState extends State<HomePage> {
                                   child: TextButton(
                                     child: const Text('Join room'),
                                     onPressed: () {
-                                      ref
-                                          .child('${snapshot_.key}/players')
-                                          .push()
-                                          .set({"name": globals.username});
+                                      DatabaseReference playerRef = ref
+                                          .child('${rooms['key']}/players')
+                                          .push();
+                                      globals.userId = playerRef.key!;
+                                      playerRef.set(
+                                        {
+                                          "name": globals.username,
+                                          "isReady": false
+                                        },
+                                      );
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -253,7 +259,7 @@ class RoomCard extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
-                            GameRoomPage(roomName: roomName, roomId: null),
+                            GameRoomPage(roomName: roomName, roomId: ''),
                       ),
                     );
                   },
