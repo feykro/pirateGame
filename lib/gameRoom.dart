@@ -1,11 +1,11 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_database/firebase_database.dart';
+
 import 'globals.dart' as globals;
 
 class GameRoomPage extends StatefulWidget {
-  const GameRoomPage({Key? key, required this.roomName, required this.roomId})
-      : super(key: key);
+  const GameRoomPage({Key? key, required this.roomName, required this.roomId}) : super(key: key);
 
   final String roomName;
   final String roomId;
@@ -34,11 +34,8 @@ class _GameRoomPageState extends State<GameRoomPage> {
             },
           )),
       floatingActionButton: FloatingActionButton.extended(
-        label:
-            isReady ? const Text("Attendez !") : const Text("Je suis pret !"),
-        icon: isReady
-            ? const Icon(Icons.cancel_outlined)
-            : const Icon(Icons.check),
+        label: isReady ? const Text("Attendez !") : const Text("Je suis pret !"),
+        icon: isReady ? const Icon(Icons.cancel_outlined) : const Icon(Icons.check),
         onPressed: () {
           setState(() {
             isReady = !isReady;
@@ -54,8 +51,7 @@ class _GameRoomPageState extends State<GameRoomPage> {
           Flexible(
             child: FirebaseAnimatedList(
                 query: ref,
-                itemBuilder: (BuildContext context, DataSnapshot snapshot_,
-                    Animation<double> animation, int index) {
+                itemBuilder: (BuildContext context, DataSnapshot snapshot_, Animation<double> animation, int index) {
                   Map players = snapshot_.value as Map;
                   players['key'] = snapshot_.key;
                   return FutureBuilder<DataSnapshot>(
@@ -64,13 +60,9 @@ class _GameRoomPageState extends State<GameRoomPage> {
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           ListTile(
-                            leading: Icon(players['isReady']
-                                ? Icons.check_circle
-                                : Icons.person_outline),
+                            leading: Icon(players['isReady'] ? Icons.check_circle : Icons.person_outline),
                             title: Text(players['name']),
-                            subtitle: Text(players['isReady']
-                                ? 'is ready'
-                                : 'is not ready yet'),
+                            subtitle: Text(players['isReady'] ? 'is ready' : 'is not ready yet'),
                           ),
                         ],
                       );
@@ -84,7 +76,6 @@ class _GameRoomPageState extends State<GameRoomPage> {
   }
 
   void deletePlayerFromRoom() {
-    print(globals.userId);
     ref.child(globals.userId).remove();
   }
 }
