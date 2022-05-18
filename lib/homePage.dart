@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
+import 'package:animated_segment/segment_animation.dart';
 
 import 'gameRoom.dart';
 import 'globals.dart' as globals;
@@ -38,7 +39,8 @@ class _HomePageState extends State<HomePage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => GameRoomPage(roomName: rooms['name'], roomId: rooms['key']),
+          builder: (context) =>
+              GameRoomPage(roomName: rooms['name'], roomId: rooms['key']),
         ),
       );
     }
@@ -64,7 +66,7 @@ class _HomePageState extends State<HomePage> {
                           },
                         )),
                     body: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Padding(
@@ -78,19 +80,37 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         StatefulBuilder(
-                          builder: (BuildContext context, StateSetter stateSetter) {
+                          builder:
+                              (BuildContext context, StateSetter stateSetter) {
                             return Column(
                               children: [
+                                AnimatedSegment(
+                                  segmentNames: const ["Public", "Private"],
+                                  onSegmentChanged: (index) {
+                                    stateSetter(() => index == 0
+                                        ? lockedRoom = false
+                                        : lockedRoom = true);
+                                  },
+                                  backgroundColor: Colors.blueGrey,
+                                  segmentTextColor: Colors.white,
+                                  rippleEffectColor: Colors.blue,
+                                  selectedSegmentColor: Colors.blue,
+                                ),
+                                /*
                                 SwitchListTile(
                                   title: const Text("Lock room with password"),
                                   value: lockedRoom,
                                   onChanged: (val) {
                                     stateSetter(() => lockedRoom = val);
                                   },
-                                  secondary: Icon(lockedRoom ? Icons.lock : Icons.lock_open),
+                                  secondary: Icon(lockedRoom
+                                      ? Icons.lock
+                                      : Icons.lock_open),
                                 ),
+                                */
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15.0),
                                   child: Visibility(
                                     visible: lockedRoom,
                                     child: TextField(
@@ -118,11 +138,16 @@ class _HomePageState extends State<HomePage> {
                           child: ElevatedButton(
                               onPressed: () {
                                 //TODO: create the room and go in it
-                                print("Salle ${_roomNameController.text} créée. Is locked = ${lockedRoom}");
+                                print(
+                                    "Salle ${_roomNameController.text} créée. Is locked = ${lockedRoom}");
                                 if (lockedRoom) {
-                                  print("Mot de passe : ${_roomPasswordController.text}");
+                                  print(
+                                      "Mot de passe : ${_roomPasswordController.text}");
                                 }
-                                GameRoom room = GameRoom(_roomNameController.text, globals.username, lockedRoom,
+                                GameRoom room = GameRoom(
+                                    _roomNameController.text,
+                                    globals.username,
+                                    lockedRoom,
                                     _roomPasswordController.text);
                                 createRoom(room);
                                 setState(() {
@@ -143,7 +168,8 @@ class _HomePageState extends State<HomePage> {
           Flexible(
             child: FirebaseAnimatedList(
                 query: ref,
-                itemBuilder: (BuildContext context, DataSnapshot snapshot_, Animation<double> animation, int index) {
+                itemBuilder: (BuildContext context, DataSnapshot snapshot_,
+                    Animation<double> animation, int index) {
                   Map rooms = snapshot_.value as Map;
                   rooms['key'] = snapshot_.key;
                   return FutureBuilder<DataSnapshot>(
@@ -153,7 +179,9 @@ class _HomePageState extends State<HomePage> {
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
                             ListTile(
-                              leading: Icon(rooms['hasPassword'] ? Icons.lock : Icons.lock_open),
+                              leading: Icon(rooms['hasPassword']
+                                  ? Icons.lock
+                                  : Icons.lock_open),
                               title: Text(rooms['name']),
                               subtitle: Text("owner : ${rooms['owner']}"),
                             ),
@@ -161,7 +189,8 @@ class _HomePageState extends State<HomePage> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: <Widget>[
                                 Padding(
-                                  padding: const EdgeInsets.only(bottom: 10.0, right: 10.0),
+                                  padding: const EdgeInsets.only(
+                                      bottom: 10.0, right: 10.0),
                                   child: TextButton(
                                     child: const Text('Join room'),
                                     onPressed: () {
@@ -170,7 +199,8 @@ class _HomePageState extends State<HomePage> {
                                         showModalBottomSheet(
                                             context: context,
                                             builder: (BuildContext context) {
-                                              return buildModalScaffold(rooms, joinRoom);
+                                              return buildModalScaffold(
+                                                  rooms, joinRoom);
                                             });
                                       } else {
                                         joinRoom(rooms);
@@ -225,7 +255,8 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.symmetric(horizontal: 15.0),
             child: ElevatedButton(
                 onPressed: () {
-                  if (rooms["password"] as String == _textEditingController.text) {
+                  if (rooms["password"] as String ==
+                      _textEditingController.text) {
                     Navigator.of(context).pop();
                     joinRoom(rooms);
                   } else {
@@ -264,7 +295,12 @@ class GameRoom {
   GameRoom(this.name, this.owner, this.hasPassword, [this.password]);
 
   Object? toJson() {
-    return {"name": name, "owner": owner, "hasPassword": hasPassword, if (hasPassword) "password": password};
+    return {
+      "name": name,
+      "owner": owner,
+      "hasPassword": hasPassword,
+      if (hasPassword) "password": password
+    };
   }
 }
 
@@ -274,7 +310,9 @@ class RoomCard extends StatelessWidget {
   bool hasPassword;
   String? password;
 
-  RoomCard(this.roomName, this.ownerName, this.hasPassword, this.password, {Key? key}) : super(key: key);
+  RoomCard(this.roomName, this.ownerName, this.hasPassword, this.password,
+      {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -298,7 +336,8 @@ class RoomCard extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => GameRoomPage(roomName: roomName, roomId: ''),
+                        builder: (context) =>
+                            GameRoomPage(roomName: roomName, roomId: ''),
                       ),
                     );
                   },
