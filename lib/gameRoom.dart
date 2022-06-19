@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pirate_app/gameBoard.dart';
 
 import 'globals.dart' as globals;
+import 'gamesUtils.dart' as gameUtils;
 
 class GameRoomPage extends StatefulWidget {
   const GameRoomPage({Key? key, required this.roomName, required this.roomId})
@@ -57,7 +58,20 @@ class _GameRoomPageState extends State<GameRoomPage> {
         ),
         color: Colors.blueAccent,
         child: InkWell(
-          onTap: () {
+          onTap: () async {
+            ref =
+                FirebaseDatabase.instance.ref('rooms/${widget.roomId}/players');
+            final snapshot = await ref.get();
+            if (snapshot.exists) {
+              Map players = snapshot.value as Map;
+              List<int> deck = gameUtils.createDeckForTurn(players.length, 1);
+              DatabaseReference postListRef =
+                  FirebaseDatabase.instance.ref("rooms/${widget.roomId}/deck");
+              DatabaseReference newPostRef = postListRef.push();
+              newPostRef.set(deck);
+            } else {
+              print('No data available.');
+            }
             Navigator.push(
               context,
               MaterialPageRoute(
