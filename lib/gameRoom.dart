@@ -1,7 +1,10 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:pirate_app/gameBoard.dart';
+
 import 'globals.dart' as globals;
+import 'gamesUtils.dart' as gameUtils;
 
 class GameRoomPage extends StatefulWidget {
   const GameRoomPage({Key? key, required this.roomName, required this.roomId})
@@ -49,6 +52,45 @@ class _GameRoomPageState extends State<GameRoomPage> {
           });
         },
       ),
+      bottomNavigationBar: Material(
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(15),
+        ),
+        color: Colors.blueAccent,
+        child: InkWell(
+          onTap: () async {
+            ref =
+                FirebaseDatabase.instance.ref('rooms/${widget.roomId}/players');
+            final snapshot = await ref.get();
+            if (snapshot.exists) {
+              Map players = snapshot.value as Map;
+              List<int> deck = gameUtils.createDeckForTurn(players.length, 1);
+              DatabaseReference postListRef =
+                  FirebaseDatabase.instance.ref("rooms/${widget.roomId}/deck");
+              DatabaseReference newPostRef = postListRef.push();
+              newPostRef.set(deck);
+            } else {
+              print('No data available.');
+            }
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => GameBoardPage(roomId: widget.roomId),
+              ),
+            );
+          },
+          child: const SizedBox(
+            height: kToolbarHeight,
+            width: double.infinity,
+            child: Center(
+              child: Text(
+                'Start Game',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+        ),
+      ),
       body: Column(
         children: [
           Flexible(
@@ -84,7 +126,6 @@ class _GameRoomPageState extends State<GameRoomPage> {
   }
 
   void deletePlayerFromRoom() {
-    print(globals.userId);
     ref.child(globals.userId).remove();
   }
 }

@@ -1,12 +1,18 @@
-import 'package:flutter/material.dart';
-import 'package:pirate_app/homePage.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+import 'package:flutter/material.dart';
+import 'package:pirate_app/GamePage.dart';
+import 'package:pirate_app/homePage.dart';
 
+import 'firebase_options.dart';
 import 'gameRoom.dart';
 import 'globals.dart' as globals;
 
-Future<void> main() async {
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  start();
+}
+
+Future<void> start() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -29,6 +35,7 @@ class MyApp extends StatelessWidget {
           '/': (context) => const LoginPage(title: "Login"),
           '/home': (context) => const HomePage(),
           '/lobby': (context) => const GameRoomPage(roomName: "", roomId: ''),
+          '/game': (context) => const GamePage()
         });
   }
 }
