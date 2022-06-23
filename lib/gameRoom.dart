@@ -79,18 +79,10 @@ class _GameRoomPageState extends State<GameRoomPage> {
             final snapshot = await ref.get();
             if (snapshot.exists) {
               Map players = snapshot.value as Map;
-              gameUtils.createDeckForTurn(players.length, 1, postListRef);
-              List<int> cards =
-                  await gameUtils.getCardFromDeck(1, postListRef) as List<int>;
+              gameUtils.createDeckForRound(players.length, 1, postListRef);
             } else {
               print('No data available.');
             }
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => GameBoardPage(roomId: widget.roomId),
-              ),
-            );
           },
           child: const SizedBox(
             height: kToolbarHeight,

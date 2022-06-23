@@ -21,30 +21,36 @@ Future<Map?> getPlayers(DatabaseReference playersRef) async {
   }
 }
 
-void createDeckForTurn(int nbPlayers, int turn, DatabaseReference postListRef) {
+void createDeckForRound(
+    int nbPlayers, int round, DatabaseReference postListRef) {
   var rng = Random();
-  List<int> deck = List.generate(nbPlayers * turn, (_) => rng.nextInt(66));
+  List<int> deck = List.generate(nbPlayers * round, (_) => rng.nextInt(66));
   print("Deck créé : ");
   print(deck);
   postListRef.set(deck);
 }
 
 Future<List<int>?> getCardFromDeck(
-    int turn, DatabaseReference postListRef) async {
+    int round, DatabaseReference postListRef) async {
   List<int> cards = [];
   TransactionResult result = await postListRef.runTransaction((Object? post) {
+    print(post);
     if (post == null) {
       return Transaction.abort();
     }
     List<int> deck = (post as List<dynamic>).cast<int>();
-    cards = deck.sublist(0, turn);
-    deck = deck.sublist(turn);
+    cards = deck.sublist(0, round);
+    deck = deck.sublist(round);
     print('Cartes piochées: ' + cards.toString());
     print('Je remet le packet: ' + deck.toString());
 
     return Transaction.success(deck);
   });
   return cards;
+}
+
+void playCard(int cardId, DatabaseReference playCardRef) {
+  playCardRef.set(cardId);
 }
 
 final Map<int, Card> deck = {
