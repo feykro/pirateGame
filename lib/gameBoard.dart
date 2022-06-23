@@ -109,8 +109,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                               horizontal: 30, vertical: 50),
                           decoration: BoxDecoration(
                               image: DecorationImage(
-                                image: NetworkImage(
-                                    "https://www.letempledujeu.fr/IMG/jpg/skullking.jpg"),
+                                image: AssetImage("images/skullking.jpg"),
                                 fit: BoxFit.cover,
                               ),
                               borderRadius: BorderRadius.circular(10)),
@@ -128,8 +127,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                                 horizontal: 30, vertical: 50),
                             decoration: BoxDecoration(
                                 image: DecorationImage(
-                                  image: NetworkImage(
-                                      "https://www.letempledujeu.fr/IMG/jpg/skullking.jpg"),
+                                  image: AssetImage("images/skullking.jpg"),
                                   fit: BoxFit.cover,
                                 ),
                                 borderRadius: BorderRadius.circular(10)),
@@ -161,8 +159,8 @@ class _GameBoardPageState extends State<GameBoardPage> {
                                                       vertical: 100),
                                               decoration: BoxDecoration(
                                                   image: DecorationImage(
-                                                    image: NetworkImage(
-                                                        "https://www.letempledujeu.fr/IMG/jpg/skullking.jpg"),
+                                                    image: AssetImage(
+                                                        "images/skullking.jpg"),
                                                     fit: BoxFit.cover,
                                                   ),
                                                   borderRadius:
@@ -303,8 +301,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                                 horizontal: 30, vertical: 50),
                             decoration: BoxDecoration(
                                 image: DecorationImage(
-                                  image: NetworkImage(
-                                      "https://www.letempledujeu.fr/IMG/jpg/skullking.jpg"),
+                                  image: AssetImage("images/skullking.jpg"),
                                   fit: BoxFit.cover,
                                 ),
                                 borderRadius: BorderRadius.circular(10)),
