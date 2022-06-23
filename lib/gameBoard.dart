@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:numberpicker/numberpicker.dart';
 
 import 'globals.dart' as globals;
 import 'gamesUtils.dart' as gameUtils;
@@ -19,22 +21,42 @@ class GameBoardPage extends StatefulWidget {
 class _GameBoardPageState extends State<GameBoardPage> {
   late DatabaseReference ref;
 
-  final List<String> cards = [
-    "Card1",
-    "Card2",
-    "Card3",
-    "Card4",
-    "Card5",
-    "Card6",
-    "Card7",
-    "Card8",
-    "Card9",
-    "Card10",
-  ];
+  int startPlayerIndex = 0;
+  int round = 1;
+  int turn = 1;
+
+  int _currentValue = 0;
+
+  List<int> cards = [];
+
+  Map<String, Map> players = {};
+  List<String> playersListInPlayOrder = [];
+
+  Map<int, int> playedCards = {};
+
+  get playersCopy => null;
+
+  void initState() {
+    super.initState();
+    getPlayers();
+    newTurn();
+  }
+
+  getPlayers() async {
+    players = await gameUtils.getPlayers(
+            FirebaseDatabase.instance.ref('rooms/${widget.roomId}/players'))
+        as Map<String, Map>;
+    List<String> playersListKeys = players.keys.toList();
+    playersListInPlayOrder =
+        playersListKeys.sublist(playersListKeys.indexOf(globals.userId)) +
+            playersListKeys.sublist(0, playersListKeys.indexOf(globals.userId));
+    startPlayerIndex = playersListInPlayOrder.indexOf(playersListKeys[0]);
+    print('players : ' + players.toString());
+    print('Start index ' + startPlayerIndex.toString());
+  }
 
   @override
   Widget build(BuildContext context) {
-    ref = FirebaseDatabase.instance.ref('rooms/${widget.roomId}/players');
     return Scaffold(
       body: Center(
           child: Padding(
@@ -42,54 +64,57 @@ class _GameBoardPageState extends State<GameBoardPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Flexible(
-                    flex: 1,
-                    child: Container(
-                        alignment: Alignment.center,
-                        height: 100,
-                        child: FirebaseAnimatedList(
-                            query: ref,
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (BuildContext context,
-                                DataSnapshot snapshot_,
-                                Animation<double> animation,
-                                int index) {
-                              Map players = snapshot_.value as Map;
-                              players['key'] = snapshot_.key;
-                              return FutureBuilder<DataSnapshot>(
-                                builder: (BuildContext context, snapshot) {
-                                  if (players['key'] == globals.userId) {
-                                    return SizedBox.shrink();
-                                  }
-                                  return Column(
-                                    children: [
-                                      Text(players['name']),
-                                      Container(
-                                          margin: const EdgeInsets.all(15.0),
-                                          padding: const EdgeInsets.all(10.0),
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.blueAccent)),
-                                          child: const Text('5')),
-                                      const Text('200 Points')
-                                    ],
-                                  );
-                                },
-                              );
-                            })),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: players.entries
+                        .map((player) {
+                          Map playerAttirbutes = player.value as Map;
+                          if (player.key == globals.userId) {
+                            return Container(color: Colors.black);
+                          }
+                          return Container(
+                              child: Column(
+                                children: [
+                                  Text(playerAttirbutes['name']),
+                                  Container(
+                                      margin: const EdgeInsets.all(15.0),
+                                      padding: const EdgeInsets.all(10.0),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: Colors.blueAccent)),
+                                      child: Text('5')),
+                                  const Text('Win: 2/2'),
+                                  Text('200 Points')
+                                ],
+                              ),
+                              decoration: player.key ==
+                                      playersListInPlayOrder[(startPlayerIndex +
+                                              playedCards.length) %
+                                          playersListInPlayOrder.length]
+                                  ? BoxDecoration(
+                                      border:
+                                          Border.all(color: Colors.blueAccent))
+                                  : null);
+                        })
+                        .where((element) => element.color != Colors.black)
+                        .toList(),
                   ),
                   Wrap(
                     alignment: WrapAlignment.center,
                     spacing: -30.0,
                     runSpacing: -50.0,
-                    children: cards.map((card) {
+                    children: playedCards.entries.map((card) {
                       return Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 10.0, vertical: 50.0),
+                              horizontal: 30, vertical: 50),
                           decoration: BoxDecoration(
-                              color: Colors.green,
-                              border: Border.all(color: Colors.blueAccent)),
-                          child: Text(card));
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                    "https://www.letempledujeu.fr/IMG/jpg/skullking.jpg"),
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: SizedBox());
                     }).toList(),
                   ),
                   Wrap(
@@ -100,59 +125,97 @@ class _GameBoardPageState extends State<GameBoardPage> {
                       return InkWell(
                         child: Container(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 10.0, vertical: 50.0),
+                                horizontal: 30, vertical: 50),
                             decoration: BoxDecoration(
-                                color: Colors.green,
-                                border: Border.all(color: Colors.blueAccent)),
-                            child: Text(card)),
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                      "https://www.letempledujeu.fr/IMG/jpg/skullking.jpg"),
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: SizedBox()),
                         onTap: () {
-                          showModalBottomSheet(
+                          showDialog(
                               context: context,
-                              backgroundColor: Colors.transparent,
                               builder: (context) {
-                                return Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 30.0, vertical: 80.0),
-                                        margin: EdgeInsets.only(bottom: 40),
-                                        decoration: BoxDecoration(
-                                            color: Colors.green,
-                                            border: Border.all(
-                                                color: Colors.blueAccent)),
-                                        child: Text(card)),
-                                    TextButton(
-                                      autofocus: true,
-                                      onPressed: () {
-                                        print("Press");
-                                      },
-                                      style: TextButton.styleFrom(
-                                          primary: Colors.white,
-                                          backgroundColor:
-                                              Colors.teal.withOpacity(0.7),
-                                          onSurface: Colors.grey,
-                                          shadowColor: Colors.grey,
-                                          elevation: 5,
-                                          side: const BorderSide(
-                                              color: Colors.white, width: 2),
-                                          shape: const BeveledRectangleBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(5))),
-                                          textStyle: const TextStyle(
-                                            color: Colors.lightBlueAccent,
-                                            fontSize: 30,
-                                            fontStyle: FontStyle.italic,
-                                          )),
-                                      child: const Text("Play this card"),
+                                return Center(
+                                  child: Material(
+                                    type: MaterialType.transparency,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.white,
+                                      ),
+                                      padding: EdgeInsets.all(15),
+                                      height: 300,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.7,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: <Widget>[
+                                          Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 60,
+                                                      vertical: 100),
+                                              decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                    image: NetworkImage(
+                                                        "https://www.letempledujeu.fr/IMG/jpg/skullking.jpg"),
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              child: SizedBox()),
+                                          SizedBox(
+                                            height: 25,
+                                          ),
+                                          if (playersListInPlayOrder[
+                                                  (startPlayerIndex +
+                                                          playedCards.length) %
+                                                      playersListInPlayOrder
+                                                          .length] ==
+                                              globals.userId) ...[
+                                            TextButton(
+                                              child: Text(
+                                                'PLAY THIS CARD',
+                                                style: TextStyle(fontSize: 20),
+                                              ),
+                                              style: ButtonStyle(
+                                                foregroundColor:
+                                                    MaterialStateProperty.all(
+                                                        Colors.lightBlueAccent),
+                                                backgroundColor:
+                                                    MaterialStateProperty.all(
+                                                        Colors.white),
+                                                shape: MaterialStateProperty.all<
+                                                        RoundedRectangleBorder>(
+                                                    RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                        side: BorderSide(
+                                                            color: Colors
+                                                                .lightBlueAccent))),
+                                              ),
+                                              onPressed: () {
+                                                playCard(card);
+                                                Navigator.pop(context);
+                                              },
+                                            )
+                                          ]
+                                        ],
+                                      ),
                                     ),
-                                  ],
+                                  ),
                                 );
                               });
                         },
                       );
                     }).toList(),
-                  )
+                  ),
                 ],
               ))),
       bottomSheet: Container(
@@ -169,5 +232,132 @@ class _GameBoardPageState extends State<GameBoardPage> {
           )),
           child: const Text('200 Points')),
     );
+  }
+
+  void playCard(int card) {
+    setState(() {
+      cards.remove(card);
+      playedCards[(startPlayerIndex + playedCards.length) % players.length] =
+          card;
+      if ((startPlayerIndex + playedCards.length) % players.length ==
+          startPlayerIndex) {
+        // Check qui win le tour, lui donner le point et le désigner en startPlayerIndex
+        turn += 1;
+        playedCards = {};
+        if (turn - 1 == round) {
+          if (round == 10) {
+          } else {
+            round += 1;
+            newTurn();
+          }
+        }
+      }
+    });
+  }
+
+  Future<void> newTurn() async {
+    gameUtils
+        .getCardFromDeck(
+            round, FirebaseDatabase.instance.ref('rooms/${widget.roomId}/deck'))
+        .then((cardForTurn) => setState(() {
+              turn = 1;
+              print('cardForTurn ' + cardForTurn.toString());
+              cardForTurn?.forEach((card) {
+                cards.add(card);
+              });
+              playedCards = {};
+              SchedulerBinding.instance!.addPostFrameCallback((_) {
+                showVoteDialog();
+              });
+            }));
+  }
+
+  void showVoteDialog() {
+    _currentValue = 0;
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return Center(
+            child: Material(
+              type: MaterialType.transparency,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                ),
+                padding: EdgeInsets.all(15),
+                height: 350,
+                width: MediaQuery.of(context).size.width,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: -25.0,
+                      runSpacing: -50.0,
+                      children: cards.map((card) {
+                        return Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 30, vertical: 50),
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                      "https://www.letempledujeu.fr/IMG/jpg/skullking.jpg"),
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: SizedBox());
+                      }).toList(),
+                    ),
+                    SizedBox(
+                      height: 25,
+                    ),
+                    NumberPicker(
+                      value: _currentValue,
+                      minValue: 0,
+                      maxValue: round,
+                      itemHeight: 70,
+                      axis: Axis.horizontal,
+                      onChanged: (value) =>
+                          setState(() => _currentValue = value),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: Colors.black26),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 25,
+                    ),
+                    TextButton(
+                      child: Text(
+                        'OK',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      style: ButtonStyle(
+                        foregroundColor:
+                            MaterialStateProperty.all(Colors.lightBlueAccent),
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.white),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    side: BorderSide(
+                                        color: Colors.lightBlueAccent))),
+                      ),
+                      onPressed: () {
+                        // Vote
+                        print('Voted : ' + _currentValue.toString());
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
   }
 }
