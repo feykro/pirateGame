@@ -22,10 +22,25 @@ class GameRoomPage extends StatefulWidget {
 class _GameRoomPageState extends State<GameRoomPage> {
   bool isReady = false;
   late DatabaseReference ref;
+  late DatabaseReference postListRef;
 
   @override
   Widget build(BuildContext context) {
     ref = FirebaseDatabase.instance.ref('rooms/${widget.roomId}/players');
+    postListRef = FirebaseDatabase.instance.ref("rooms/${widget.roomId}/deck");
+
+    postListRef.parent?.onChildAdded.listen((event) {
+      final key = event.snapshot.key;
+      if (key == 'deck') {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => GameBoardPage(roomId: widget.roomId),
+          ),
+        );
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(
           title: Text(widget.roomName),
@@ -64,20 +79,10 @@ class _GameRoomPageState extends State<GameRoomPage> {
             final snapshot = await ref.get();
             if (snapshot.exists) {
               Map players = snapshot.value as Map;
-              List<int> deck = gameUtils.createDeckForTurn(players.length, 1);
-              DatabaseReference postListRef =
-                  FirebaseDatabase.instance.ref("rooms/${widget.roomId}/deck");
-              DatabaseReference newPostRef = postListRef.push();
-              newPostRef.set(deck);
+              gameUtils.createDeckForRound(players.length, 1, postListRef);
             } else {
               print('No data available.');
             }
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => GameBoardPage(roomId: widget.roomId),
-              ),
-            );
           },
           child: const SizedBox(
             height: kToolbarHeight,

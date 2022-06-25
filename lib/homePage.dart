@@ -49,7 +49,9 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text("Welcome, ${globals.username}"),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startDocked,
       floatingActionButton: FloatingActionButton.extended(
+          elevation: 10.0,
           label: const Text("Create room"),
           icon: const Icon(Icons.add),
           onPressed: () {

@@ -1,5 +1,6 @@
 library my_prj.globals;
 
+import 'package:firebase_database/firebase_database.dart';
 import 'dart:math';
 
 class Card {
@@ -9,9 +10,47 @@ class Card {
   Card(this.type, [this.value, this.color]);
 }
 
-List<int> createDeckForTurn(int nbPlayers, int turn) {
+Future<Map?> getPlayers(DatabaseReference playersRef) async {
+  final snapshot = await playersRef.get();
+  if (snapshot.exists) {
+    Map<String, Map> players = (snapshot.value as Map).cast<String, Map>();
+    return players;
+  } else {
+    print('No data available.');
+    return null;
+  }
+}
+
+void createDeckForRound(
+    int nbPlayers, int round, DatabaseReference postListRef) {
   var rng = Random();
-  return List.generate(nbPlayers * turn, (_) => rng.nextInt(66));
+  List<int> deck = List.generate(nbPlayers * round, (_) => rng.nextInt(66));
+  print("Deck créé : ");
+  print(deck);
+  postListRef.set(deck);
+}
+
+Future<List<int>?> getCardFromDeck(
+    int round, DatabaseReference postListRef) async {
+  List<int> cards = [];
+  TransactionResult result = await postListRef.runTransaction((Object? post) {
+    print(post);
+    if (post == null) {
+      return Transaction.abort();
+    }
+    List<int> deck = (post as List<dynamic>).cast<int>();
+    cards = deck.sublist(0, round);
+    deck = deck.sublist(round);
+    print('Cartes piochées: ' + cards.toString());
+    print('Je remet le packet: ' + deck.toString());
+
+    return Transaction.success(deck);
+  });
+  return cards;
+}
+
+void playCard(int cardId, DatabaseReference playCardRef) {
+  playCardRef.set(cardId);
 }
 
 final Map<int, Card> deck = {
