@@ -413,7 +413,10 @@ class _GameBoardPageState extends State<GameBoardPage> {
                             status: (voteCount + 1).toString() +
                                 '/' +
                                 players.length.toString());
-                        _progress = (voteCount + 1) / players.length;
+                        setState(() {
+                          _progress = (voteCount + 1) / players.length;
+                        });
+
                         if (_progress >= 1) {
                           EasyLoading.dismiss();
                           Navigator.pop(context);
