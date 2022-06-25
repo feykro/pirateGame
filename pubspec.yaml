@@ -37,6 +37,7 @@ dependencies:
   firebase_database: ^9.0.13
   animated_segment: ^0.0.3
   numberpicker: ^2.1.1
+  flutter_easyloading: ^3.0.5
 
 dev_dependencies:
   flutter_test:
