@@ -2,6 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:pirate_app/gameBoard.dart';
+import 'dart:async';
 
 import 'globals.dart' as globals;
 import 'gamesUtils.dart' as gameUtils;
@@ -24,23 +25,32 @@ class _GameRoomPageState extends State<GameRoomPage> {
   late DatabaseReference ref;
   late DatabaseReference postListRef;
 
+  late StreamSubscription<DatabaseEvent> _subscription;
+
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     ref = FirebaseDatabase.instance.ref('rooms/${widget.roomId}/players');
     postListRef = FirebaseDatabase.instance.ref("rooms/${widget.roomId}/deck");
 
-    postListRef.parent?.onChildAdded.listen((event) {
+    _subscription = postListRef.parent!.onChildAdded.listen((event) async {
       final key = event.snapshot.key;
       if (key == 'deck') {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => GameBoardPage(roomId: widget.roomId),
-          ),
-        );
+        _subscription.cancel();
+        Future.delayed(Duration(seconds: 1), (() {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => GameBoardPage(roomId: widget.roomId),
+            ),
+          );
+        }));
       }
     });
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
           title: Text(widget.roomName),
