@@ -2,6 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'dart:io';
 
 import 'globals.dart' as globals;
@@ -17,17 +18,22 @@ class GameBoardPage extends StatefulWidget {
 }
 
 class _GameBoardPageState extends State<GameBoardPage> {
-  late DatabaseReference ref;
+  late DatabaseReference playersRef =
+      FirebaseDatabase.instance.ref('rooms/${widget.roomId}/players');
   late DatabaseReference playCardRef =
       FirebaseDatabase.instance.ref('rooms/${widget.roomId}/playedCard');
   late DatabaseReference postListRef =
       FirebaseDatabase.instance.ref('rooms/${widget.roomId}/deck');
+  late DatabaseReference voteCountRef =
+      FirebaseDatabase.instance.ref('rooms/${widget.roomId}/VoteCount');
 
   int startPlayerIndex = 0;
   int round = 1;
   int turn = 1;
 
   int _currentValue = 0;
+
+  int voteCount = 0;
 
   List<int> cards = [];
 
@@ -40,8 +46,10 @@ class _GameBoardPageState extends State<GameBoardPage> {
 
   void initState() {
     super.initState();
+
     _activateDeckListener();
     _activateCardPlayedListener();
+    _activateVoteCountListener();
 
     asyncInit();
   }
@@ -52,16 +60,15 @@ class _GameBoardPageState extends State<GameBoardPage> {
       final key = event.snapshot.key;
       if (key == 'deck') {
         gameUtils
-            .getCardFromDeck(round,
-                FirebaseDatabase.instance.ref('rooms/${widget.roomId}/deck'))
+            .getCardFromDeck(round, postListRef)
             .then((cardForTurn) => setState(() {
                   turn = 1;
-                  print('cardForTurn ' + cardForTurn.toString());
                   cardForTurn?.forEach((card) {
                     cards.add(card);
                   });
                   playedCards = [];
                   SchedulerBinding.instance!.addPostFrameCallback((_) {
+                    _currentValue = 0;
                     showVoteDialog();
                   });
                 }));
@@ -74,28 +81,33 @@ class _GameBoardPageState extends State<GameBoardPage> {
     playCardRef.onValue.listen((event) {
       final value = event.snapshot.value;
       if (event.snapshot.exists) {
-        print(value);
         setState(() {
           playedCards.add(value as int);
         });
-        print('Carte played');
-        print(playedCards);
+      }
+    });
+  }
+
+  void _activateVoteCountListener() {
+    // Recup la carte jouée
+    voteCountRef.onValue.listen((event) {
+      final value = event.snapshot.value;
+      if (event.snapshot.exists) {
+        setState(() {
+          voteCount = value as int;
+        });
       }
     });
   }
 
   asyncInit() async {
     // Recup les joueurs
-    players = await gameUtils.getPlayers(
-            FirebaseDatabase.instance.ref('rooms/${widget.roomId}/players'))
-        as Map<String, Map>;
+    players = await gameUtils.getPlayers(playersRef) as Map<String, Map>;
     List<String> playersListKeys = players.keys.toList();
     playersListInPlayOrder =
         playersListKeys.sublist(playersListKeys.indexOf(globals.userId)) +
             playersListKeys.sublist(0, playersListKeys.indexOf(globals.userId));
     startPlayerIndex = playersListInPlayOrder.indexOf(playersListKeys[0]);
-    print('players : ' + players.toString());
-    print('Start index ' + startPlayerIndex.toString());
 
     newTurn();
   }
@@ -111,16 +123,23 @@ class _GameBoardPageState extends State<GameBoardPage> {
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: players.entries
-                        .map((player) {
-                          Map playerAttirbutes = player.value as Map;
-                          if (player.key == globals.userId) {
+                    children: playersListInPlayOrder
+                        .map((_player) {
+                          Map player = players[_player] as Map;
+                          if (_player == globals.userId) {
                             return Container(color: Colors.black);
+                          }
+                          String ScoreText = '';
+                          if (voteCount == players.length) {
+                            ScoreText = 'Win: ' +
+                                player['vote'].toString() +
+                                '/' +
+                                round.toString();
                           }
                           return Container(
                               child: Column(
                                 children: [
-                                  Text(playerAttirbutes['name']),
+                                  Text(player['name']),
                                   Container(
                                       margin: const EdgeInsets.all(15.0),
                                       padding: const EdgeInsets.all(10.0),
@@ -128,11 +147,11 @@ class _GameBoardPageState extends State<GameBoardPage> {
                                           border: Border.all(
                                               color: Colors.blueAccent)),
                                       child: const Text('5')),
-                                  const Text('Win: 2/2'),
+                                  Text(ScoreText),
                                   const Text('200 Points')
                                 ],
                               ),
-                              decoration: player.key ==
+                              decoration: _player ==
                                       playersListInPlayOrder[(startPlayerIndex +
                                               playedCards.length) %
                                           playersListInPlayOrder.length]
@@ -287,6 +306,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
         turn += 1;
         if (turn - 1 == round) {
           if (round == 10) {
+            Navigator.pop(context);
           } else {
             round += 1;
             Future.delayed(const Duration(seconds: 3), () {
@@ -303,15 +323,11 @@ class _GameBoardPageState extends State<GameBoardPage> {
         players.keys.toList()[(round - 1) % players.length];
     startPlayerIndex = playersListInPlayOrder.indexOf(nextRoundFirstPlayer);
     if (globals.userId == nextRoundFirstPlayer && round != 1) {
-      print(globals.userId);
-      print(nextRoundFirstPlayer);
-      print(players);
       gameUtils.createDeckForRound(players.length, round, postListRef);
     }
   }
 
   void showVoteDialog() {
-    _currentValue = 0;
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -385,8 +401,19 @@ class _GameBoardPageState extends State<GameBoardPage> {
                                         color: Colors.lightBlueAccent))),
                       ),
                       onPressed: () {
-                        // Vote
-                        Navigator.pop(context);
+                        gameUtils.vote(
+                            globals.userId, _currentValue, playersRef);
+                        double _progress = 0;
+                        EasyLoading.showProgress(_progress,
+                            maskType: EasyLoadingMaskType.black,
+                            status: (voteCount + 1).toString() +
+                                '/' +
+                                players.length.toString());
+                        _progress = (voteCount + 1) / players.length;
+                        if (_progress >= 1) {
+                          EasyLoading.dismiss();
+                          Navigator.pop(context);
+                        }
                       },
                     ),
                   ],

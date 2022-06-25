@@ -36,14 +36,15 @@ class _GameRoomPageState extends State<GameRoomPage> {
     _subscription = postListRef.parent!.onChildAdded.listen((event) async {
       final key = event.snapshot.key;
       if (key == 'deck') {
-        _subscription.cancel();
-        Future.delayed(Duration(seconds: 1), (() {
-          Navigator.push(
+        _subscription.pause();
+        Future.delayed(Duration(seconds: 1), (() async {
+          await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => GameBoardPage(roomId: widget.roomId),
             ),
           );
+          _subscription.resume();
         }));
       }
     });

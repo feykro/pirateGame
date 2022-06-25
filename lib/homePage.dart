@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
       DatabaseReference playerRef = ref.child('${rooms['key']}/players').push();
       globals.userId = playerRef.key!;
       playerRef.set(
-        {"name": globals.username, "isReady": false},
+        {"name": globals.username, "isReady": false, "vote": -1},
       );
       Navigator.push(
         context,
@@ -140,13 +140,6 @@ class _HomePageState extends State<HomePage> {
                           padding: const EdgeInsets.symmetric(horizontal: 15.0),
                           child: ElevatedButton(
                               onPressed: () {
-                                //TODO: create the room and go in it
-                                print(
-                                    "Salle ${_roomNameController.text} créée. Is locked = ${lockedRoom}");
-                                if (lockedRoom) {
-                                  print(
-                                      "Mot de passe : ${_roomPasswordController.text}");
-                                }
                                 GameRoom room = GameRoom(
                                     _roomNameController.text,
                                     globals.username,
@@ -302,7 +295,8 @@ class GameRoom {
       "name": name,
       "owner": owner,
       "hasPassword": hasPassword,
-      if (hasPassword) "password": password
+      if (hasPassword) "password": password,
+      "VoteCount": 0
     };
   }
 }
