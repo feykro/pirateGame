@@ -18,8 +18,10 @@ class GameBoardPage extends StatefulWidget {
 
 class _GameBoardPageState extends State<GameBoardPage> {
   late DatabaseReference ref;
-  late DatabaseReference playCardRef;
-  late DatabaseReference postListRef;
+  late DatabaseReference playCardRef =
+      FirebaseDatabase.instance.ref('rooms/${widget.roomId}/playedCard');
+  late DatabaseReference postListRef =
+      FirebaseDatabase.instance.ref('rooms/${widget.roomId}/deck');
 
   int startPlayerIndex = 0;
   int round = 1;
@@ -32,46 +34,19 @@ class _GameBoardPageState extends State<GameBoardPage> {
   Map<String, Map> players = {};
   List<String> playersListInPlayOrder = [];
 
-  Map<int, int> playedCards = {};
+  List<int> playedCards = [];
 
   get playersCopy => null;
 
   void initState() {
     super.initState();
+    _activateDeckListener();
+    _activateCardPlayedListener();
+
     asyncInit();
   }
 
-  asyncInit() async {
-    postListRef = FirebaseDatabase.instance.ref('rooms/${widget.roomId}/deck');
-    playCardRef =
-        FirebaseDatabase.instance.ref('rooms/${widget.roomId}/playedCard');
-
-    // Recup les joueurs
-    players = await gameUtils.getPlayers(
-            FirebaseDatabase.instance.ref('rooms/${widget.roomId}/players'))
-        as Map<String, Map>;
-    List<String> playersListKeys = players.keys.toList();
-    playersListInPlayOrder =
-        playersListKeys.sublist(playersListKeys.indexOf(globals.userId)) +
-            playersListKeys.sublist(0, playersListKeys.indexOf(globals.userId));
-    startPlayerIndex = playersListInPlayOrder.indexOf(playersListKeys[0]);
-    print('players : ' + players.toString());
-    print('Start index ' + startPlayerIndex.toString());
-
-    newTurn();
-
-    // Recup la carte jouée
-    playCardRef.onValue.listen((event) {
-      final value = event.snapshot.value;
-      if (event.snapshot.exists) {
-        print(value);
-        playedCards[(startPlayerIndex + playedCards.length) % players.length] =
-            value as int;
-        print('Carte played');
-        print(playedCards);
-      }
-    });
-
+  void _activateDeckListener() {
     // Recup ses cartes à chaque round
     postListRef.parent?.onChildAdded.listen((event) {
       final key = event.snapshot.key;
@@ -85,13 +60,44 @@ class _GameBoardPageState extends State<GameBoardPage> {
                   cardForTurn?.forEach((card) {
                     cards.add(card);
                   });
-                  playedCards = {};
+                  playedCards = [];
                   SchedulerBinding.instance!.addPostFrameCallback((_) {
                     showVoteDialog();
                   });
                 }));
       }
     });
+  }
+
+  void _activateCardPlayedListener() {
+    // Recup la carte jouée
+    playCardRef.onValue.listen((event) {
+      final value = event.snapshot.value;
+      if (event.snapshot.exists) {
+        print(value);
+        setState(() {
+          playedCards.add(value as int);
+        });
+        print('Carte played');
+        print(playedCards);
+      }
+    });
+  }
+
+  asyncInit() async {
+    // Recup les joueurs
+    players = await gameUtils.getPlayers(
+            FirebaseDatabase.instance.ref('rooms/${widget.roomId}/players'))
+        as Map<String, Map>;
+    List<String> playersListKeys = players.keys.toList();
+    playersListInPlayOrder =
+        playersListKeys.sublist(playersListKeys.indexOf(globals.userId)) +
+            playersListKeys.sublist(0, playersListKeys.indexOf(globals.userId));
+    startPlayerIndex = playersListInPlayOrder.indexOf(playersListKeys[0]);
+    print('players : ' + players.toString());
+    print('Start index ' + startPlayerIndex.toString());
+
+    newTurn();
   }
 
   @override
@@ -142,7 +148,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                     alignment: WrapAlignment.center,
                     spacing: -30.0,
                     runSpacing: -50.0,
-                    children: playedCards.entries.map((card) {
+                    children: playedCards.map((card) {
                       return Container(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 30, vertical: 50),
@@ -279,7 +285,6 @@ class _GameBoardPageState extends State<GameBoardPage> {
           startPlayerIndex) {
         // Check qui win le tour, lui donner le point et le désigner en startPlayerIndex
         turn += 1;
-        playedCards = {};
         if (turn - 1 == round) {
           if (round == 10) {
           } else {
