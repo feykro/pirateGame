@@ -103,6 +103,9 @@ class _GameBoardPageState extends State<GameBoardPage> {
   asyncInit() async {
     // Recup les joueurs
     players = await gameUtils.getPlayers(playersRef) as Map<String, Map>;
+    players.forEach((key, value) {
+      value['points'] = 0;
+    });
     List<String> playersListKeys = players.keys.toList();
     playersListInPlayOrder =
         playersListKeys.sublist(playersListKeys.indexOf(globals.userId)) +
@@ -148,7 +151,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                                               color: Colors.blueAccent)),
                                       child: const Text('5')),
                                   Text(ScoreText),
-                                  const Text('200 Points')
+                                  Text(player['points'].toString() + ' Points')
                                 ],
                               ),
                               decoration: _player ==
@@ -292,7 +295,8 @@ class _GameBoardPageState extends State<GameBoardPage> {
               Colors.blue,
             ],
           )),
-          child: const Text('200 Points')),
+          child:
+              Text(players[globals.userId]!['points'].toString() + ' Points')),
     );
   }
 
