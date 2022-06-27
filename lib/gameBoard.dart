@@ -1,4 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:numberpicker/numberpicker.dart';
@@ -29,7 +30,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
 
   int _currentValue = 0;
 
-  int voteCount = 0;
+  ValueNotifier<int> voteCount = ValueNotifier(0);
 
   List<int> cards = [];
 
@@ -45,6 +46,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
 
     _activateDeckListener();
     _activateCardPlayedListener();
+    voteCount.addListener(() {});
     _activateVoteCountListener();
 
     asyncInit();
@@ -89,7 +91,8 @@ class _GameBoardPageState extends State<GameBoardPage> {
       final value = event.snapshot.value;
       if (event.snapshot.exists) {
         setState(() {
-          voteCount = value as int;
+          voteCount = value as ValueNotifier<int>;
+          voteCount.notifyListeners();
           print('Vote Updated:$voteCount');
         });
       }
