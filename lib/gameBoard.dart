@@ -18,14 +18,10 @@ class GameBoardPage extends StatefulWidget {
 }
 
 class _GameBoardPageState extends State<GameBoardPage> {
-  late DatabaseReference playersRef =
-      FirebaseDatabase.instance.ref('rooms/${widget.roomId}/players');
-  late DatabaseReference playCardRef =
-      FirebaseDatabase.instance.ref('rooms/${widget.roomId}/playedCard');
-  late DatabaseReference postListRef =
-      FirebaseDatabase.instance.ref('rooms/${widget.roomId}/deck');
-  late DatabaseReference voteCountRef =
-      FirebaseDatabase.instance.ref('rooms/${widget.roomId}/VoteCount');
+  late DatabaseReference playersRef = FirebaseDatabase.instance.ref('rooms/${widget.roomId}/players');
+  late DatabaseReference playCardRef = FirebaseDatabase.instance.ref('rooms/${widget.roomId}/playedCard');
+  late DatabaseReference postListRef = FirebaseDatabase.instance.ref('rooms/${widget.roomId}/deck');
+  late DatabaseReference voteCountRef = FirebaseDatabase.instance.ref('rooms/${widget.roomId}/VoteCount');
 
   int startPlayerIndex = 0;
   int round = 1;
@@ -59,19 +55,18 @@ class _GameBoardPageState extends State<GameBoardPage> {
     postListRef.parent?.onChildAdded.listen((event) {
       final key = event.snapshot.key;
       if (key == 'deck') {
-        gameUtils
-            .getCardFromDeck(round, postListRef)
-            .then((cardForTurn) => setState(() {
-                  turn = 1;
-                  cardForTurn?.forEach((card) {
-                    cards.add(card);
-                  });
-                  playedCards = [];
-                  SchedulerBinding.instance!.addPostFrameCallback((_) {
-                    _currentValue = 0;
-                    showVoteDialog();
-                  });
-                }));
+        gameUtils.getCardFromDeck(round, postListRef).then((cardForTurn) => setState(() {
+              turn = 1;
+              cardForTurn?.forEach((card) {
+                cards.add(card);
+              });
+              playedCards = [];
+              SchedulerBinding.instance!.addPostFrameCallback((_) {
+                _currentValue = 0;
+                //showVoteDialog();
+                showInformationDialog(context);
+              });
+            }));
       }
     });
   }
@@ -107,9 +102,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
       value['points'] = 0;
     });
     List<String> playersListKeys = players.keys.toList();
-    playersListInPlayOrder =
-        playersListKeys.sublist(playersListKeys.indexOf(globals.userId)) +
-            playersListKeys.sublist(0, playersListKeys.indexOf(globals.userId));
+    playersListInPlayOrder = playersListKeys.sublist(playersListKeys.indexOf(globals.userId)) + playersListKeys.sublist(0, playersListKeys.indexOf(globals.userId));
     startPlayerIndex = playersListInPlayOrder.indexOf(playersListKeys[0]);
 
     newTurn();
@@ -134,34 +127,18 @@ class _GameBoardPageState extends State<GameBoardPage> {
                           }
                           String ScoreText = '';
                           if (voteCount == players.length) {
-                            ScoreText = 'Win: ' +
-                                player['vote'].toString() +
-                                '/' +
-                                round.toString();
+                            ScoreText = 'Win: ' + player['vote'].toString() + '/' + round.toString();
                           }
                           return Container(
                               child: Column(
                                 children: [
                                   Text(player['name']),
-                                  Container(
-                                      margin: const EdgeInsets.all(15.0),
-                                      padding: const EdgeInsets.all(10.0),
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: Colors.blueAccent)),
-                                      child: const Text('5')),
+                                  Container(margin: const EdgeInsets.all(15.0), padding: const EdgeInsets.all(10.0), decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent)), child: const Text('5')),
                                   Text(ScoreText),
                                   Text(player['points'].toString() + ' Points')
                                 ],
                               ),
-                              decoration: _player ==
-                                      playersListInPlayOrder[(startPlayerIndex +
-                                              playedCards.length) %
-                                          playersListInPlayOrder.length]
-                                  ? BoxDecoration(
-                                      border:
-                                          Border.all(color: Colors.blueAccent))
-                                  : null);
+                              decoration: _player == playersListInPlayOrder[(startPlayerIndex + playedCards.length) % playersListInPlayOrder.length] ? BoxDecoration(border: Border.all(color: Colors.blueAccent)) : null);
                         })
                         .where((element) => element.color != Colors.black)
                         .toList(),
@@ -172,8 +149,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                     runSpacing: -50.0,
                     children: playedCards.map((card) {
                       return Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 50),
+                          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
                           decoration: BoxDecoration(
                               image: const DecorationImage(
                                 image: AssetImage("images/skullking.jpg"),
@@ -190,8 +166,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                     children: cards.map((card) {
                       return InkWell(
                         child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 30, vertical: 50),
+                            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
                             decoration: BoxDecoration(
                                 image: const DecorationImage(
                                   image: AssetImage("images/skullking.jpg"),
@@ -213,57 +188,32 @@ class _GameBoardPageState extends State<GameBoardPage> {
                                       ),
                                       padding: const EdgeInsets.all(15),
                                       height: 300,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.7,
+                                      width: MediaQuery.of(context).size.width * 0.7,
                                       child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         children: <Widget>[
                                           Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 60,
-                                                      vertical: 100),
+                                              padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 100),
                                               decoration: BoxDecoration(
                                                   image: const DecorationImage(
-                                                    image: AssetImage(
-                                                        "images/skullking.jpg"),
+                                                    image: AssetImage("images/skullking.jpg"),
                                                     fit: BoxFit.cover,
                                                   ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
+                                                  borderRadius: BorderRadius.circular(10)),
                                               child: const SizedBox()),
                                           const SizedBox(
                                             height: 25,
                                           ),
-                                          if (playersListInPlayOrder[
-                                                  (startPlayerIndex +
-                                                          playedCards.length) %
-                                                      playersListInPlayOrder
-                                                          .length] ==
-                                              globals.userId) ...[
+                                          if (playersListInPlayOrder[(startPlayerIndex + playedCards.length) % playersListInPlayOrder.length] == globals.userId) ...[
                                             TextButton(
                                               child: const Text(
                                                 'PLAY THIS CARD',
                                                 style: TextStyle(fontSize: 20),
                                               ),
                                               style: ButtonStyle(
-                                                foregroundColor:
-                                                    MaterialStateProperty.all(
-                                                        Colors.lightBlueAccent),
-                                                backgroundColor:
-                                                    MaterialStateProperty.all(
-                                                        Colors.white),
-                                                shape: MaterialStateProperty.all<
-                                                        RoundedRectangleBorder>(
-                                                    RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
-                                                        side: const BorderSide(
-                                                            color: Colors
-                                                                .lightBlueAccent))),
+                                                foregroundColor: MaterialStateProperty.all(Colors.lightBlueAccent),
+                                                backgroundColor: MaterialStateProperty.all(Colors.white),
+                                                shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10), side: const BorderSide(color: Colors.lightBlueAccent))),
                                               ),
                                               onPressed: () {
                                                 playCard(card);
@@ -295,8 +245,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
               Colors.blue,
             ],
           )),
-          child:
-              Text(players[globals.userId]!['points'].toString() + ' Points')),
+          child: Text(players[globals.userId]!['points'].toString() + ' Points')),
     );
   }
 
@@ -304,8 +253,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
     setState(() {
       cards.remove(card);
       gameUtils.playCard(card, playCardRef);
-      if ((startPlayerIndex + playedCards.length) % players.length ==
-          startPlayerIndex) {
+      if ((startPlayerIndex + playedCards.length) % players.length == startPlayerIndex) {
         // Check qui win le tour, lui donner le point et le désigner en startPlayerIndex
         turn += 1;
         if (turn - 1 == round) {
@@ -323,8 +271,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
   }
 
   Future<void> newTurn() async {
-    String nextRoundFirstPlayer =
-        players.keys.toList()[(round - 1) % players.length];
+    String nextRoundFirstPlayer = players.keys.toList()[(round - 1) % players.length];
     startPlayerIndex = playersListInPlayOrder.indexOf(nextRoundFirstPlayer);
     if (globals.userId == nextRoundFirstPlayer && round != 1) {
       gameUtils.createDeckForRound(players.length, round, postListRef);
@@ -357,8 +304,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                       runSpacing: -50.0,
                       children: cards.map((card) {
                         return Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 30, vertical: 50),
+                            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
                             decoration: BoxDecoration(
                                 image: const DecorationImage(
                                   image: AssetImage("images/skullking.jpg"),
@@ -377,8 +323,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                       maxValue: round,
                       itemHeight: 70,
                       axis: Axis.horizontal,
-                      onChanged: (value) =>
-                          setState(() => _currentValue = value),
+                      onChanged: (value) => setState(() => _currentValue = value),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(color: Colors.black26),
@@ -393,26 +338,14 @@ class _GameBoardPageState extends State<GameBoardPage> {
                         style: TextStyle(fontSize: 20),
                       ),
                       style: ButtonStyle(
-                        foregroundColor:
-                            MaterialStateProperty.all(Colors.lightBlueAccent),
-                        backgroundColor:
-                            MaterialStateProperty.all(Colors.white),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    side: const BorderSide(
-                                        color: Colors.lightBlueAccent))),
+                        foregroundColor: MaterialStateProperty.all(Colors.lightBlueAccent),
+                        backgroundColor: MaterialStateProperty.all(Colors.white),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10), side: const BorderSide(color: Colors.lightBlueAccent))),
                       ),
                       onPressed: () {
-                        gameUtils.vote(
-                            globals.userId, _currentValue, playersRef);
+                        gameUtils.vote(globals.userId, _currentValue, playersRef);
                         double _progress = 0;
-                        EasyLoading.showProgress(_progress,
-                            maskType: EasyLoadingMaskType.black,
-                            status: (voteCount + 1).toString() +
-                                '/' +
-                                players.length.toString());
+                        EasyLoading.showProgress(_progress, maskType: EasyLoadingMaskType.black, status: (voteCount + 1).toString() + '/' + players.length.toString());
                         setState(() {
                           _progress = (voteCount + 1) / players.length;
                         });
@@ -428,6 +361,94 @@ class _GameBoardPageState extends State<GameBoardPage> {
               ),
             ),
           );
+        });
+  }
+
+  Future<void> showInformationDialog(BuildContext context) async {
+    return await showDialog(
+        context: context,
+        builder: (context) {
+          bool isChecked = false;
+          return StatefulBuilder(builder: (context, setState) {
+            return Center(
+              child: Material(
+                type: MaterialType.transparency,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white,
+                  ),
+                  padding: const EdgeInsets.all(15),
+                  height: 350,
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Wrap(
+                        alignment: WrapAlignment.center,
+                        spacing: -25.0,
+                        runSpacing: -50.0,
+                        children: cards.map((card) {
+                          return Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
+                              decoration: BoxDecoration(
+                                  image: const DecorationImage(
+                                    image: AssetImage("images/skullking.jpg"),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: const SizedBox());
+                        }).toList(),
+                      ),
+                      const SizedBox(
+                        height: 25,
+                      ),
+                      NumberPicker(
+                        value: _currentValue,
+                        minValue: 0,
+                        maxValue: round,
+                        itemHeight: 70,
+                        axis: Axis.horizontal,
+                        onChanged: (value) => setState(() => _currentValue = value),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: Colors.black26),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 25,
+                      ),
+                      TextButton(
+                        child: const Text(
+                          'OK',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        style: ButtonStyle(
+                          foregroundColor: MaterialStateProperty.all(Colors.lightBlueAccent),
+                          backgroundColor: MaterialStateProperty.all(Colors.white),
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10), side: const BorderSide(color: Colors.lightBlueAccent))),
+                        ),
+                        onPressed: () {
+                          gameUtils.vote(globals.userId, _currentValue, playersRef);
+                          double _progress = 0;
+                          EasyLoading.showProgress(_progress, maskType: EasyLoadingMaskType.black, status: (voteCount + 1).toString() + '/' + players.length.toString());
+                          setState(() {
+                            _progress = (voteCount + 1) / players.length;
+                          });
+
+                          if (_progress >= 1) {
+                            EasyLoading.dismiss();
+                            Navigator.pop(context);
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          });
         });
   }
 }
