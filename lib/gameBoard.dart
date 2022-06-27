@@ -67,7 +67,6 @@ class _GameBoardPageState extends State<GameBoardPage> {
               });
               playedCards = [];
               SchedulerBinding.instance!.addPostFrameCallback((_) {
-                _currentValue = 0;
                 //showVoteDialog();
                 showInformationDialog(context);
               });
