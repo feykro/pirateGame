@@ -362,7 +362,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
               setState(() {
                 voteCount = value as int;
                 print('Vote Updated:$voteCount');
-                _progress = (voteCount + 1) / players.length;
+                _progress = (voteCount) / players.length;
                 print('PROGRESS:$_progress');
               });
             }
