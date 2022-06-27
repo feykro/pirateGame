@@ -425,11 +425,11 @@ class _GameBoardPageState extends State<GameBoardPage> {
                                 voteCount = value as int;
                                 print('Vote Updated:$voteCount');
                                 _progress = (voteCount) / players.length;
+                                EasyLoading.showProgress(_progress, maskType: EasyLoadingMaskType.black, status: (voteCount + 1).toString() + '/' + players.length.toString());
                                 print('PROGRESS:$_progress');
                               });
                             }
                           });
-                          var loader = EasyLoading.showProgress(_progress, maskType: EasyLoadingMaskType.black, status: (voteCount + 1).toString() + '/' + players.length.toString());
                           if (_progress >= 1) {
                             listener.cancel();
                             EasyLoading.dismiss();
