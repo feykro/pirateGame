@@ -355,19 +355,6 @@ class _GameBoardPageState extends State<GameBoardPage> {
           double _progress = 0;
           int voteCount = 0;
 
-          // Recup la carte jouée
-          var listener = voteCountRef.onValue.listen((event) {
-            final value = event.snapshot.value;
-            if (event.snapshot.exists) {
-              setState(() {
-                voteCount = value as int;
-                print('Vote Updated:$voteCount');
-                _progress = (voteCount) / players.length;
-                print('PROGRESS:$_progress');
-              });
-            }
-          });
-
           return StatefulBuilder(builder: (context, setState) {
             return Center(
               child: Material(
@@ -430,7 +417,19 @@ class _GameBoardPageState extends State<GameBoardPage> {
                         ),
                         onPressed: () {
                           gameUtils.vote(globals.userId, _currentValue, playersRef);
-                          EasyLoading.showProgress(_progress, maskType: EasyLoadingMaskType.black, status: (voteCount + 1).toString() + '/' + players.length.toString());
+                          // Recup la carte jouée
+                          var listener = voteCountRef.onValue.listen((event) {
+                            final value = event.snapshot.value;
+                            if (event.snapshot.exists) {
+                              setState(() {
+                                voteCount = value as int;
+                                print('Vote Updated:$voteCount');
+                                _progress = (voteCount) / players.length;
+                                print('PROGRESS:$_progress');
+                              });
+                            }
+                          });
+                          var loader = EasyLoading.showProgress(_progress, maskType: EasyLoadingMaskType.black, status: (voteCount + 1).toString() + '/' + players.length.toString());
                           if (_progress >= 1) {
                             listener.cancel();
                             EasyLoading.dismiss();
