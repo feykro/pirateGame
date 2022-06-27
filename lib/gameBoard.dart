@@ -435,7 +435,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                                 if (_progress >= 1) {
                                   _subscription.cancel();
                                   EasyLoading.dismiss();
-                                  updatePlayersVote()
+                                  updatePlayersVote();
                                   Navigator.pop(context);
                                 }
                               });
