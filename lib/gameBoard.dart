@@ -80,6 +80,8 @@ class _GameBoardPageState extends State<GameBoardPage> {
     players = await gameUtils.getPlayers(playersRef) as Map<String, Map>;
     players.forEach((key, value) {
       value['points'] = 0;
+      value['win'] = 0;
+      value['bonus'] = 0;
     });
     List<String> playersListKeys = players.keys.toList();
     playersListInPlayOrder = playersListKeys.sublist(playersListKeys.indexOf(globals.userId)) + playersListKeys.sublist(0, playersListKeys.indexOf(globals.userId));
@@ -106,8 +108,12 @@ class _GameBoardPageState extends State<GameBoardPage> {
                             return Container(color: Colors.black);
                           }
                           String ScoreText = '';
-                          if (player['vote'] != -1) {
-                            ScoreText = 'Win: ' + player['vote'].toString() + '/' + round.toString();
+                          if (player['vote'] != -1 && player['win'] != null) {
+                            ScoreText = 'Win: ' + player['win'].toString() + '/' + player['vote'].toString();
+                          }
+                          String pointText = '';
+                          if (player['points'] != null) {
+                            pointText = player['points'].toString() + ' Points';
                           }
                           return Container(
                               child: Column(
@@ -115,7 +121,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                                   Text(player['name']),
                                   Container(margin: const EdgeInsets.all(15.0), padding: const EdgeInsets.all(10.0), decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent)), child: const Text('5')),
                                   Text(ScoreText),
-                                  Text(player['points'].toString() + ' Points')
+                                  Text(pointText)
                                 ],
                               ),
                               decoration: _player == playersListInPlayOrder[(startPlayerIndex + playedCards.length) % playersListInPlayOrder.length] ? BoxDecoration(border: Border.all(color: Colors.blueAccent)) : null);
@@ -256,6 +262,11 @@ class _GameBoardPageState extends State<GameBoardPage> {
     if (globals.userId == nextRoundFirstPlayer && round != 1) {
       gameUtils.createDeckForRound(players.length, round, postListRef);
     }
+    players.forEach((key, value) {
+      value['vote'] = -1;
+      value['win'] = 0;
+      value['bonus'] = 0;
+    });
   }
 
 /*
