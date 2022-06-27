@@ -93,7 +93,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
   @override
   Widget build(BuildContext context) {
     String my_score = '';
-    if (players[globals.userId]!['points'] != null) {
+    if (players[globals.userId] != null && players[globals.userId]!['points'] != null) {
       my_score = players[globals.userId]!['points'].toString() + ' Points';
     }
     return Scaffold(
