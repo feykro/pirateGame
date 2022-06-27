@@ -436,9 +436,9 @@ class _GameBoardPageState extends State<GameBoardPage> {
                         onPressed: () {
                           gameUtils.vote(globals.userId, _currentValue, playersRef);
                           double _progress = 0;
-                          EasyLoading.showProgress(_progress, maskType: EasyLoadingMaskType.black, status: (voteCount + 1).toString() + '/' + players.length.toString());
+                          EasyLoading.showProgress(_progress, maskType: EasyLoadingMaskType.black, status: (voteCount.value + 1).toString() + '/' + players.length.toString());
                           setState(() {
-                            _progress = (voteCount + 1) / players.length;
+                            _progress = (voteCount.value + 1) / players.length;
                             print(_progress);
                           });
 
