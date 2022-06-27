@@ -17,7 +17,7 @@ class GameBoardPage extends StatefulWidget {
   State<GameBoardPage> createState() => _GameBoardPageState();
 }
 
-class _GameBoardPageState extends State<GameBoardPage> with  {
+class _GameBoardPageState extends State<GameBoardPage> {
   late DatabaseReference playersRef = FirebaseDatabase.instance.ref('rooms/${widget.roomId}/players');
   late DatabaseReference playCardRef = FirebaseDatabase.instance.ref('rooms/${widget.roomId}/playedCard');
   late DatabaseReference postListRef = FirebaseDatabase.instance.ref('rooms/${widget.roomId}/deck');
