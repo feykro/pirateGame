@@ -1,5 +1,4 @@
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:numberpicker/numberpicker.dart';
@@ -18,7 +17,7 @@ class GameBoardPage extends StatefulWidget {
   State<GameBoardPage> createState() => _GameBoardPageState();
 }
 
-class _GameBoardPageState extends State<GameBoardPage> {
+class _GameBoardPageState extends State<GameBoardPage> with  {
   late DatabaseReference playersRef = FirebaseDatabase.instance.ref('rooms/${widget.roomId}/players');
   late DatabaseReference playCardRef = FirebaseDatabase.instance.ref('rooms/${widget.roomId}/playedCard');
   late DatabaseReference postListRef = FirebaseDatabase.instance.ref('rooms/${widget.roomId}/deck');
@@ -95,7 +94,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
       final value = event.snapshot.value;
       if (event.snapshot.exists) {
         setState(() {
-          voteCount = ValueNotifier(value as int);
+          voteCount.value = value as int;
           voteCount.notifyListeners();
           print('Vote Updated:$voteCount');
         });
