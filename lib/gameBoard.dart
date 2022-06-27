@@ -91,7 +91,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
       final value = event.snapshot.value;
       if (event.snapshot.exists) {
         setState(() {
-          voteCount = value as ValueNotifier<int>;
+          voteCount = ValueNotifier(value as int);
           voteCount.notifyListeners();
           print('Vote Updated:$voteCount');
         });
@@ -441,6 +441,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                             _progress = (voteCount.value + 1) / players.length;
                             print(_progress);
                           });
+                          void updateProgress(int voteCount) {}
 
                           if (_progress >= 1) {
                             EasyLoading.dismiss();
