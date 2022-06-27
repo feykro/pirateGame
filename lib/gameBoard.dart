@@ -436,6 +436,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                           EasyLoading.showProgress(_progress, maskType: EasyLoadingMaskType.black, status: (voteCount + 1).toString() + '/' + players.length.toString());
                           setState(() {
                             _progress = (voteCount + 1) / players.length;
+                            print(_progress);
                           });
 
                           if (_progress >= 1) {
