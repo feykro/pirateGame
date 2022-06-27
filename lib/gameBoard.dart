@@ -26,8 +26,6 @@ class _GameBoardPageState extends State<GameBoardPage> {
   int round = 1;
   int turn = 1;
 
-  int _currentValue = 0;
-
   ValueNotifier<int> voteCount = ValueNotifier(0);
   ValueNotifier<double> _progress = ValueNotifier(0);
 
@@ -287,6 +285,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
     }
   }
 
+/*
   void showVoteDialog() {
     showDialog(
         context: context,
@@ -372,12 +371,14 @@ class _GameBoardPageState extends State<GameBoardPage> {
           );
         });
   }
+  */
 
   Future<void> showInformationDialog(BuildContext context) async {
     return await showDialog(
         context: context,
         builder: (context) {
-          bool isChecked = false;
+          int _currentValue = 0;
+
           return StatefulBuilder(builder: (context, setState) {
             return Center(
               child: Material(
