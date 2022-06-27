@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'dart:io';
 
 import 'globals.dart' as globals;
 import 'gamesUtils.dart' as gameUtils;
@@ -47,8 +46,10 @@ class _GameBoardPageState extends State<GameBoardPage> {
     _activateDeckListener();
     _activateCardPlayedListener();
     voteCount.addListener(() {
-      _progress = (voteCount.value + 1) / players.length;
-      print('PROGRESS:$_progress');
+      setState(() {
+        _progress = (voteCount.value + 1) / players.length;
+        print('PROGRESS:$_progress');
+      });
     });
     _activateVoteCountListener();
 
