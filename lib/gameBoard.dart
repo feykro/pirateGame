@@ -346,6 +346,13 @@ class _GameBoardPageState extends State<GameBoardPage> {
   }
   */
 
+  void updatePlayersVote() async {
+    Map<String, Map> players_ = await gameUtils.getPlayers(playersRef) as Map<String, Map>;
+    players_.forEach((key, value) {
+      players[key]!['vote'] = value['vote'];
+    });
+  }
+
   Future<void> showInformationDialog(BuildContext context) async {
     return await showDialog(
         context: context,
