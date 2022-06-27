@@ -26,9 +26,6 @@ class _GameBoardPageState extends State<GameBoardPage> {
   int round = 1;
   int turn = 1;
 
-  ValueNotifier<int> voteCount = ValueNotifier(0);
-  ValueNotifier<double> _progress = ValueNotifier(0);
-
   List<int> cards = [];
 
   Map<String, Map> players = {};
@@ -43,14 +40,6 @@ class _GameBoardPageState extends State<GameBoardPage> {
 
     _activateDeckListener();
     _activateCardPlayedListener();
-    voteCount.addListener(() {
-      setState(() {
-        _progress.value = (voteCount.value) / players.length;
-        _progress.notifyListeners();
-        print('PROGRESS:$_progress');
-      });
-    });
-    _activateVoteCountListener();
 
     asyncInit();
   }
@@ -87,20 +76,6 @@ class _GameBoardPageState extends State<GameBoardPage> {
     });
   }
 
-  void _activateVoteCountListener() {
-    // Recup la carte jouée
-    voteCountRef.onValue.listen((event) {
-      final value = event.snapshot.value;
-      if (event.snapshot.exists) {
-        setState(() {
-          voteCount.value = value as int;
-          voteCount.notifyListeners();
-          print('Vote Updated:$voteCount');
-        });
-      }
-    });
-  }
-
   asyncInit() async {
     // Recup les joueurs
     players = await gameUtils.getPlayers(playersRef) as Map<String, Map>;
@@ -132,7 +107,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                             return Container(color: Colors.black);
                           }
                           String ScoreText = '';
-                          if (voteCount == players.length) {
+                          if (player['vote'] != -1) {
                             ScoreText = 'Win: ' + player['vote'].toString() + '/' + round.toString();
                           }
                           return Container(
@@ -377,6 +352,21 @@ class _GameBoardPageState extends State<GameBoardPage> {
         context: context,
         builder: (context) {
           int _currentValue = 0;
+          double _progress = 0;
+          int voteCount = 0;
+
+          // Recup la carte jouée
+          var listener = voteCountRef.onValue.listen((event) {
+            final value = event.snapshot.value;
+            if (event.snapshot.exists) {
+              setState(() {
+                voteCount = value as int;
+                print('Vote Updated:$voteCount');
+                _progress = (voteCount + 1) / players.length;
+                print('PROGRESS:$_progress');
+              });
+            }
+          });
 
           return StatefulBuilder(builder: (context, setState) {
             return Center(
@@ -440,10 +430,9 @@ class _GameBoardPageState extends State<GameBoardPage> {
                         ),
                         onPressed: () {
                           gameUtils.vote(globals.userId, _currentValue, playersRef);
-                          _progress.value = 0;
-                          print(_progress.value);
-                          EasyLoading.showProgress(_progress.value, maskType: EasyLoadingMaskType.black, status: (voteCount.value + 1).toString() + '/' + players.length.toString());
-                          if (_progress.value >= 1) {
+                          EasyLoading.showProgress(_progress, maskType: EasyLoadingMaskType.black, status: (voteCount + 1).toString() + '/' + players.length.toString());
+                          if (_progress >= 1) {
+                            listener.cancel();
                             EasyLoading.dismiss();
                             Navigator.pop(context);
                           }
