@@ -90,6 +90,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
       if (event.snapshot.exists) {
         setState(() {
           voteCount = value as int;
+          print('Vote Updated:$voteCount');
         });
       }
     });
