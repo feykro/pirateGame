@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'dart:async';
 
 import 'globals.dart' as globals;
 import 'gamesUtils.dart' as gameUtils;
@@ -32,8 +33,6 @@ class _GameBoardPageState extends State<GameBoardPage> {
   List<String> playersListInPlayOrder = [];
 
   List<int> playedCards = [];
-
-  get playersCopy => null;
 
   void initState() {
     super.initState();
@@ -354,6 +353,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
           int _currentValue = 0;
           double _progress = 0;
           int voteCount = 0;
+          late StreamSubscription<DatabaseEvent> _subscription;
 
           return StatefulBuilder(builder: (context, setState) {
             return Center(
@@ -418,23 +418,21 @@ class _GameBoardPageState extends State<GameBoardPage> {
                         onPressed: () {
                           gameUtils.vote(globals.userId, _currentValue, playersRef);
                           // Recup la carte jouée
-                          var listener = voteCountRef.onValue.listen((event) {
+                          _subscription = voteCountRef.onValue.listen((event) {
                             final value = event.snapshot.value;
                             if (event.snapshot.exists) {
                               setState(() {
                                 voteCount = value as int;
-                                print('Vote Updated:$voteCount');
                                 _progress = (voteCount) / players.length;
-                                EasyLoading.showProgress(_progress, maskType: EasyLoadingMaskType.black, status: (voteCount + 1).toString() + '/' + players.length.toString());
-                                print('PROGRESS:$_progress');
+                                EasyLoading.showProgress(_progress, maskType: EasyLoadingMaskType.black, status: (voteCount).toString() + '/' + players.length.toString());
+                                if (_progress >= 1) {
+                                  _subscription.cancel();
+                                  EasyLoading.dismiss();
+                                  Navigator.pop(context);
+                                }
                               });
                             }
                           });
-                          if (_progress >= 1) {
-                            listener.cancel();
-                            EasyLoading.dismiss();
-                            Navigator.pop(context);
-                          }
                         },
                       ),
                     ],
