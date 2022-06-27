@@ -92,6 +92,10 @@ class _GameBoardPageState extends State<GameBoardPage> {
 
   @override
   Widget build(BuildContext context) {
+    String my_score = '';
+    if (players[globals.userId]!['points'] != null) {
+      my_score = players[globals.userId]!['points'].toString() + ' Points';
+    }
     return Scaffold(
       body: Center(
           child: Padding(
@@ -231,7 +235,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
               Colors.blue,
             ],
           )),
-          child: Text(players[globals.userId]!['points'].toString() + ' Points')),
+          child: Text(my_score)),
     );
   }
 
