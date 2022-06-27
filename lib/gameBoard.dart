@@ -47,7 +47,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
     _activateCardPlayedListener();
     voteCount.addListener(() {
       setState(() {
-        _progress = (voteCount.value + 1) / players.length;
+        _progress = (voteCount.value) / players.length;
         print('PROGRESS:$_progress');
       });
     });
@@ -441,14 +441,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                           gameUtils.vote(globals.userId, _currentValue, playersRef);
                           double _progress = 0;
                           EasyLoading.showProgress(_progress, maskType: EasyLoadingMaskType.black, status: (voteCount.value + 1).toString() + '/' + players.length.toString());
-                          setState(() {
-                            _progress = (voteCount.value + 1) / players.length;
-                            print(_progress);
-                          });
-                          void updateProgress() {
-                            print('UPDATE');
-                          }
-
+                          print('UPDATE');
                           if (_progress >= 1) {
                             EasyLoading.dismiss();
                             Navigator.pop(context);
