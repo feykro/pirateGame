@@ -31,6 +31,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
   int _currentValue = 0;
 
   ValueNotifier<int> voteCount = ValueNotifier(0);
+  double _progress = 0;
 
   List<int> cards = [];
 
@@ -46,7 +47,10 @@ class _GameBoardPageState extends State<GameBoardPage> {
 
     _activateDeckListener();
     _activateCardPlayedListener();
-    voteCount.addListener(() {});
+    voteCount.addListener(() {
+      _progress = (voteCount.value + 1) / players.length;
+      print('PROGRESS:$_progress');
+    });
     _activateVoteCountListener();
 
     asyncInit();
@@ -441,7 +445,9 @@ class _GameBoardPageState extends State<GameBoardPage> {
                             _progress = (voteCount.value + 1) / players.length;
                             print(_progress);
                           });
-                          void updateProgress(int voteCount) {}
+                          void updateProgress() {
+                            print('UPDATE');
+                          }
 
                           if (_progress >= 1) {
                             EasyLoading.dismiss();
