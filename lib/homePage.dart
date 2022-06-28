@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text("Welcome, ${globals.username}"),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.startDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       floatingActionButton: FloatingActionButton.extended(
           elevation: 10.0,
           label: const Text("Create room"),
@@ -168,6 +168,10 @@ class _HomePageState extends State<HomePage> {
                     Animation<double> animation, int index) {
                   Map rooms = snapshot_.value as Map;
                   rooms['key'] = snapshot_.key;
+                  int nb_players = 0;
+                  if (rooms['players'] != null) {
+                    nb_players = (rooms['players'] as Map).length;
+                  }
                   return FutureBuilder<DataSnapshot>(
                     builder: (BuildContext context, snapshot) {
                       return Card(
@@ -180,6 +184,10 @@ class _HomePageState extends State<HomePage> {
                                   : Icons.lock_open),
                               title: Text(rooms['name']),
                               subtitle: Text("owner : ${rooms['owner']}"),
+                              trailing: Text('$nb_players/6',
+                                  style: const TextStyle(
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.w500)),
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
@@ -190,16 +198,18 @@ class _HomePageState extends State<HomePage> {
                                   child: TextButton(
                                     child: const Text('Join room'),
                                     onPressed: () {
-                                      if (rooms['hasPassword'] as bool) {
-                                        // display modal
-                                        showModalBottomSheet(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return buildModalScaffold(
-                                                  rooms, joinRoom);
-                                            });
-                                      } else {
-                                        joinRoom(rooms);
+                                      if (nb_players < 6) {
+                                        if (rooms['hasPassword'] as bool) {
+                                          // display modal
+                                          showModalBottomSheet(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return buildModalScaffold(
+                                                    rooms, joinRoom);
+                                              });
+                                        } else {
+                                          joinRoom(rooms);
+                                        }
                                       }
                                     },
                                   ),
