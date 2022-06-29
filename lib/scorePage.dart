@@ -173,27 +173,31 @@ class _ScorePageState extends State<ScorePage> {
                             ),
                             Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 12),
-                              child: Text(
-                                'Etienne',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontFamily: 'Outfit',
-                                  color: Color(0xFF0F1113),
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
+                              child: widget.players.length >= 2
+                                  ? Text(
+                                      players_ranking[1][0].toString(),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontFamily: 'Outfit',
+                                        color: Color(0xFF0F1113),
+                                        fontSize: 32,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    )
+                                  : Text(''),
                             ),
-                            Text(
-                              '170 points',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontFamily: 'Outfit',
-                                color: Color(0xFF57636C),
-                                fontSize: 14,
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ),
+                            widget.players.length >= 2
+                                ? Text(
+                                    players_ranking[1][1].toString() + ' Points',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontFamily: 'Outfit',
+                                      color: Color(0xFF57636C),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  )
+                                : Text(''),
                           ],
                         ),
                       ),
@@ -218,27 +222,31 @@ class _ScorePageState extends State<ScorePage> {
                             ),
                             Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 12),
-                              child: Text(
-                                'Dorian',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontFamily: 'Outfit',
-                                  color: Color(0xFF0F1113),
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
+                              child: widget.players.length >= 3
+                                  ? Text(
+                                      players_ranking[2][0].toString(),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontFamily: 'Outfit',
+                                        color: Color(0xFF0F1113),
+                                        fontSize: 32,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    )
+                                  : Text(''),
                             ),
-                            Text(
-                              '120 points',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontFamily: 'Outfit',
-                                color: Color(0xFF57636C),
-                                fontSize: 14,
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ),
+                            widget.players.length >= 3
+                                ? Text(
+                                    players_ranking[2][1].toString() + ' Points',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontFamily: 'Outfit',
+                                      color: Color(0xFF57636C),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  )
+                                : Text(''),
                           ],
                         ),
                       ),
