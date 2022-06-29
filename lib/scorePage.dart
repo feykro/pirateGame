@@ -151,7 +151,7 @@ class _ScorePageState extends State<ScorePage> {
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.4,
-                      height: 130,
+                      height: 160,
                       decoration: BoxDecoration(
                         color: Color(0xFFF1F4F8),
                         borderRadius: BorderRadius.circular(24),
@@ -200,7 +200,7 @@ class _ScorePageState extends State<ScorePage> {
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.4,
-                      height: 130,
+                      height: 160,
                       decoration: BoxDecoration(
                         color: Color(0xFFF1F4F8),
                         borderRadius: BorderRadius.circular(24),
