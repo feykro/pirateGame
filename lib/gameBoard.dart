@@ -261,24 +261,25 @@ class _GameBoardPageState extends State<GameBoardPage> {
     if (round == 2) {
       // Remettre à 10
       print("FINI");
-      Navigator.push(
+      await Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => ScorePage(players: players),
         ),
       );
-      //Navigator.pop(context);
+      Navigator.pop(context);
+    } else {
+      String nextRoundFirstPlayer = players.keys.toList()[(round - 1) % players.length];
+      startPlayerIndex = playersListInPlayOrder.indexOf(nextRoundFirstPlayer);
+      if (globals.userId == nextRoundFirstPlayer && round != 1) {
+        gameUtils.createDeckForRound(players.length, round, postListRef);
+      }
+      players.forEach((key, value) {
+        value['vote'] = -1;
+        value['win'] = 0;
+        value['bonus'] = 0;
+      });
     }
-    String nextRoundFirstPlayer = players.keys.toList()[(round - 1) % players.length];
-    startPlayerIndex = playersListInPlayOrder.indexOf(nextRoundFirstPlayer);
-    if (globals.userId == nextRoundFirstPlayer && round != 1) {
-      gameUtils.createDeckForRound(players.length, round, postListRef);
-    }
-    players.forEach((key, value) {
-      value['vote'] = -1;
-      value['win'] = 0;
-      value['bonus'] = 0;
-    });
   }
 
 /*

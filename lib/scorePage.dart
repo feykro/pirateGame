@@ -49,7 +49,7 @@ class _ScorePageState extends State<ScorePage> {
                         },
                         child: Text(
                           'Go back to the lobby',
-                          style: TextStyle(fontFamily: 'Poppins', color: Colors.lightGreenAccent),
+                          style: TextStyle(fontFamily: 'Poppins', color: Color(0xFF0F1113)),
                         ),
                       ),
                     ),
@@ -84,7 +84,7 @@ class _ScorePageState extends State<ScorePage> {
                       width: MediaQuery.of(context).size.width * 0.85,
                       height: 160,
                       decoration: BoxDecoration(
-                        color: Colors.lightGreenAccent,
+                        color: Color(0xFF0F1113),
                         borderRadius: BorderRadius.circular(24),
                       ),
                       child: Padding(
