@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:pirate_app/scorePage.dart';
 import 'dart:async';
 
 import 'globals.dart' as globals;
@@ -247,8 +248,15 @@ class _GameBoardPageState extends State<GameBoardPage> {
         // Check qui win le tour, lui donner le point et le désigner en startPlayerIndex
         turn += 1;
         if (turn - 1 == round) {
-          if (round == 10) {
-            Navigator.pop(context);
+          if (round == 2) {
+            // Remettre à 10
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ScorePage(players: players),
+              ),
+            );
+            //Navigator.pop(context);
           } else {
             round += 1;
             Future.delayed(const Duration(seconds: 3), () {
