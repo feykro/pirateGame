@@ -180,7 +180,7 @@ class _ScorePageState extends State<ScorePage> {
                                       style: TextStyle(
                                         fontFamily: 'Outfit',
                                         color: Color(0xFF0F1113),
-                                        fontSize: 32,
+                                        fontSize: 25,
                                         fontWeight: FontWeight.w500,
                                       ),
                                     )
@@ -229,7 +229,7 @@ class _ScorePageState extends State<ScorePage> {
                                       style: TextStyle(
                                         fontFamily: 'Outfit',
                                         color: Color(0xFF0F1113),
-                                        fontSize: 32,
+                                        fontSize: 25,
                                         fontWeight: FontWeight.w500,
                                       ),
                                     )
