@@ -58,7 +58,6 @@ class _ScorePageState extends State<ScorePage> {
               ],
             ),
           ),
-          actions: [],
           elevation: 0,
         ),
       ),
@@ -100,27 +99,31 @@ class _ScorePageState extends State<ScorePage> {
                             ),
                             Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 12),
-                              child: Text(
-                                'Tom',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontFamily: 'Outfit',
-                                  color: Color(0xFF0F1113),
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
+                              child: widget.players.length >= 1
+                                  ? Text(
+                                      'Tom',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontFamily: 'Outfit',
+                                        color: Color(0xFF0F1113),
+                                        fontSize: 32,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    )
+                                  : Text(''),
                             ),
-                            Text(
-                              '290 points',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontFamily: 'Outfit',
-                                color: Color(0xFF57636C),
-                                fontSize: 14,
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ),
+                            widget.players.length >= 1
+                                ? Text(
+                                    '290 points',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontFamily: 'Outfit',
+                                      color: Color(0xFF57636C),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  )
+                                : Text(''),
                           ],
                         ),
                       ),
@@ -145,27 +148,31 @@ class _ScorePageState extends State<ScorePage> {
                             ),
                             Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 12),
-                              child: Text(
-                                'Etienne',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontFamily: 'Outfit',
-                                  color: Color(0xFF0F1113),
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
+                              child: widget.players.length >= 2
+                                  ? Text(
+                                      'Etienne',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontFamily: 'Outfit',
+                                        color: Color(0xFF0F1113),
+                                        fontSize: 32,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    )
+                                  : Text(''),
                             ),
-                            Text(
-                              '170 points',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontFamily: 'Outfit',
-                                color: Color(0xFF57636C),
-                                fontSize: 14,
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ),
+                            widget.players.length >= 2
+                                ? Text(
+                                    '170 points',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontFamily: 'Outfit',
+                                      color: Color(0xFF57636C),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  )
+                                : Text(''),
                           ],
                         ),
                       ),
@@ -190,27 +197,31 @@ class _ScorePageState extends State<ScorePage> {
                             ),
                             Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 12),
-                              child: Text(
-                                'Dorian',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontFamily: 'Outfit',
-                                  color: Color(0xFF0F1113),
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
+                              child: widget.players.length >= 3
+                                  ? Text(
+                                      'Dorian',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontFamily: 'Outfit',
+                                        color: Color(0xFF0F1113),
+                                        fontSize: 32,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    )
+                                  : Text(''),
                             ),
-                            Text(
-                              '120 points',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontFamily: 'Outfit',
-                                color: Color(0xFF57636C),
-                                fontSize: 14,
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ),
+                            widget.players.length >= 3
+                                ? Text(
+                                    '120 points',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontFamily: 'Outfit',
+                                      color: Color(0xFF57636C),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  )
+                                : Text(''),
                           ],
                         ),
                       ),
@@ -224,6 +235,7 @@ class _ScorePageState extends State<ScorePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
+                      /*
                       Column(
                         mainAxisSize: MainAxisSize.max,
                         children: [
@@ -353,6 +365,7 @@ class _ScorePageState extends State<ScorePage> {
                           ),
                         ],
                       ),
+                      */
                     ],
                   ),
                 ),
