@@ -248,28 +248,27 @@ class _GameBoardPageState extends State<GameBoardPage> {
         // Check qui win le tour, lui donner le point et le désigner en startPlayerIndex
         turn += 1;
         if (turn - 1 == round) {
-          if (round == 2) {
-            // Remettre à 10
-            print("FINI");
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ScorePage(players: players),
-              ),
-            );
-            //Navigator.pop(context);
-          } else {
-            round += 1;
-            Future.delayed(const Duration(seconds: 3), () {
-              newTurn();
-            });
-          }
+          round += 1;
+          Future.delayed(const Duration(seconds: 3), () {
+            newTurn();
+          });
         }
       }
     });
   }
 
   Future<void> newTurn() async {
+    if (round == 2) {
+      // Remettre à 10
+      print("FINI");
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ScorePage(players: players),
+        ),
+      );
+      //Navigator.pop(context);
+    }
     String nextRoundFirstPlayer = players.keys.toList()[(round - 1) % players.length];
     startPlayerIndex = playersListInPlayOrder.indexOf(nextRoundFirstPlayer);
     if (globals.userId == nextRoundFirstPlayer && round != 1) {
