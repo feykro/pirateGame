@@ -258,7 +258,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
   }
 
   Future<void> newTurn() async {
-    if (round == 2) {
+    if (true) {
       // Remettre à 10
       print("FINI");
       await Navigator.push(
