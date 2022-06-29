@@ -89,7 +89,6 @@ class _ScorePageState extends State<ScorePage> {
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Wrap(
                   spacing: 16,
@@ -249,7 +248,7 @@ class _ScorePageState extends State<ScorePage> {
                       ),
                     ),
                   ],
-                ),
+                ), /*
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(20, 17, 20, 0),
                   child: widget.players.length > 3
@@ -435,7 +434,7 @@ class _ScorePageState extends State<ScorePage> {
                       */
                         )
                       : SizedBox(),
-                ),
+                ),*/
               ],
             ),
           ),
