@@ -122,7 +122,7 @@ class _ScorePageState extends State<ScorePage> {
                               padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 12),
                               child: widget.players.length >= 1
                                   ? Text(
-                                      players_ranking[0].toString(),
+                                      players_ranking[0][0].toString(),
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontFamily: 'Outfit',
@@ -135,7 +135,7 @@ class _ScorePageState extends State<ScorePage> {
                             ),
                             widget.players.length >= 1
                                 ? Text(
-                                    players_ranking[1].toString() + ' Points',
+                                    players_ranking[0][1].toString() + ' Points',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontFamily: 'Outfit',
@@ -171,7 +171,7 @@ class _ScorePageState extends State<ScorePage> {
                               padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 12),
                               child: widget.players.length >= 2
                                   ? Text(
-                                      players_ranking[0].toString(),
+                                      players_ranking[1][0].toString(),
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontFamily: 'Outfit',
@@ -184,7 +184,7 @@ class _ScorePageState extends State<ScorePage> {
                             ),
                             widget.players.length >= 2
                                 ? Text(
-                                    players_ranking[1].toString() + ' Points',
+                                    players_ranking[1][1].toString() + ' Points',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontFamily: 'Outfit',
@@ -220,7 +220,7 @@ class _ScorePageState extends State<ScorePage> {
                               padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 12),
                               child: widget.players.length >= 3
                                   ? Text(
-                                      players_ranking[0].toString(),
+                                      players_ranking[2][0].toString(),
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontFamily: 'Outfit',
@@ -233,7 +233,7 @@ class _ScorePageState extends State<ScorePage> {
                             ),
                             widget.players.length >= 3
                                 ? Text(
-                                    players_ranking[1].toString() + ' Points',
+                                    players_ranking[2][1].toString() + ' Points',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontFamily: 'Outfit',
