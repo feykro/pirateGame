@@ -80,7 +80,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
     // Recup les joueurs
     players = await gameUtils.getPlayers(playersRef) as Map<String, Map>;
     players.forEach((key, value) {
-      value['points'] = 0;
+      value['points'] = 100;
       value['win'] = 0;
       value['bonus'] = 0;
     });
