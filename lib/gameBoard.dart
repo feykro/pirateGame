@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:pirate_app/scorePage.dart';
 import 'dart:async';
 
 import 'globals.dart' as globals;
@@ -55,7 +56,6 @@ class _GameBoardPageState extends State<GameBoardPage> {
               });
               playedCards = [];
               SchedulerBinding.instance!.addPostFrameCallback((_) {
-                //showVoteDialog();
                 showInformationDialog(context);
               });
             }));
@@ -247,119 +247,37 @@ class _GameBoardPageState extends State<GameBoardPage> {
         // Check qui win le tour, lui donner le point et le désigner en startPlayerIndex
         turn += 1;
         if (turn - 1 == round) {
-          if (round == 10) {
-            Navigator.pop(context);
-          } else {
-            round += 1;
-            Future.delayed(const Duration(seconds: 3), () {
-              newTurn();
-            });
-          }
+          round += 1;
+          Future.delayed(const Duration(seconds: 3), () {
+            newTurn();
+          });
         }
       }
     });
   }
 
   Future<void> newTurn() async {
-    String nextRoundFirstPlayer = players.keys.toList()[(round - 1) % players.length];
-    startPlayerIndex = playersListInPlayOrder.indexOf(nextRoundFirstPlayer);
-    if (globals.userId == nextRoundFirstPlayer && round != 1) {
-      gameUtils.createDeckForRound(players.length, round, postListRef);
+    if (round == 11) {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ScorePage(players: players),
+        ),
+      );
+      Navigator.pop(context);
+    } else {
+      String nextRoundFirstPlayer = players.keys.toList()[(round - 1) % players.length];
+      startPlayerIndex = playersListInPlayOrder.indexOf(nextRoundFirstPlayer);
+      if (globals.userId == nextRoundFirstPlayer && round != 1) {
+        gameUtils.createDeckForRound(players.length, round, postListRef);
+      }
+      players.forEach((key, value) {
+        value['vote'] = -1;
+        value['win'] = 0;
+        value['bonus'] = 0;
+      });
     }
-    players.forEach((key, value) {
-      value['vote'] = -1;
-      value['win'] = 0;
-      value['bonus'] = 0;
-    });
   }
-
-/*
-  void showVoteDialog() {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          return Center(
-            child: Material(
-              type: MaterialType.transparency,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                ),
-                padding: const EdgeInsets.all(15),
-                height: 350,
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Wrap(
-                      alignment: WrapAlignment.center,
-                      spacing: -25.0,
-                      runSpacing: -50.0,
-                      children: cards.map((card) {
-                        return Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
-                            decoration: BoxDecoration(
-                                image: const DecorationImage(
-                                  image: AssetImage("images/skullking.jpg"),
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: const SizedBox());
-                      }).toList(),
-                    ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    NumberPicker(
-                      value: _currentValue,
-                      minValue: 0,
-                      maxValue: round,
-                      itemHeight: 70,
-                      axis: Axis.horizontal,
-                      onChanged: (value) => setState(() => _currentValue = value),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: Colors.black26),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    TextButton(
-                      child: const Text(
-                        'OK',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      style: ButtonStyle(
-                        foregroundColor: MaterialStateProperty.all(Colors.lightBlueAccent),
-                        backgroundColor: MaterialStateProperty.all(Colors.white),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10), side: const BorderSide(color: Colors.lightBlueAccent))),
-                      ),
-                      onPressed: () {
-                        gameUtils.vote(globals.userId, _currentValue, playersRef);
-                        double _progress = 0;
-                        EasyLoading.showProgress(_progress, maskType: EasyLoadingMaskType.black, status: (voteCount.value + 1).toString() + '/' + players.length.toString());
-                        setState(() {
-                          _progress = (voteCount.value + 1) / players.length;
-                        });
-
-                        if (_progress >= 1) {
-                          EasyLoading.dismiss();
-                          Navigator.pop(context);
-                        }
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        });
-  }
-  */
 
   void updatePlayersVote() async {
     Map<String, Map> players_ = await gameUtils.getPlayers(playersRef) as Map<String, Map>;
