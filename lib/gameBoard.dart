@@ -56,8 +56,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
               });
               playedCards = [];
               SchedulerBinding.instance!.addPostFrameCallback((_) {
-                //showVoteDialog();
-                //showInformationDialog(context);
+                showInformationDialog(context);
               });
             }));
       }
@@ -80,7 +79,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
     // Recup les joueurs
     players = await gameUtils.getPlayers(playersRef) as Map<String, Map>;
     players.forEach((key, value) {
-      value['points'] = 100;
+      value['points'] = 0;
       value['win'] = 0;
       value['bonus'] = 0;
     });
@@ -259,8 +258,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
   }
 
   Future<void> newTurn() async {
-    if (true) {
-      // Remettre à 10
+    if (round == 11) {
       await Navigator.push(
         context,
         MaterialPageRoute(
@@ -280,94 +278,6 @@ class _GameBoardPageState extends State<GameBoardPage> {
       });
     }
   }
-
-/*
-  void showVoteDialog() {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          return Center(
-            child: Material(
-              type: MaterialType.transparency,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                ),
-                padding: const EdgeInsets.all(15),
-                height: 350,
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Wrap(
-                      alignment: WrapAlignment.center,
-                      spacing: -25.0,
-                      runSpacing: -50.0,
-                      children: cards.map((card) {
-                        return Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
-                            decoration: BoxDecoration(
-                                image: const DecorationImage(
-                                  image: AssetImage("images/skullking.jpg"),
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: const SizedBox());
-                      }).toList(),
-                    ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    NumberPicker(
-                      value: _currentValue,
-                      minValue: 0,
-                      maxValue: round,
-                      itemHeight: 70,
-                      axis: Axis.horizontal,
-                      onChanged: (value) => setState(() => _currentValue = value),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: Colors.black26),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    TextButton(
-                      child: const Text(
-                        'OK',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      style: ButtonStyle(
-                        foregroundColor: MaterialStateProperty.all(Colors.lightBlueAccent),
-                        backgroundColor: MaterialStateProperty.all(Colors.white),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10), side: const BorderSide(color: Colors.lightBlueAccent))),
-                      ),
-                      onPressed: () {
-                        gameUtils.vote(globals.userId, _currentValue, playersRef);
-                        double _progress = 0;
-                        EasyLoading.showProgress(_progress, maskType: EasyLoadingMaskType.black, status: (voteCount.value + 1).toString() + '/' + players.length.toString());
-                        setState(() {
-                          _progress = (voteCount.value + 1) / players.length;
-                        });
-
-                        if (_progress >= 1) {
-                          EasyLoading.dismiss();
-                          Navigator.pop(context);
-                        }
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        });
-  }
-  */
 
   void updatePlayersVote() async {
     Map<String, Map> players_ = await gameUtils.getPlayers(playersRef) as Map<String, Map>;
