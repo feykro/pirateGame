@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ScorePage extends StatefulWidget {
@@ -10,6 +11,26 @@ class ScorePage extends StatefulWidget {
 }
 
 class _ScorePageState extends State<ScorePage> {
+  List<List> players_ranking = [];
+
+  @override
+  void initState() {
+    super.initState();
+    widget.players.forEach((key, value) {
+      players_ranking.addAll([
+        value['name'],
+        value['points']
+      ]);
+    });
+    print('AVANT RANKING: $players_ranking');
+    players_ranking.sort(
+      (a, b) {
+        return b[1].compareTo(a[1]);
+      },
+    );
+    print('APRES RANKING: $players_ranking');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,7 +122,7 @@ class _ScorePageState extends State<ScorePage> {
                               padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 12),
                               child: widget.players.length >= 1
                                   ? Text(
-                                      'Tom',
+                                      players_ranking[0].toString(),
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontFamily: 'Outfit',
@@ -114,7 +135,7 @@ class _ScorePageState extends State<ScorePage> {
                             ),
                             widget.players.length >= 1
                                 ? Text(
-                                    '290 points',
+                                    players_ranking[1].toString() + ' Points',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontFamily: 'Outfit',
@@ -130,7 +151,7 @@ class _ScorePageState extends State<ScorePage> {
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.4,
-                      height: 160,
+                      height: 130,
                       decoration: BoxDecoration(
                         color: Color(0xFFF1F4F8),
                         borderRadius: BorderRadius.circular(24),
@@ -150,7 +171,7 @@ class _ScorePageState extends State<ScorePage> {
                               padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 12),
                               child: widget.players.length >= 2
                                   ? Text(
-                                      'Etienne',
+                                      players_ranking[0].toString(),
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontFamily: 'Outfit',
@@ -163,7 +184,7 @@ class _ScorePageState extends State<ScorePage> {
                             ),
                             widget.players.length >= 2
                                 ? Text(
-                                    '170 points',
+                                    players_ranking[1].toString() + ' Points',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontFamily: 'Outfit',
@@ -179,7 +200,7 @@ class _ScorePageState extends State<ScorePage> {
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.4,
-                      height: 160,
+                      height: 130,
                       decoration: BoxDecoration(
                         color: Color(0xFFF1F4F8),
                         borderRadius: BorderRadius.circular(24),
@@ -199,7 +220,7 @@ class _ScorePageState extends State<ScorePage> {
                               padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 12),
                               child: widget.players.length >= 3
                                   ? Text(
-                                      'Dorian',
+                                      players_ranking[0].toString(),
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontFamily: 'Outfit',
@@ -212,7 +233,7 @@ class _ScorePageState extends State<ScorePage> {
                             ),
                             widget.players.length >= 3
                                 ? Text(
-                                    '120 points',
+                                    players_ranking[1].toString() + ' Points',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontFamily: 'Outfit',
@@ -230,12 +251,57 @@ class _ScorePageState extends State<ScorePage> {
                 ),
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(20, 17, 20, 0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      /*
+                  child: widget.players.length > 3
+                      ? Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: players_ranking.sublist(3).map((player) {
+                            return Column(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Text(
+                                  player[1].toString(),
+                                  style: TextStyle(
+                                    fontFamily: 'Outfit',
+                                    color: Color(0xFF0F1113),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+                                  child: Container(
+                                    width: 36,
+                                    height: (player[1] as int) / 2,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFF39D2C0),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  (players_ranking.indexOf(player) + 1).toString() + 'e',
+                                  style: TextStyle(
+                                    fontFamily: 'Outfit',
+                                    color: Color(0xFF0F1113),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ),
+                                Text(
+                                  player[0],
+                                  style: TextStyle(
+                                    fontFamily: 'Outfit',
+                                    color: Color(0xFF0F1113),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ),
+                              ],
+                            );
+                          }).toList(),
+                          /*
                       Column(
                         mainAxisSize: MainAxisSize.max,
                         children: [
@@ -366,8 +432,8 @@ class _ScorePageState extends State<ScorePage> {
                         ],
                       ),
                       */
-                    ],
-                  ),
+                        )
+                      : SizedBox(),
                 ),
               ],
             ),
