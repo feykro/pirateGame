@@ -306,7 +306,11 @@ class _ScorePageState extends State<ScorePage> {
                             );
                           }).toList(),
                         )
-                      : SizedBox(),
+                      : Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                        ),
                 ),
               ],
             ),
