@@ -84,6 +84,13 @@ class _GameBoardPageState extends State<GameBoardPage> {
       value['win'] = 0;
       value['bonus'] = 0;
     });
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ScorePage(players: players),
+      ),
+    );
+    Navigator.pop(context);
     List<String> playersListKeys = players.keys.toList();
     playersListInPlayOrder = playersListKeys.sublist(playersListKeys.indexOf(globals.userId)) + playersListKeys.sublist(0, playersListKeys.indexOf(globals.userId));
     startPlayerIndex = playersListInPlayOrder.indexOf(playersListKeys[0]);
@@ -258,16 +265,9 @@ class _GameBoardPageState extends State<GameBoardPage> {
   }
 
   Future<void> newTurn() async {
-    if (true) {
+    if (round == 11) {
       // Remettre à 10
-      print("FINI");
-      await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ScorePage(players: players),
-        ),
-      );
-      Navigator.pop(context);
+
     } else {
       String nextRoundFirstPlayer = players.keys.toList()[(round - 1) % players.length];
       startPlayerIndex = playersListInPlayOrder.indexOf(nextRoundFirstPlayer);
