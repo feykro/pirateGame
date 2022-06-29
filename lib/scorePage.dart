@@ -17,7 +17,7 @@ class _ScorePageState extends State<ScorePage> {
   void initState() {
     super.initState();
     widget.players.forEach((key, value) {
-      players_ranking.addAll([
+      players_ranking.add([
         value['name'],
         value['points']
       ]);
