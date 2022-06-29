@@ -326,7 +326,7 @@ class _ScorePageState extends State<ScorePage> {
                             padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
                             child: Container(
                               width: 36,
-                              height: 10,
+                              height: -10,
                               decoration: BoxDecoration(
                                 color: Color(0xFF39D2C0),
                                 borderRadius: BorderRadius.circular(12),
