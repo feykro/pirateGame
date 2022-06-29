@@ -83,7 +83,6 @@ class _GameBoardPageState extends State<GameBoardPage> {
       value['win'] = 0;
       value['bonus'] = 0;
     });
-    Navigator.pop(context);
     List<String> playersListKeys = players.keys.toList();
     playersListInPlayOrder = playersListKeys.sublist(playersListKeys.indexOf(globals.userId)) + playersListKeys.sublist(0, playersListKeys.indexOf(globals.userId));
     startPlayerIndex = playersListInPlayOrder.indexOf(playersListKeys[0]);
@@ -265,6 +264,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
           builder: (context) => ScorePage(players: players),
         ),
       );
+      Navigator.pop(context);
     } else {
       String nextRoundFirstPlayer = players.keys.toList()[(round - 1) % players.length];
       startPlayerIndex = playersListInPlayOrder.indexOf(nextRoundFirstPlayer);
