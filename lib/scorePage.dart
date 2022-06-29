@@ -106,7 +106,7 @@ class _ScorePageState extends State<ScorePage> {
                   children: [
                     Container(
                       width: MediaQuery.of(context).size.width * 0.85,
-                      height: 160,
+                      height: 150,
                       decoration: BoxDecoration(
                         color: Colors.lightBlueAccent,
                         borderRadius: BorderRadius.circular(24),
@@ -155,7 +155,7 @@ class _ScorePageState extends State<ScorePage> {
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.4,
-                      height: 160,
+                      height: 120,
                       decoration: BoxDecoration(
                         color: Color(0xFFF1F4F8),
                         borderRadius: BorderRadius.circular(24),
@@ -204,7 +204,7 @@ class _ScorePageState extends State<ScorePage> {
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.4,
-                      height: 160,
+                      height: 120,
                       decoration: BoxDecoration(
                         color: Color(0xFFF1F4F8),
                         borderRadius: BorderRadius.circular(24),
@@ -255,142 +255,58 @@ class _ScorePageState extends State<ScorePage> {
                 ),
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(20, 17, 20, 0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Text(
-                            '100',
-                            style: TextStyle(
-                              fontFamily: 'Outfit',
-                              color: Color(0xFF0F1113),
-                              fontSize: 14,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
-                            child: Container(
-                              width: 36,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                color: Color(0xFF39D2C0),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                          ),
-                          Text(
-                            '4e',
-                            style: TextStyle(
-                              fontFamily: 'Outfit',
-                              color: Color(0xFF0F1113),
-                              fontSize: 14,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                          Text(
-                            'Dorian',
-                            style: TextStyle(
-                              fontFamily: 'Outfit',
-                              color: Color(0xFF0F1113),
-                              fontSize: 14,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Text(
-                            '80',
-                            style: TextStyle(
-                              fontFamily: 'Outfit',
-                              color: Color(0xFF0F1113),
-                              fontSize: 14,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
-                            child: Container(
-                              width: 36,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                color: Color(0xFF39D2C0),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                          ),
-                          Text(
-                            '5e',
-                            style: TextStyle(
-                              fontFamily: 'Outfit',
-                              color: Color(0xFF0F1113),
-                              fontSize: 14,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                          Text(
-                            'Dorian',
-                            style: TextStyle(
-                              fontFamily: 'Outfit',
-                              color: Color(0xFF0F1113),
-                              fontSize: 14,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Text(
-                            '10',
-                            style: TextStyle(
-                              fontFamily: 'Outfit',
-                              color: Color(0xFF0F1113),
-                              fontSize: 14,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
-                            child: Container(
-                              width: 36,
-                              height: 10,
-                              decoration: BoxDecoration(
-                                color: Color(0xFF39D2C0),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                          ),
-                          Text(
-                            '6e',
-                            style: TextStyle(
-                              fontFamily: 'Outfit',
-                              color: Color(0xFF0F1113),
-                              fontSize: 14,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                          Text(
-                            'Dorian',
-                            style: TextStyle(
-                              fontFamily: 'Outfit',
-                              color: Color(0xFF0F1113),
-                              fontSize: 14,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                  child: widget.players.length > 3
+                      ? Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: players_ranking.sublist(3).map((player) {
+                            return Column(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Text(
+                                  player[1].toString(),
+                                  style: TextStyle(
+                                    fontFamily: 'Outfit',
+                                    color: Color(0xFF0F1113),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+                                  child: Container(
+                                    width: 36,
+                                    height: (player[1] as int) / 2,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFF39D2C0),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  (players_ranking.indexOf(player) + 1).toString() + 'e',
+                                  style: TextStyle(
+                                    fontFamily: 'Outfit',
+                                    color: Color(0xFF0F1113),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ),
+                                Text(
+                                  player[0],
+                                  style: TextStyle(
+                                    fontFamily: 'Outfit',
+                                    color: Color(0xFF0F1113),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ),
+                              ],
+                            );
+                          }).toList(),
+                        )
+                      : SizedBox(),
                 ),
               ],
             ),
