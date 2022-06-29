@@ -172,7 +172,7 @@ class _ScorePageState extends State<ScorePage> {
                               size: 32,
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 12),
+                              padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 5),
                               child: widget.players.length >= 2
                                   ? Text(
                                       players_ranking[1][0].toString(),
@@ -221,7 +221,7 @@ class _ScorePageState extends State<ScorePage> {
                               size: 32,
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 12),
+                              padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 5),
                               child: widget.players.length >= 3
                                   ? Text(
                                       players_ranking[2][0].toString(),
