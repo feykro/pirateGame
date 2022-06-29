@@ -250,6 +250,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
         if (turn - 1 == round) {
           if (round == 2) {
             // Remettre à 10
+            print("FINI");
             Navigator.push(
               context,
               MaterialPageRoute(
