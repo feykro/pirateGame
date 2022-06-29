@@ -93,8 +93,8 @@ class _ScorePageState extends State<ScorePage> {
                 Wrap(
                   spacing: 16,
                   runSpacing: 16,
-                  alignment: WrapAlignment.center,
-                  crossAxisAlignment: WrapCrossAlignment.start,
+                  alignment: WrapAlignment.start,
+                  crossAxisAlignment: WrapCrossAlignment.center,
                   direction: Axis.horizontal,
                   runAlignment: WrapAlignment.start,
                   verticalDirection: VerticalDirection.down,
