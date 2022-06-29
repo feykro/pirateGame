@@ -89,12 +89,13 @@ class _ScorePageState extends State<ScorePage> {
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Wrap(
                   spacing: 16,
                   runSpacing: 16,
                   alignment: WrapAlignment.start,
-                  crossAxisAlignment: WrapCrossAlignment.center,
+                  crossAxisAlignment: WrapCrossAlignment.start,
                   direction: Axis.horizontal,
                   runAlignment: WrapAlignment.start,
                   verticalDirection: VerticalDirection.down,
