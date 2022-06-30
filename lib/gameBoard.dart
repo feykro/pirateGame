@@ -278,14 +278,15 @@ class _GameBoardPageState extends State<GameBoardPage> {
       gameUtils.playCard(card, playCardRef);
       if ((startPlayerIndex + playedCards.length) % players.length == startPlayerIndex) {
         // Check qui win le tour, lui donner le point et le désigner en startPlayerIndex
-        colorForTurn = -1;
-        turn += 1;
-        if (turn - 1 == round) {
-          round += 1;
-          Future.delayed(const Duration(seconds: 3), () {
+        Future.delayed(const Duration(seconds: 1), () {
+          playedCards = [];
+          colorForTurn = -1;
+          turn += 1;
+          if (turn - 1 == round) {
+            round += 1;
             newTurn();
-          });
-        }
+          }
+        });
       }
     });
   }
