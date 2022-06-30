@@ -56,7 +56,6 @@ class _GameBoardPageState extends State<GameBoardPage> {
               cardForTurn?.forEach((card) {
                 cards.add(card);
               });
-              print(cardForTurn);
               SchedulerBinding.instance!.addPostFrameCallback((_) {
                 showInformationDialog(context);
               });
@@ -76,23 +75,22 @@ class _GameBoardPageState extends State<GameBoardPage> {
           playedCards.add(cardKey);
           if (card.type == 'classic' && colorForTurn == '') {
             colorForTurn = card.color as String;
-            print(colorForTurn);
           }
           if (playedCards.length == players.length) {
             // Check qui win le tour, lui donner le point et le désigner en startPlayerIndex
-            setState(() {
-              colorForTurn = '';
-              turn += 1;
-              Future.delayed(Duration(seconds: 2), () {
+            colorForTurn = '';
+            turn += 1;
+            Future.delayed(Duration(seconds: 3), () {
+              setState(() {
                 playedCards = [];
               });
-              if (turn - 1 == round) {
-                round += 1;
-                Future.delayed(Duration(seconds: 3), () {
-                  newTurn();
-                });
-              }
             });
+            if (turn - 1 == round) {
+              round += 1;
+              Future.delayed(Duration(seconds: 3), () {
+                newTurn();
+              });
+            }
           }
         });
       }
@@ -187,7 +185,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                                   image: const DecorationImage(
                                     image: AssetImage("images/skullking.jpg"),
                                     fit: BoxFit.cover,
-                                    colorFilter: ColorFilter.mode(Colors.grey, BlendMode.modulate),
+                                    colorFilter: ColorFilter.mode(Colors.grey, BlendMode.saturation),
                                   ),
                                   borderRadius: BorderRadius.circular(10)),
                               child: const SizedBox()),
