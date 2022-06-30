@@ -292,7 +292,6 @@ class _GameBoardPageState extends State<GameBoardPage> {
                                   } else {
                                     return StatefulBuilder(
                                       builder: (context, setState) {
-                                        print(selected);
                                         return Center(
                                           child: Material(
                                             type: MaterialType.transparency,
@@ -319,12 +318,12 @@ class _GameBoardPageState extends State<GameBoardPage> {
                                                           child: Container(
                                                               padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 100),
                                                               decoration: BoxDecoration(
-                                                                image: const DecorationImage(
-                                                                  image: AssetImage("images/skullking.jpg"),
-                                                                  fit: BoxFit.cover,
-                                                                ),
-                                                                borderRadius: BorderRadius.circular(10),
-                                                              ),
+                                                                  image: const DecorationImage(
+                                                                    image: AssetImage("images/skullking.jpg"),
+                                                                    fit: BoxFit.cover,
+                                                                  ),
+                                                                  borderRadius: BorderRadius.circular(10),
+                                                                  border: selected == 0 ? Border.all(width: 5) : null),
                                                               child: const SizedBox())),
                                                       InkWell(
                                                           onTap: () {
@@ -339,7 +338,8 @@ class _GameBoardPageState extends State<GameBoardPage> {
                                                                     image: AssetImage("images/skullking.jpg"),
                                                                     fit: BoxFit.cover,
                                                                   ),
-                                                                  borderRadius: BorderRadius.circular(10)),
+                                                                  borderRadius: BorderRadius.circular(10),
+                                                                  border: selected == 0 ? Border.all(width: 5) : null),
                                                               child: const SizedBox())),
                                                     ],
                                                   ),
