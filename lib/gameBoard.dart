@@ -28,6 +28,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
   int round = 1;
   int turn = 1;
   String colorForTurn = '';
+  bool haveSuit = false;
 
   List<int> cards = [];
 
@@ -55,7 +56,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
               cardForTurn?.forEach((card) {
                 cards.add(card);
               });
-              playedCards = [];
+              print(cardForTurn);
               SchedulerBinding.instance!.addPostFrameCallback((_) {
                 showInformationDialog(context);
               });
@@ -73,20 +74,6 @@ class _GameBoardPageState extends State<GameBoardPage> {
           int cardKey = value as int;
           gameUtils.Card card = gameUtils.deck[cardKey]!;
           playedCards.add(cardKey);
-          if (playedCards.length == players.length) {
-            // Check qui win le tour, lui donner le point et le désigner en startPlayerIndex
-            Future.delayed(const Duration(seconds: 2), () {
-              setState(() {
-                playedCards = [];
-                colorForTurn = '';
-                turn += 1;
-                if (turn - 1 == round) {
-                  round += 1;
-                  newTurn();
-                }
-              });
-            });
-          }
           if (card.type == 'classic' && colorForTurn == '') {
             colorForTurn = card.color as String;
             print(colorForTurn);
@@ -175,7 +162,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                     spacing: -30.0,
                     runSpacing: -50.0,
                     children: cards.map((card) {
-                      bool haveSuit = haveSuitColor(cards);
+                      haveSuit = haveSuitColor(cards);
                       if (haveSuit && gameUtils.deck[card]!.type == 'classic' && gameUtils.deck[card]!.color != colorForTurn) {
                         return InkWell(
                           child: Container(
@@ -324,6 +311,20 @@ class _GameBoardPageState extends State<GameBoardPage> {
     setState(() {
       cards.remove(card);
       gameUtils.playCard(card, playCardRef);
+      if (playedCards.length == players.length) {
+        // Check qui win le tour, lui donner le point et le désigner en startPlayerIndex
+        Future.delayed(const Duration(seconds: 3), () {
+          setState(() {
+            playedCards = [];
+            colorForTurn = '';
+            turn += 1;
+            if (turn - 1 == round) {
+              round += 1;
+              newTurn();
+            }
+          });
+        });
+      }
     });
   }
 
