@@ -27,12 +27,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
   int startPlayerIndex = 0;
   int round = 1;
   int turn = 1;
-  int colorForTurn = -1;
-  // -1 : undifined
-  // 1 : red
-  // 2 : blue
-  // 3 : yellow
-  // 4 : black
+  String colorForTurn = '';
 
   List<int> cards = [];
 
@@ -78,29 +73,8 @@ class _GameBoardPageState extends State<GameBoardPage> {
           int cardKey = value as int;
           gameUtils.Card card = gameUtils.deck[cardKey]!;
           playedCards.add(cardKey);
-          if (card.type == 'classic' && colorForTurn == -1) {
-            switch (card.color) {
-              case 'red':
-                {
-                  colorForTurn = 1;
-                  break;
-                }
-              case 'blue':
-                {
-                  colorForTurn = 2;
-                  break;
-                }
-              case 'yellow':
-                {
-                  colorForTurn = 3;
-                  break;
-                }
-              case 'black':
-                {
-                  colorForTurn = 4;
-                  break;
-                }
-            }
+          if (card.type == 'classic' && colorForTurn == '') {
+            colorForTurn = card.color as String;
             print(colorForTurn);
           }
         });
@@ -187,71 +161,121 @@ class _GameBoardPageState extends State<GameBoardPage> {
                     spacing: -30.0,
                     runSpacing: -50.0,
                     children: cards.map((card) {
-                      return InkWell(
-                        child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
-                            decoration: BoxDecoration(
-                                image: const DecorationImage(
-                                  image: AssetImage("images/skullking.jpg"),
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: const SizedBox()),
-                        onTap: () {
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return Center(
-                                  child: Material(
-                                    type: MaterialType.transparency,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.white,
-                                      ),
-                                      padding: const EdgeInsets.all(15),
-                                      height: 300,
-                                      width: MediaQuery.of(context).size.width * 0.7,
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: <Widget>[
-                                          Container(
-                                              padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 100),
-                                              decoration: BoxDecoration(
-                                                  image: const DecorationImage(
-                                                    image: AssetImage("images/skullking.jpg"),
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                  borderRadius: BorderRadius.circular(10)),
-                                              child: const SizedBox()),
-                                          const SizedBox(
-                                            height: 25,
-                                          ),
-                                          if (playersListInPlayOrder[(startPlayerIndex + playedCards.length) % playersListInPlayOrder.length] == globals.userId) ...[
-                                            TextButton(
-                                              child: const Text(
-                                                'PLAY THIS CARD',
-                                                style: TextStyle(fontSize: 20),
-                                              ),
-                                              style: ButtonStyle(
-                                                foregroundColor: MaterialStateProperty.all(Colors.lightBlueAccent),
-                                                backgroundColor: MaterialStateProperty.all(Colors.white),
-                                                shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10), side: const BorderSide(color: Colors.lightBlueAccent))),
-                                              ),
-                                              onPressed: () {
-                                                playCard(card);
-                                                Navigator.pop(context);
-                                              },
-                                            )
-                                          ]
-                                        ],
+                      bool haveSuit = haveSuitColor(cards);
+                      if (haveSuit && gameUtils.deck[card]!.type == 'classic' && gameUtils.deck[card]!.color != colorForTurn) {
+                        return InkWell(
+                          child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
+                              decoration: BoxDecoration(
+                                  image: const DecorationImage(
+                                    image: AssetImage("images/skullking.jpg"),
+                                    fit: BoxFit.cover,
+                                    colorFilter: ColorFilter.mode(Colors.grey, BlendMode.modulate),
+                                  ),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: const SizedBox()),
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return Center(
+                                    child: Material(
+                                      type: MaterialType.transparency,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(10),
+                                          color: Colors.white,
+                                        ),
+                                        padding: const EdgeInsets.all(15),
+                                        height: 300,
+                                        width: MediaQuery.of(context).size.width * 0.7,
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: <Widget>[
+                                            Container(
+                                                padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 100),
+                                                decoration: BoxDecoration(
+                                                    image: const DecorationImage(
+                                                      image: AssetImage("images/skullking.jpg"),
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                    borderRadius: BorderRadius.circular(10)),
+                                                child: const SizedBox()),
+                                          ],
+                                        ),
                                       ),
                                     ),
+                                  );
+                                });
+                          },
+                        );
+                      } else {
+                        return InkWell(
+                          child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
+                              decoration: BoxDecoration(
+                                  image: const DecorationImage(
+                                    image: AssetImage("images/skullking.jpg"),
+                                    fit: BoxFit.cover,
                                   ),
-                                );
-                              });
-                        },
-                      );
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: const SizedBox()),
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return Center(
+                                    child: Material(
+                                      type: MaterialType.transparency,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(10),
+                                          color: Colors.white,
+                                        ),
+                                        padding: const EdgeInsets.all(15),
+                                        height: 300,
+                                        width: MediaQuery.of(context).size.width * 0.7,
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: <Widget>[
+                                            Container(
+                                                padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 100),
+                                                decoration: BoxDecoration(
+                                                    image: const DecorationImage(
+                                                      image: AssetImage("images/skullking.jpg"),
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                    borderRadius: BorderRadius.circular(10)),
+                                                child: const SizedBox()),
+                                            if (playersListInPlayOrder[(startPlayerIndex + playedCards.length) % playersListInPlayOrder.length] == globals.userId) ...[
+                                              const SizedBox(
+                                                height: 25,
+                                              ),
+                                              TextButton(
+                                                child: const Text(
+                                                  'PLAY THIS CARD',
+                                                  style: TextStyle(fontSize: 20),
+                                                ),
+                                                style: ButtonStyle(
+                                                  foregroundColor: MaterialStateProperty.all(Colors.lightBlueAccent),
+                                                  backgroundColor: MaterialStateProperty.all(Colors.white),
+                                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10), side: const BorderSide(color: Colors.lightBlueAccent))),
+                                                ),
+                                                onPressed: () {
+                                                  playCard(card);
+                                                  Navigator.pop(context);
+                                                },
+                                              )
+                                            ]
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                });
+                          },
+                        );
+                      }
                     }).toList(),
                   ),
                 ],
@@ -272,16 +296,26 @@ class _GameBoardPageState extends State<GameBoardPage> {
     );
   }
 
+  bool haveSuitColor(List cards) {
+    bool haveCardColorOfSuit = false;
+    cards.forEach((card) {
+      if (gameUtils.deck[card]!.color == colorForTurn) {
+        haveCardColorOfSuit = true;
+      }
+    });
+    return haveCardColorOfSuit;
+  }
+
   void playCard(int card) {
     setState(() {
       cards.remove(card);
       gameUtils.playCard(card, playCardRef);
       if ((startPlayerIndex + playedCards.length) % players.length == startPlayerIndex) {
         // Check qui win le tour, lui donner le point et le désigner en startPlayerIndex
-        Future.delayed(const Duration(seconds: 1), () {
+        Future.delayed(const Duration(seconds: 2), () {
           setState(() {
             playedCards = [];
-            colorForTurn = -1;
+            colorForTurn = '';
             turn += 1;
             if (turn - 1 == round) {
               round += 1;
