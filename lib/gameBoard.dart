@@ -179,9 +179,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                     runSpacing: -50.0,
                     children: cards.map((card) {
                       haveSuit = haveSuitColor(cards);
-                      print(haveSuit.toString() + (gameUtils.deck[card]!.type == 'classic').toString() + (gameUtils.deck[card]!.color != colorForTurn).toString());
                       if (haveSuit && gameUtils.deck[card]!.type == 'classic' && gameUtils.deck[card]!.color != colorForTurn) {
-                        print('CARD UNPLAYABLE:$card');
                         return InkWell(
                           child: Container(
                               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
@@ -189,7 +187,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                                   image: const DecorationImage(
                                     image: AssetImage("images/skullking.jpg"),
                                     fit: BoxFit.cover,
-                                    colorFilter: ColorFilter.mode(Colors.black, BlendMode.modulate),
+                                    colorFilter: ColorFilter.mode(Colors.grey, BlendMode.saturation),
                                   ),
                                   borderRadius: BorderRadius.circular(10)),
                               child: const SizedBox()),
