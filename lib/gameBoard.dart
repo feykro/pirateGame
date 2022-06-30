@@ -56,7 +56,6 @@ class _GameBoardPageState extends State<GameBoardPage> {
               cardForTurn?.forEach((card) {
                 cards.add(card);
               });
-              print(cardForTurn);
               SchedulerBinding.instance!.addPostFrameCallback((_) {
                 showInformationDialog(context);
               });
@@ -76,23 +75,20 @@ class _GameBoardPageState extends State<GameBoardPage> {
           playedCards.add(cardKey);
           if (card.type == 'classic' && colorForTurn == '') {
             colorForTurn = card.color as String;
-            print(colorForTurn);
           }
           if (playedCards.length == players.length) {
             // Check qui win le tour, lui donner le point et le désigner en startPlayerIndex
-            setState(() {
-              colorForTurn = '';
-              turn += 1;
-              Future.delayed(Duration(seconds: 2), () {
-                playedCards = [];
-              });
-              if (turn - 1 == round) {
-                round += 1;
-                Future.delayed(Duration(seconds: 3), () {
-                  newTurn();
-                });
-              }
+            colorForTurn = '';
+            turn += 1;
+            Future.delayed(Duration(seconds: 2), () {
+              playedCards = [];
             });
+            if (turn - 1 == round) {
+              round += 1;
+              Future.delayed(Duration(seconds: 3), () {
+                newTurn();
+              });
+            }
           }
         });
       }
@@ -327,6 +323,11 @@ class _GameBoardPageState extends State<GameBoardPage> {
     setState(() {
       cards.remove(card);
       gameUtils.playCard(card, playCardRef);
+      if (playedCards.length == players.length) {
+        Future.delayed(Duration(seconds: 2), () {
+          playedCards = [];
+        });
+      }
     });
   }
 
