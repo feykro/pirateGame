@@ -73,6 +73,11 @@ class _GameBoardPageState extends State<GameBoardPage> {
           int cardKey = value as int;
           gameUtils.Card card = gameUtils.deck[cardKey]!;
           playedCards.add(cardKey);
+          print('AVANT:$colorForTurn');
+          if (card.type == 'classic' && colorForTurn == '') {
+            colorForTurn = card.color as String;
+            print(colorForTurn);
+          }
           if (playedCards.length == players.length) {
             // Check qui win le tour, lui donner le point et le désigner en startPlayerIndex
             Future.delayed(const Duration(seconds: 2), () {
@@ -86,10 +91,6 @@ class _GameBoardPageState extends State<GameBoardPage> {
                 }
               });
             });
-          }
-          if (card.type == 'classic' && colorForTurn == '') {
-            colorForTurn = card.color as String;
-            print(colorForTurn);
           }
         });
       }
