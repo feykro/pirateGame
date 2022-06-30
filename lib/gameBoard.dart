@@ -311,6 +311,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                                                       onTap: () {
                                                         setState(() {
                                                           selected = 0;
+                                                          print(selected);
                                                         });
                                                       },
                                                       child: Container(
@@ -320,34 +321,24 @@ class _GameBoardPageState extends State<GameBoardPage> {
                                                               image: AssetImage("images/skullking.jpg"),
                                                               fit: BoxFit.cover,
                                                             ),
-                                                            borderRadius: BorderRadius.circular(10),
-                                                            border: selected == 0
-                                                                ? Border.all(
-                                                                    width: 5,
-                                                                  )
-                                                                : null,
+                                                            borderRadius: selected == 1 ? BorderRadius.circular(10) : null,
                                                           ),
                                                           child: const SizedBox())),
                                                   InkWell(
                                                       onTap: () {
                                                         setState(() {
                                                           selected = 1;
+                                                          print(selected);
                                                         });
                                                       },
                                                       child: Container(
                                                           padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 100),
                                                           decoration: BoxDecoration(
-                                                            image: const DecorationImage(
-                                                              image: AssetImage("images/skullking.jpg"),
-                                                              fit: BoxFit.cover,
-                                                            ),
-                                                            borderRadius: BorderRadius.circular(10),
-                                                            border: selected == 1
-                                                                ? Border.all(
-                                                                    width: 5,
-                                                                  )
-                                                                : null,
-                                                          ),
+                                                              image: const DecorationImage(
+                                                                image: AssetImage("images/skullking.jpg"),
+                                                                fit: BoxFit.cover,
+                                                              ),
+                                                              borderRadius: selected == 0 ? BorderRadius.circular(10) : null),
                                                           child: const SizedBox())),
                                                 ],
                                               ),
