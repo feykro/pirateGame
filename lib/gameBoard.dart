@@ -80,9 +80,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
             // Check qui win le tour, lui donner le point et le désigner en startPlayerIndex
             colorForTurn = '';
             turn += 1;
-            Future.delayed(Duration(seconds: 2), () {
-              playedCards = [];
-            });
+            playedCards = [];
             if (turn - 1 == round) {
               round += 1;
               Future.delayed(Duration(seconds: 3), () {
@@ -323,11 +321,6 @@ class _GameBoardPageState extends State<GameBoardPage> {
     setState(() {
       cards.remove(card);
       gameUtils.playCard(card, playCardRef);
-      if (playedCards.length == players.length) {
-        Future.delayed(Duration(seconds: 2), () {
-          playedCards = [];
-        });
-      }
     });
   }
 
