@@ -240,7 +240,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                                 context: context,
                                 builder: (context) {
                                   int selected = -1;
-                                  if (gameUtils.deck[card]!.type == 'scary-mary') {
+                                  if (gameUtils.deck[card]!.type != 'scary-mary') {
                                     return Center(
                                       child: Material(
                                         type: MaterialType.transparency,
