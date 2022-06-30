@@ -412,9 +412,12 @@ class _GameBoardPageState extends State<GameBoardPage> {
   }
 
   void playCard(int card) {
-    print('PLAYED:$card');
     setState(() {
-      cards.remove(card);
+      if (card == 66 || card == 67) {
+        cards.remove(64);
+      } else {
+        cards.remove(card);
+      }
       gameUtils.playCard(card, playCardRef);
     });
   }
