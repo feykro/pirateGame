@@ -300,11 +300,12 @@ class _GameBoardPageState extends State<GameBoardPage> {
                                           ),
                                           padding: const EdgeInsets.all(15),
                                           height: 300,
-                                          width: MediaQuery.of(context).size.width * 0.7,
+                                          width: MediaQuery.of(context).size.width * 0.9,
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.center,
                                             children: <Widget>[
                                               Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                                 children: [
                                                   InkWell(
                                                       onTap: () {
