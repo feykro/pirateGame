@@ -23,7 +23,9 @@ Future<Map?> getPlayers(DatabaseReference playersRef) async {
 
 void createDeckForRound(int nbPlayers, int round, DatabaseReference postListRef) {
   var rng = Random();
-  List<int> deck = List.generate(nbPlayers * round, (_) => rng.nextInt(66));
+  List<int> deck = Iterable<int>.generate(66).toList();
+  deck.shuffle();
+  deck = deck.sublist(0, nbPlayers * round);
   postListRef.set(deck);
   Map<String, Object?> updates = {};
   updates["VoteCount"] = 0;
@@ -138,5 +140,11 @@ final Map<int, Card> deck = {
   64: Card('scary-mary'),
 
   //Skull King 1
-  65: Card('skull-king')
+  65: Card('skull-king'),
+
+  //Scary Mary pirate
+  66: Card('scary-mary-pirate'),
+
+  //Scary Mary escape
+  67: Card('scary-mary-escape')
 };

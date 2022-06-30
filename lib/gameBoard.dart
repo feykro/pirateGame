@@ -239,54 +239,144 @@ class _GameBoardPageState extends State<GameBoardPage> {
                             showDialog(
                                 context: context,
                                 builder: (context) {
-                                  return Center(
-                                    child: Material(
-                                      type: MaterialType.transparency,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(10),
-                                          color: Colors.white,
-                                        ),
-                                        padding: const EdgeInsets.all(15),
-                                        height: 300,
-                                        width: MediaQuery.of(context).size.width * 0.7,
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: <Widget>[
-                                            Container(
-                                                padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 100),
-                                                decoration: BoxDecoration(
-                                                    image: const DecorationImage(
-                                                      image: AssetImage("images/skullking.jpg"),
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                    borderRadius: BorderRadius.circular(10)),
-                                                child: const SizedBox()),
-                                            if (playersListInPlayOrder[(startPlayerIndex + playedCards.length) % playersListInPlayOrder.length] == globals.userId) ...[
-                                              const SizedBox(
-                                                height: 25,
-                                              ),
-                                              TextButton(
-                                                child: const Text(
-                                                  'PLAY THIS CARD',
-                                                  style: TextStyle(fontSize: 20),
+                                  int selected = -1;
+                                  if (gameUtils.deck[card]!.type != 'scary-mary') {
+                                    return Center(
+                                      child: Material(
+                                        type: MaterialType.transparency,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10),
+                                            color: Colors.white,
+                                          ),
+                                          padding: const EdgeInsets.all(15),
+                                          height: 300,
+                                          width: MediaQuery.of(context).size.width * 0.7,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: <Widget>[
+                                              Container(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 100),
+                                                  decoration: BoxDecoration(
+                                                      image: const DecorationImage(
+                                                        image: AssetImage("images/skullking.jpg"),
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                      borderRadius: BorderRadius.circular(10)),
+                                                  child: const SizedBox()),
+                                              if (playersListInPlayOrder[(startPlayerIndex + playedCards.length) % playersListInPlayOrder.length] == globals.userId) ...[
+                                                const SizedBox(
+                                                  height: 25,
                                                 ),
-                                                style: ButtonStyle(
-                                                  foregroundColor: MaterialStateProperty.all(Colors.lightBlueAccent),
-                                                  backgroundColor: MaterialStateProperty.all(Colors.white),
-                                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10), side: const BorderSide(color: Colors.lightBlueAccent))),
-                                                ),
-                                                onPressed: () {
-                                                  playCard(card);
-                                                  Navigator.pop(context);
-                                                },
-                                              )
-                                            ]
-                                          ],
+                                                TextButton(
+                                                  child: const Text(
+                                                    'PLAY THIS CARD',
+                                                    style: TextStyle(fontSize: 20),
+                                                  ),
+                                                  style: ButtonStyle(
+                                                    foregroundColor: MaterialStateProperty.all(Colors.lightBlueAccent),
+                                                    backgroundColor: MaterialStateProperty.all(Colors.white),
+                                                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10), side: const BorderSide(color: Colors.lightBlueAccent))),
+                                                  ),
+                                                  onPressed: () {
+                                                    playCard(card);
+                                                    Navigator.pop(context);
+                                                  },
+                                                )
+                                              ]
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  );
+                                    );
+                                  } else {
+                                    return StatefulBuilder(
+                                      builder: (context, setState) {
+                                        return Center(
+                                          child: Material(
+                                            type: MaterialType.transparency,
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(10),
+                                                color: Colors.white,
+                                              ),
+                                              padding: const EdgeInsets.all(15),
+                                              height: 300,
+                                              width: MediaQuery.of(context).size.width * 0.9,
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: <Widget>[
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                    children: [
+                                                      InkWell(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              selected = 0;
+                                                            });
+                                                          },
+                                                          child: Container(
+                                                              padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 100),
+                                                              decoration: BoxDecoration(
+                                                                  image: const DecorationImage(
+                                                                    image: AssetImage("images/skullking.jpg"),
+                                                                    fit: BoxFit.cover,
+                                                                  ),
+                                                                  borderRadius: BorderRadius.circular(10),
+                                                                  border: selected == 0 ? Border.all(width: 5, color: Colors.red) : null),
+                                                              child: const SizedBox())),
+                                                      InkWell(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              selected = 1;
+                                                            });
+                                                          },
+                                                          child: Container(
+                                                              padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 100),
+                                                              decoration: BoxDecoration(
+                                                                  image: const DecorationImage(
+                                                                    image: AssetImage("images/skullking.jpg"),
+                                                                    fit: BoxFit.cover,
+                                                                  ),
+                                                                  borderRadius: BorderRadius.circular(10),
+                                                                  border: selected == 1 ? Border.all(width: 5, color: Colors.red) : null),
+                                                              child: const SizedBox())),
+                                                    ],
+                                                  ),
+                                                  if (playersListInPlayOrder[(startPlayerIndex + playedCards.length) % playersListInPlayOrder.length] == globals.userId) ...[
+                                                    const SizedBox(
+                                                      height: 25,
+                                                    ),
+                                                    TextButton(
+                                                      child: const Text(
+                                                        'PLAY THIS CARD',
+                                                        style: TextStyle(fontSize: 20),
+                                                      ),
+                                                      style: ButtonStyle(
+                                                        foregroundColor: MaterialStateProperty.all(Colors.lightBlueAccent),
+                                                        backgroundColor: MaterialStateProperty.all(Colors.white),
+                                                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10), side: const BorderSide(color: Colors.lightBlueAccent))),
+                                                      ),
+                                                      onPressed: () {
+                                                        if (selected == 0) {
+                                                          playCard(66);
+                                                          Navigator.pop(context);
+                                                        }
+                                                        if (selected == 1) {
+                                                          playCard(67);
+                                                          Navigator.pop(context);
+                                                        }
+                                                      },
+                                                    )
+                                                  ]
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  }
                                 });
                           },
                         );
@@ -323,7 +413,11 @@ class _GameBoardPageState extends State<GameBoardPage> {
 
   void playCard(int card) {
     setState(() {
-      cards.remove(card);
+      if (card == 66 || card == 67) {
+        cards.remove(64);
+      } else {
+        cards.remove(card);
+      }
       gameUtils.playCard(card, playCardRef);
     });
   }
