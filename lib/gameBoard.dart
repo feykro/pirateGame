@@ -323,7 +323,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                                                                     fit: BoxFit.cover,
                                                                   ),
                                                                   borderRadius: BorderRadius.circular(10),
-                                                                  border: selected == 0 ? Border.all(width: 5) : null),
+                                                                  border: selected == 0 ? Border.all(width: 5, color: Colors.red) : null),
                                                               child: const SizedBox())),
                                                       InkWell(
                                                           onTap: () {
@@ -339,7 +339,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                                                                     fit: BoxFit.cover,
                                                                   ),
                                                                   borderRadius: BorderRadius.circular(10),
-                                                                  border: selected == 0 ? Border.all(width: 5) : null),
+                                                                  border: selected == 1 ? Border.all(width: 5, color: Colors.red) : null),
                                                               child: const SizedBox())),
                                                     ],
                                                   ),
