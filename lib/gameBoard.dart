@@ -29,6 +29,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
   int turn = 1;
   String colorForTurn = '';
   bool haveSuit = false;
+  int selected = -1;
 
   List<int> cards = [];
 
@@ -289,7 +290,6 @@ class _GameBoardPageState extends State<GameBoardPage> {
                                       ),
                                     );
                                   } else {
-                                    int selected = -1;
                                     return Center(
                                       child: Material(
                                         type: MaterialType.transparency,
@@ -311,7 +311,6 @@ class _GameBoardPageState extends State<GameBoardPage> {
                                                       onTap: () {
                                                         setState(() {
                                                           selected = 0;
-                                                          print(selected);
                                                         });
                                                       },
                                                       child: Container(
@@ -328,7 +327,6 @@ class _GameBoardPageState extends State<GameBoardPage> {
                                                       onTap: () {
                                                         setState(() {
                                                           selected = 1;
-                                                          print(selected);
                                                         });
                                                       },
                                                       child: Container(
