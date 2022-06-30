@@ -290,6 +290,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                                       ),
                                     );
                                   } else {
+                                    print(selected);
                                     return Center(
                                       child: Material(
                                         type: MaterialType.transparency,
