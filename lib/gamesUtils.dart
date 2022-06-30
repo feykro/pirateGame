@@ -25,7 +25,7 @@ void createDeckForRound(int nbPlayers, int round, DatabaseReference postListRef)
   var rng = Random();
   List<int> deck = List.generate(nbPlayers * round, (_) => rng.nextInt(66));
   postListRef.set(deck);
-  print('deck:$deck');
+
   Map<String, Object?> updates = {};
   updates["VoteCount"] = 0;
   postListRef.parent!.update(updates);
@@ -38,9 +38,11 @@ Future<List<int>?> getCardFromDeck(int round, DatabaseReference postListRef) asy
       return Transaction.abort();
     }
     List<int> deck = (post as List<dynamic>).cast<int>();
+    print('deck:$deck');
     cards = deck.sublist(0, round);
     deck = deck.sublist(round);
-
+    print('deck:$deck');
+    print('cards:$cards');
     return Transaction.success(deck);
   });
   return cards;
