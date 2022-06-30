@@ -78,20 +78,6 @@ class _GameBoardPageState extends State<GameBoardPage> {
             colorForTurn = card.color as String;
             print(colorForTurn);
           }
-          if (playedCards.length == players.length) {
-            // Check qui win le tour, lui donner le point et le désigner en startPlayerIndex
-            Future.delayed(const Duration(seconds: 2), () {
-              setState(() {
-                playedCards = [];
-                colorForTurn = '';
-                turn += 1;
-                if (turn - 1 == round) {
-                  round += 1;
-                  newTurn();
-                }
-              });
-            });
-          }
         });
       }
     });
@@ -325,6 +311,20 @@ class _GameBoardPageState extends State<GameBoardPage> {
     setState(() {
       cards.remove(card);
       gameUtils.playCard(card, playCardRef);
+      if (playedCards.length == players.length) {
+        // Check qui win le tour, lui donner le point et le désigner en startPlayerIndex
+        Future.delayed(const Duration(seconds: 3), () {
+          setState(() {
+            playedCards = [];
+            colorForTurn = '';
+            turn += 1;
+            if (turn - 1 == round) {
+              round += 1;
+              newTurn();
+            }
+          });
+        });
+      }
     });
   }
 
