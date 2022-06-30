@@ -56,7 +56,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
               cardForTurn?.forEach((card) {
                 cards.add(card);
               });
-              playedCards = [];
+              print(cardForTurn);
               SchedulerBinding.instance!.addPostFrameCallback((_) {
                 showInformationDialog(context);
               });
@@ -74,7 +74,6 @@ class _GameBoardPageState extends State<GameBoardPage> {
           int cardKey = value as int;
           gameUtils.Card card = gameUtils.deck[cardKey]!;
           playedCards.add(cardKey);
-          print('AVANT:$colorForTurn');
           if (card.type == 'classic' && colorForTurn == '') {
             colorForTurn = card.color as String;
             print(colorForTurn);
@@ -178,7 +177,6 @@ class _GameBoardPageState extends State<GameBoardPage> {
                     runSpacing: -50.0,
                     children: cards.map((card) {
                       haveSuit = haveSuitColor(cards);
-                      print(haveSuit);
                       if (haveSuit && gameUtils.deck[card]!.type == 'classic' && gameUtils.deck[card]!.color != colorForTurn) {
                         return InkWell(
                           child: Container(
