@@ -320,7 +320,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                                                               image: AssetImage("images/skullking.jpg"),
                                                               fit: BoxFit.cover,
                                                             ),
-                                                            borderRadius: selected == 1 ? BorderRadius.circular(10) : null,
+                                                            borderRadius: BorderRadius.circular(10),
                                                           ),
                                                           child: const SizedBox())),
                                                   InkWell(
@@ -336,7 +336,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                                                                 image: AssetImage("images/skullking.jpg"),
                                                                 fit: BoxFit.cover,
                                                               ),
-                                                              borderRadius: selected == 0 ? BorderRadius.circular(10) : null),
+                                                              borderRadius: BorderRadius.circular(10)),
                                                           child: const SizedBox())),
                                                 ],
                                               ),
