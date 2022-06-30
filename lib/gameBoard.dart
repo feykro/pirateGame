@@ -27,6 +27,12 @@ class _GameBoardPageState extends State<GameBoardPage> {
   int startPlayerIndex = 0;
   int round = 1;
   int turn = 1;
+  int colorForTurn = -1;
+  // -1 : undifined
+  // 1 : red
+  // 2 : blue
+  // 3 : yellow
+  // 4 : black
 
   List<int> cards = [];
 
@@ -69,7 +75,34 @@ class _GameBoardPageState extends State<GameBoardPage> {
       final value = event.snapshot.value;
       if (event.snapshot.exists) {
         setState(() {
-          playedCards.add(value as int);
+          int cardKey = value as int;
+          gameUtils.Card card = gameUtils.deck[cardKey]!;
+          playedCards.add(cardKey);
+          if (card.type == 'classic' && colorForTurn == -1) {
+            switch (card.color) {
+              case 'red':
+                {
+                  colorForTurn = 1;
+                  break;
+                }
+              case 'blue':
+                {
+                  colorForTurn = 2;
+                  break;
+                }
+              case 'yellow':
+                {
+                  colorForTurn = 3;
+                  break;
+                }
+              case 'black':
+                {
+                  colorForTurn = 4;
+                  break;
+                }
+            }
+            print(colorForTurn);
+          }
         });
       }
     });
@@ -245,6 +278,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
       gameUtils.playCard(card, playCardRef);
       if ((startPlayerIndex + playedCards.length) % players.length == startPlayerIndex) {
         // Check qui win le tour, lui donner le point et le désigner en startPlayerIndex
+        colorForTurn = -1;
         turn += 1;
         if (turn - 1 == round) {
           round += 1;

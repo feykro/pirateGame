@@ -21,8 +21,7 @@ Future<Map?> getPlayers(DatabaseReference playersRef) async {
   }
 }
 
-void createDeckForRound(
-    int nbPlayers, int round, DatabaseReference postListRef) {
+void createDeckForRound(int nbPlayers, int round, DatabaseReference postListRef) {
   var rng = Random();
   List<int> deck = List.generate(nbPlayers * round, (_) => rng.nextInt(66));
   postListRef.set(deck);
@@ -31,8 +30,7 @@ void createDeckForRound(
   postListRef.parent!.update(updates);
 }
 
-Future<List<int>?> getCardFromDeck(
-    int round, DatabaseReference postListRef) async {
+Future<List<int>?> getCardFromDeck(int round, DatabaseReference postListRef) async {
   List<int> cards = [];
   TransactionResult result = await postListRef.runTransaction((Object? post) {
     if (post == null) {
