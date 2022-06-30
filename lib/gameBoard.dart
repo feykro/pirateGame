@@ -28,6 +28,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
   int round = 1;
   int turn = 1;
   String colorForTurn = '';
+  bool haveSuit = false;
 
   List<int> cards = [];
 
@@ -176,7 +177,8 @@ class _GameBoardPageState extends State<GameBoardPage> {
                     spacing: -30.0,
                     runSpacing: -50.0,
                     children: cards.map((card) {
-                      bool haveSuit = haveSuitColor(cards);
+                      haveSuit = haveSuitColor(cards);
+                      print(haveSuit);
                       if (haveSuit && gameUtils.deck[card]!.type == 'classic' && gameUtils.deck[card]!.color != colorForTurn) {
                         return InkWell(
                           child: Container(
