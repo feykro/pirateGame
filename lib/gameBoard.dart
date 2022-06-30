@@ -80,7 +80,11 @@ class _GameBoardPageState extends State<GameBoardPage> {
             // Check qui win le tour, lui donner le point et le désigner en startPlayerIndex
             colorForTurn = '';
             turn += 1;
-            playedCards = [];
+            Future.delayed(Duration(seconds: 2), () {
+              setState(() {
+                playedCards = [];
+              });
+            });
             if (turn - 1 == round) {
               round += 1;
               Future.delayed(Duration(seconds: 3), () {
