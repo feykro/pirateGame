@@ -140,5 +140,11 @@ final Map<int, Card> deck = {
   64: Card('scary-mary'),
 
   //Skull King 1
-  65: Card('skull-king')
+  65: Card('skull-king'),
+
+  //Scary Mary pirate
+  66: Card('scary-mary-pirate'),
+
+  //Scary Mary escape
+  67: Card('scary-mary-escape')
 };
