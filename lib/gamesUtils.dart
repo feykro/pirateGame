@@ -38,11 +38,8 @@ Future<List<int>?> getCardFromDeck(int round, DatabaseReference postListRef) asy
       return Transaction.abort();
     }
     List<int> deck = (post as List<dynamic>).cast<int>();
-    print('deck avant:$deck');
     cards = deck.sublist(0, round);
     deck = deck.sublist(round);
-    print('deck après:$deck');
-    print('cards:$cards');
     return Transaction.success(deck);
   });
   return cards;
