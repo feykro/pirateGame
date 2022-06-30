@@ -23,13 +23,9 @@ Future<Map?> getPlayers(DatabaseReference playersRef) async {
 
 void createDeckForRound(int nbPlayers, int round, DatabaseReference postListRef) {
   var rng = Random();
-  //List<int> deck = List.generate(nbPlayers * round, (_) => rng.nextInt(66));
   List<int> deck = Iterable<int>.generate(66).toList();
-  print(deck);
   deck.shuffle();
-  print(deck);
   deck = deck.sublist(0, nbPlayers * round);
-  print(deck);
   postListRef.set(deck);
   Map<String, Object?> updates = {};
   updates["VoteCount"] = 0;
