@@ -21,7 +21,8 @@ Future<Map?> getPlayers(DatabaseReference playersRef) async {
   }
 }
 
-void createDeckForRound(int nbPlayers, int round, DatabaseReference postListRef) {
+void createDeckForRound(
+    int nbPlayers, int round, DatabaseReference postListRef) {
   var rng = Random();
   List<int> deck = Iterable<int>.generate(66).toList();
   deck.shuffle();
@@ -32,7 +33,8 @@ void createDeckForRound(int nbPlayers, int round, DatabaseReference postListRef)
   postListRef.parent!.update(updates);
 }
 
-Future<List<int>?> getCardFromDeck(int round, DatabaseReference postListRef) async {
+Future<List<int>?> getCardFromDeck(
+    int round, DatabaseReference postListRef) async {
   List<int> cards = [];
   TransactionResult result = await postListRef.runTransaction((Object? post) {
     if (post == null) {
@@ -148,3 +150,95 @@ final Map<int, Card> deck = {
   //Scary Mary escape
   67: Card('scary-mary-escape')
 };
+
+//cartes la liste des indice dans la hashmap des cartes dans l'ordre du premier a jouer au dernier
+int getWinner(List<int> indiceMapCarte) {
+  int nbCarte = indiceMapCarte.length;
+  if (nbCarte == 0) {
+    return -1;
+  } else {
+    int indiceHigherCarte = 0;
+    for (int i = 1; i != nbCarte; i++) {
+      indiceHigherCarte = carteCmp(indiceMapCarte, indiceHigherCarte, i);
+    }
+    return indiceHigherCarte;
+  }
+}
+
+int carteCmp(List<int> cartes, int carteA, int carteB) {
+  int indiceCarteA = cartes[carteA];
+  int indiceCarteB = cartes[carteB];
+
+  if (indiceCarteA < 13 && indiceCarteB < 13) {
+    if (indiceCarteA > indiceCarteB) {
+      return carteA;
+    } else {
+      return carteB;
+    }
+  }
+  if (indiceCarteA < 26 && indiceCarteB < 26) {
+    if (indiceCarteA > indiceCarteB) {
+      return carteA;
+    } else {
+      return carteB;
+    }
+  }
+  if (indiceCarteA < 39 && indiceCarteB < 39) {
+    if (indiceCarteA > indiceCarteB) {
+      return carteA;
+    } else {
+      return carteB;
+    }
+  }
+  if (indiceCarteA < 52 && indiceCarteB < 52) {
+    if (indiceCarteA > indiceCarteB) {
+      return carteA;
+    } else {
+      return carteB;
+    }
+  }
+
+  //si A est un pirate
+  if ((indiceCarteA > 51 && indiceCarteA < 57) || indiceCarteA == 66) {
+    if (indiceCarteB == 65) {
+      return carteB;
+    } else {
+      return carteA;
+    }
+  }
+
+  //si A est une mermaid
+  if ((indiceCarteA == 62 || indiceCarteA == 63)) {
+    if ((indiceCarteB > 51 && indiceCarteB < 57) || indiceCarteB == 66) {
+      return carteB;
+    } else {
+      return carteA;
+    }
+  }
+
+  //si A est un skullking
+  if (indiceCarteA == 65) {
+    if ((indiceCarteB == 62 || indiceCarteB == 63)) {
+      return carteB;
+    } else {
+      return carteA;
+    }
+  }
+
+  //si A est une escape
+  if ((indiceCarteA > 56 && indiceCarteA < 61) || indiceCarteA == 67) {
+    if ((indiceCarteA > 56 && indiceCarteA < 61) || indiceCarteA == 67) {
+      return carteA;
+    } else {
+      return carteB;
+    }
+  }
+
+  //si pas la meme couleur
+  if (deck[indiceCarteA]!.color != deck[indiceCarteB]!.color &&
+      deck[indiceCarteB]!.color != 'black') {
+    return carteA;
+  }
+
+  return carteB;
+}
