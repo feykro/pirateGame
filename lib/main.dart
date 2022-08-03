@@ -211,7 +211,7 @@ class _LoginPageState extends State<LoginPage> {
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.normal,
                                               ),
-                                              hintText: 'Enter your email...',
+                                              hintText: 'Enter your name...',
                                               hintStyle: TextStyle(
                                                 fontFamily: 'Lexend Deca',
                                                 color: Color(0xFF95A1AC),
@@ -255,8 +255,7 @@ class _LoginPageState extends State<LoginPage> {
                                                 child: ElevatedButton(
                                                   child: Text('Login'),
                                                   style: ElevatedButton.styleFrom(
-                                                    primary: Colors.red,
-                                                    onPrimary: Colors.black,
+                                                    fixedSize: Size(230, 50),
                                                     shape: const BeveledRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
                                                   ),
                                                   onPressed: value.text.isNotEmpty
