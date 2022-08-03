@@ -17,6 +17,7 @@ Future<void> start() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -135,7 +136,6 @@ class _LoginPageState extends State<LoginPage> {
     final _inputController = TextEditingController();
     return Scaffold(
       backgroundColor: Color(0xFF14181B),
-      /*
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Container(
@@ -284,7 +284,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         ),
-      ),*/
+      ),
     );
   }
 }
