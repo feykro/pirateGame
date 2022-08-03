@@ -11,12 +11,12 @@ import 'globals.dart' as globals;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  start();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown
   ]).then((value) => runApp(MyApp()));
   runApp(MyApp());
+  start();
 }
 
 Future<void> start() async {
