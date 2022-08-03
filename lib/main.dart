@@ -12,17 +12,17 @@ import 'globals.dart' as globals;
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   start();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown
+  ]).then((value) => runApp(MyApp()));
+  runApp(MyApp());
 }
 
 Future<void> start() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown
-  ]).then((value) => runApp(MyApp()));
-  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
