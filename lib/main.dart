@@ -255,8 +255,8 @@ class _LoginPageState extends State<LoginPage> {
                                                 child: ElevatedButton(
                                                   child: Text('Login'),
                                                   style: ElevatedButton.styleFrom(
-                                                    primary: Colors.teal,
-                                                    onPrimary: Colors.white,
+                                                    primary: Colors.red,
+                                                    onPrimary: Colors.black,
                                                     shape: const BeveledRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
                                                   ),
                                                   onPressed: value.text.isNotEmpty
