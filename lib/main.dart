@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:pirate_app/GamePage.dart';
 import 'package:pirate_app/homePage.dart';
+import 'package:flutter/services.dart';
 
 import 'firebase_options.dart';
 import 'gameRoom.dart';
@@ -18,6 +19,11 @@ Future<void> start() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MyApp());
+  /*
+    SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]).then((value) => runApp(MyApp()));
+  */
 }
 
 class MyApp extends StatelessWidget {
@@ -67,8 +73,7 @@ class _LoginPageState extends State<LoginPage> {
 
     return WillPopScope(
       onWillPop: () async {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('The System Back Button is Deactivated')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('The System Back Button is Deactivated')));
         return false;
       },
       child: Scaffold(
@@ -107,8 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                 valueListenable: _inputController,
                 builder: (context, value, child) {
                   return Padding(
-                    padding: const EdgeInsets.only(
-                        left: 25.0, right: 25.0, top: 25.0, bottom: 10.0),
+                    padding: const EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0, bottom: 10.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
