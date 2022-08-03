@@ -204,7 +204,7 @@ class _LoginPageState extends State<LoginPage> {
                                             controller: _inputController,
                                             obscureText: false,
                                             decoration: InputDecoration(
-                                              labelText: 'Email Address',
+                                              labelText: 'Name',
                                               labelStyle: TextStyle(
                                                 fontFamily: 'Lexend Deca',
                                                 color: Color(0xFF95A1AC),
