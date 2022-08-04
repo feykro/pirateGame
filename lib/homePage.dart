@@ -46,11 +46,7 @@ class _HomePageState extends State<HomePage> {
         ),
         title: Text(
           'Rooms',
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 28,
-            fontWeight: FontWeight.normal,
-          ),
+          style: TextStyle(fontFamily: 'Poppins', fontSize: 28, fontWeight: FontWeight.normal, color: Colors.black),
         ),
         actions: [],
         centerTitle: false,
