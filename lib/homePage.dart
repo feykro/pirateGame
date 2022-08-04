@@ -130,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                                 Visibility(
                                   visible: !lockedRoom,
                                   child: Container(
-                                    height: 52,
+                                    height: 30,
                                   ),
                                 ),
                               ],
@@ -139,7 +139,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         // Bouton pour valider modal et naviguer vers la salle en question
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
                           child: ElevatedButton(
                               style: ButtonStyle(
                                 shape: MaterialStateProperty.all(
