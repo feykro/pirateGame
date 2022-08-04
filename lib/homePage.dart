@@ -185,7 +185,7 @@ class _HomePageState extends State<HomePage> {
                         child: Container(
                             decoration: BoxDecoration(
                               image: DecorationImage(
-                                colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.dstATop),
+                                colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.33), BlendMode.dstATop),
                                 image: Image.network("https://m.media-amazon.com/images/I/61Tv1QeZfDL._AC_SY580_.jpg").image,
                                 fit: BoxFit.cover,
                                 alignment: Alignment.center,
