@@ -23,285 +23,278 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController emailAddressController = TextEditingController();
+    //  Todo: get les rooms depuis le réseau
+    //  Todo: ajouter la search bar
+    //  Todo optionnel: ajouter un will pop scope en cas de retour arrière pour faire une déconnexion
+
+    final _roomNameController = TextEditingController();
+    final _roomPasswordController = TextEditingController();
+
+    void joinRoom(Map rooms) {
+      DatabaseReference playerRef = ref.child('${rooms['key']}/players').push();
+      globals.userId = playerRef.key!;
+      playerRef.set(
+        {
+          "name": globals.username,
+          "isReady": false,
+          "vote": -1
+        },
+      );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => GameRoomPage(roomName: rooms['name'], roomId: rooms['key']),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        automaticallyImplyLeading: false,
-        leading: IconButton(
-          /*
-          borderColor: Colors.transparent,
-          borderRadius: 30,
-          borderWidth: 1,
-          buttonSize: 60,
-          */
-          icon: Icon(
-            Icons.arrow_back_rounded,
-            color: Color(0xFF1D2429),
-            size: 30,
-          ),
-          onPressed: () async {
-            Navigator.pop(context);
-          },
-        ),
-        title: Text(
-          'Rooms',
-          style: TextStyle(fontFamily: 'Poppins', fontSize: 28, fontWeight: FontWeight.normal, color: Colors.black),
-        ),
-        actions: [],
-        centerTitle: false,
-        elevation: 0,
+        title: Text("Welcome, ${globals.username}"),
       ),
-      backgroundColor: Colors.white,
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          print('FloatingActionButton pressed ...');
-        },
-        icon: Icon(
-          Icons.add_circle,
-        ),
-        elevation: 8,
-        label: Text(
-          'Create Room',
-        ),
-      ),
-      body: SafeArea(
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
-                child: TextFormField(
-                  controller: emailAddressController,
-                  obscureText: false,
-                  decoration: InputDecoration(
-                    labelText: 'Search for rooms',
-                    labelStyle: TextStyle(
-                      fontFamily: 'Outfit',
-                      color: Color(0xFF57636C),
-                      fontSize: 14,
-                      fontWeight: FontWeight.normal,
-                    ),
-                    hintStyle: TextStyle(
-                      fontFamily: 'Outfit',
-                      color: Color(0xFF57636C),
-                      fontSize: 14,
-                      fontWeight: FontWeight.normal,
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0xFFE0E3E7),
-                        width: 2,
-                      ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0xFFE0E3E7),
-                        width: 2,
-                      ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    filled: true,
-                    fillColor: Color(0xFFF1F4F8),
-                    contentPadding: EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
-                    prefixIcon: Icon(
-                      Icons.search,
-                      color: Color(0xFF57636C),
-                      size: 16,
-                    ),
-                  ),
-                  style: TextStyle(
-                    fontFamily: 'Outfit',
-                    color: Color(0xFF1D2429),
-                    fontSize: 14,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: DefaultTabController(
-                  length: 1,
-                  initialIndex: 0,
-                  child: Column(
-                    children: [
-                      TabBar(
-                        tabs: [
-                          Tab(
-                            text: 'SkullKing',
-                            iconMargin: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
+          elevation: 10.0,
+          label: const Text("Create room"),
+          icon: const Icon(Icons.add),
+          onPressed: () {
+            showModalBottomSheet(
+                context: context,
+                builder: (BuildContext context) {
+                  lockedRoom = false;
+                  return Scaffold(
+                    appBar: AppBar(
+                        title: const Text("Create a room"),
+                        leading: IconButton(
+                          icon: const Icon(Icons.cancel_outlined),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        )),
+                    body: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                          child: TextField(
+                            controller: _roomNameController,
+                            maxLines: 1,
+                            decoration: const InputDecoration(
+                              labelText: 'Room name',
+                            ),
                           ),
-                        ],
-                        unselectedLabelColor: Color(0xFF57636C),
-                        labelStyle: TextStyle(
-                          fontFamily: 'Outfit',
-                          color: Color(0xFF1D2429),
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
                         ),
-                        indicatorColor: Colors.blueAccent,
-                        labelColor: Colors.blueAccent,
-                      ),
-                      Expanded(
-                        child: TabBarView(
-                          children: [
-                            SingleChildScrollView(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(16, 16, 0, 0),
-                                    child: Text(
-                                      'SkullKing Rooms',
-                                      style: TextStyle(
-                                        fontFamily: 'Outfit',
-                                        color: Color(0xFF1D2429),
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.normal,
+                        StatefulBuilder(
+                          builder: (BuildContext context, StateSetter stateSetter) {
+                            return Column(
+                              children: [
+                                AnimatedSegment(
+                                  segmentNames: const [
+                                    "Public",
+                                    "Private"
+                                  ],
+                                  onSegmentChanged: (index) {
+                                    stateSetter(() => index == 0 ? lockedRoom = false : lockedRoom = true);
+                                  },
+                                  backgroundColor: Colors.blueGrey,
+                                  segmentTextColor: Colors.white,
+                                  rippleEffectColor: Colors.blue,
+                                  selectedSegmentColor: Colors.blue,
+                                ),
+                                /*
+                                SwitchListTile(
+                                  title: const Text("Lock room with password"),
+                                  value: lockedRoom,
+                                  onChanged: (val) {
+                                    stateSetter(() => lockedRoom = val);
+                                  },
+                                  secondary: Icon(lockedRoom
+                                      ? Icons.lock
+                                      : Icons.lock_open),
+                                ),
+                                */
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                                  child: Visibility(
+                                    visible: lockedRoom,
+                                    child: TextField(
+                                      controller: _roomPasswordController,
+                                      maxLines: 1,
+                                      decoration: const InputDecoration(
+                                        labelText: 'Room password',
                                       ),
                                     ),
                                   ),
-                                  /*
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 0),
-                                    child: InkWell(
-                                      onTap: () async {},
-                                      child: Container(
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                          color: Color(0xFFF1F4F8),
-                                          borderRadius: BorderRadius.circular(12),
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsetsDirectional.fromSTEB(8, 8, 12, 8),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: [
-                                              Icon(
-                                                Icons.lock_outline,
-                                                color: Colors.black,
-                                                size: 50,
-                                              ),
-                                              Expanded(
-                                                child: Column(
-                                                  mainAxisSize: MainAxisSize.max,
-                                                  children: [
-                                                    Padding(
-                                                      padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
-                                                      child: Row(
-                                                        mainAxisSize: MainAxisSize.max,
-                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                        children: [
-                                                          Text(
-                                                            'Room1',
-                                                            style: TextStyle(fontSize: 20),
-                                                          ),
-                                                          Text(
-                                                            '6/6',
-                                                            style: TextStyle(fontSize: 15),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 16),
-                                                      child: Row(
-                                                        mainAxisSize: MainAxisSize.max,
-                                                        children: [
-                                                          Text(
-                                                            'created by Tom',
-                                                            style: TextStyle(
-                                                              fontFamily: 'Outfit',
-                                                              color: Color(0xFF57636C),
-                                                              fontSize: 12,
-                                                              fontWeight: FontWeight.normal,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
+                                ),
+                                Visibility(
+                                  visible: !lockedRoom,
+                                  child: Container(
+                                    height: 52,
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                        // Bouton pour valider modal et naviguer vers la salle en question
+                        SizedBox(
+                          height: 50,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                            child: ElevatedButton(
+                                style: ButtonStyle(
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30),
                                     ),
-                                  ),*/
-                                  Flexible(
-                                    child: FirebaseAnimatedList(
-                                        query: ref,
-                                        itemBuilder: (BuildContext context, DataSnapshot snapshot_, Animation<double> animation, int index) {
-                                          Map rooms = snapshot_.value as Map;
-                                          rooms['key'] = snapshot_.key;
-                                          int nb_players = 0;
-                                          if (rooms['players'] != null) {
-                                            nb_players = (rooms['players'] as Map).length;
-                                          }
-                                          return FutureBuilder<DataSnapshot>(
-                                            builder: (BuildContext context, snapshot) {
-                                              return Card(
-                                                child: Container(
-                                                    decoration: BoxDecoration(
-                                                      image: DecorationImage(
-                                                        colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.33), BlendMode.dstATop),
-                                                        image: Image.network("https://m.media-amazon.com/images/I/61Tv1QeZfDL._AC_SY580_.jpg").image,
-                                                        fit: BoxFit.cover,
-                                                        alignment: Alignment.center,
-                                                      ),
-                                                    ),
-                                                    child: Column(
-                                                      mainAxisSize: MainAxisSize.min,
-                                                      children: <Widget>[
-                                                        ListTile(
-                                                          leading: Icon(rooms['hasPassword'] ? Icons.lock : Icons.lock_open),
-                                                          title: Text(rooms['name']),
-                                                          subtitle: Text("owner : ${rooms['owner']}"),
-                                                          trailing: Text('$nb_players/6'),
-                                                        ),
-                                                        Row(
-                                                          mainAxisAlignment: MainAxisAlignment.end,
-                                                          children: <Widget>[
-                                                            Padding(
-                                                              padding: const EdgeInsets.only(bottom: 10.0, right: 10.0),
-                                                              child: TextButton(
-                                                                child: const Text('Join room', style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500)),
-                                                                onPressed: () {
-                                                                  if (nb_players < 6) {
-                                                                    if (rooms['hasPassword'] as bool) {
-                                                                      // display modal
-                                                                    } else {}
-                                                                  }
-                                                                },
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    )),
-                                              );
-                                            },
-                                          );
-                                        }),
-                                  )
-                                ],
+                                  ),
+                                ),
+                                onPressed: () {
+                                  GameRoom room = GameRoom(_roomNameController.text, globals.username, lockedRoom, _roomPasswordController.text);
+                                  createRoom(room);
+                                  setState(() {
+                                    lockedRoom = false;
+                                  });
+                                  Navigator.pop(context);
+                                },
+                                child: const Text("Ok !")),
+                          ),
+                        )
+                      ],
+                    ),
+                  );
+                });
+          }),
+      body: Column(
+        children: [
+          //TextButton(onPressed: () {}, child: const Text("Ici searchbar")),
+          Flexible(
+            child: FirebaseAnimatedList(
+                query: ref,
+                itemBuilder: (BuildContext context, DataSnapshot snapshot_, Animation<double> animation, int index) {
+                  Map rooms = snapshot_.value as Map;
+                  rooms['key'] = snapshot_.key;
+                  int nb_players = 0;
+                  if (rooms['players'] != null) {
+                    nb_players = (rooms['players'] as Map).length;
+                  }
+                  return FutureBuilder<DataSnapshot>(
+                    builder: (BuildContext context, snapshot) {
+                      return Card(
+                        child: Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.33), BlendMode.dstATop),
+                                image: Image.network("https://m.media-amazon.com/images/I/61Tv1QeZfDL._AC_SY580_.jpg").image,
+                                fit: BoxFit.cover,
+                                alignment: Alignment.center,
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                ListTile(
+                                  leading: Icon(rooms['hasPassword'] ? Icons.lock : Icons.lock_open),
+                                  title: Text(rooms['name']),
+                                  subtitle: Text("owner : ${rooms['owner']}"),
+                                  trailing: Text('$nb_players/6'),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 10.0, right: 10.0),
+                                      child: TextButton(
+                                        child: const Text('Join room', style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500)),
+                                        onPressed: () {
+                                          if (nb_players < 6) {
+                                            if (rooms['hasPassword'] as bool) {
+                                              // display modal
+                                              showModalBottomSheet(
+                                                  context: context,
+                                                  builder: (BuildContext context) {
+                                                    return buildModalScaffold(rooms, joinRoom);
+                                                  });
+                                            } else {
+                                              joinRoom(rooms);
+                                            }
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            )),
+                      );
+                    },
+                  );
+                }),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget buildModalScaffold(Map rooms, Function joinRoom) {
+    var _textEditingController = TextEditingController();
+
+    var isPasswordOk = false;
+    return Scaffold(
+      appBar: AppBar(
+          title: const Text("Please enter password"),
+          leading: IconButton(
+            icon: const Icon(Icons.cancel_outlined),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          )),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: TextField(
+              obscureText: true,
+              controller: _textEditingController,
+              maxLines: 1,
+              decoration: const InputDecoration(
+                labelText: 'Password',
               ),
-            ],
+            ),
           ),
-        ),
+          // Bouton pour valider modal et naviguer vers la salle en question
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: ElevatedButton(
+                onPressed: () {
+                  if (rooms["password"] as String == _textEditingController.text) {
+                    Navigator.of(context).pop();
+                    joinRoom(rooms);
+                  } else {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text("Erreur"),
+                            content: Text("Le mot de passe est incorrect."),
+                            actions: [
+                              TextButton(
+                                child: const Text("ok"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        });
+                  }
+                },
+                child: const Text("Rejoindre")),
+          ),
+        ],
       ),
     );
   }
