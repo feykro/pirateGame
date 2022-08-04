@@ -275,7 +275,6 @@ class _HomePageState extends State<HomePage> {
                                                                   if (nb_players < 6) {
                                                                     if (rooms['hasPassword'] as bool) {
                                                                       // display modal
-                                                                      showModalBottomSheet(context: context, builder: (BuildContext context) {});
                                                                     } else {}
                                                                   }
                                                                 },
