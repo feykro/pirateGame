@@ -182,43 +182,42 @@ class _HomePageState extends State<HomePage> {
                   return FutureBuilder<DataSnapshot>(
                     builder: (BuildContext context, snapshot) {
                       return Card(
-                        
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            ListTile(
+                              leading: Icon(rooms['hasPassword'] ? Icons.lock : Icons.lock_open),
+                              title: Text(rooms['name']),
+                              subtitle: Text("owner : ${rooms['owner']}"),
+                              trailing: Text('$nb_players/6'),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: <Widget>[
-                                ListTile(
-                                  leading: Icon(rooms['hasPassword'] ? Icons.lock : Icons.lock_open),
-                                  title: Text(rooms['name']),
-                                  subtitle: Text("owner : ${rooms['owner']}"),
-                                  trailing: Text('$nb_players/6'),
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.only(bottom: 10.0, right: 10.0),
-                                      child: TextButton(
-                                        child: const Text('Join room', style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500)),
-                                        onPressed: () {
-                                          if (nb_players < 6) {
-                                            if (rooms['hasPassword'] as bool) {
-                                              // display modal
-                                              showModalBottomSheet(
-                                                  context: context,
-                                                  builder: (BuildContext context) {
-                                                    return buildModalScaffold(rooms, joinRoom);
-                                                  });
-                                            } else {
-                                              joinRoom(rooms);
-                                            }
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                  ],
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 10.0, right: 10.0),
+                                  child: TextButton(
+                                    child: const Text('Join room', style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500)),
+                                    onPressed: () {
+                                      if (nb_players < 6) {
+                                        if (rooms['hasPassword'] as bool) {
+                                          // display modal
+                                          showModalBottomSheet(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return buildModalScaffold(rooms, joinRoom);
+                                              });
+                                        } else {
+                                          joinRoom(rooms);
+                                        }
+                                      }
+                                    },
+                                  ),
                                 ),
                               ],
-                            )),
+                            ),
+                          ],
+                        ),
                       );
                     },
                   );
