@@ -138,26 +138,29 @@ class _HomePageState extends State<HomePage> {
                           },
                         ),
                         // Bouton pour valider modal et naviguer vers la salle en question
-                        Padding(
-                          padding: const EdgeInsets.all(50),
-                          child: ElevatedButton(
-                              style: ButtonStyle(
-                                shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30),
+                        SizedBox(
+                          height: 100,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                            child: ElevatedButton(
+                                style: ButtonStyle(
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              onPressed: () {
-                                GameRoom room = GameRoom(_roomNameController.text, globals.username, lockedRoom, _roomPasswordController.text);
-                                createRoom(room);
-                                setState(() {
-                                  lockedRoom = false;
-                                });
-                                Navigator.pop(context);
-                              },
-                              child: const Text("Ok !")),
-                        ),
+                                onPressed: () {
+                                  GameRoom room = GameRoom(_roomNameController.text, globals.username, lockedRoom, _roomPasswordController.text);
+                                  createRoom(room);
+                                  setState(() {
+                                    lockedRoom = false;
+                                  });
+                                  Navigator.pop(context);
+                                },
+                                child: const Text("Ok !")),
+                          ),
+                        )
                       ],
                     ),
                   );
