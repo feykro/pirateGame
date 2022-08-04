@@ -182,6 +182,19 @@ class _HomePageState extends State<HomePage> {
                   return FutureBuilder<DataSnapshot>(
                     builder: (BuildContext context, snapshot) {
                       return Card(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: Image.network("https://cdn.shopify.com/s/files/1/0565/3230/4053/products/skull-king-family-games-grandpa-beck_s-games-united-states-product-gallery-_6_1200x775.jpg?v=1651003672").image,
+                              fit: BoxFit.fitWidth,
+                              alignment: Alignment.topCenter,
+                            ),
+                          ),
+                          child: Text("YOUR TEXT"),
+                        ),
+                      );
+                      /*
+                      return Card(
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
@@ -219,6 +232,7 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                       );
+                      */
                     },
                   );
                 }),
