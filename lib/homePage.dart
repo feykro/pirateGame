@@ -185,7 +185,7 @@ class _HomePageState extends State<HomePage> {
                         child: Container(
                             decoration: BoxDecoration(
                               image: DecorationImage(
-                                colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.2), BlendMode.dstATop),
+                                colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.dstATop),
                                 image: Image.network("https://cdn.shopify.com/s/files/1/0565/3230/4053/products/skull-king-family-games-grandpa-beck_s-games-united-states-product-gallery-_6_1200x775.jpg?v=1651003672").image,
                                 fit: BoxFit.fitWidth,
                                 alignment: Alignment.topCenter,
