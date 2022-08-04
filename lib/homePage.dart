@@ -142,6 +142,7 @@ class _HomePageState extends State<HomePage> {
                           fontWeight: FontWeight.w500,
                         ),
                         indicatorColor: Colors.lightBlueAccent,
+                        labelColor: Colors.lightBlueAccent,
                       ),
                       Expanded(
                         child: TabBarView(
