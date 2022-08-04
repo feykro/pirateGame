@@ -139,7 +139,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         // Bouton pour valider modal et naviguer vers la salle en question
                         SizedBox(
-                          height: 100,
+                          height: 50,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 15.0),
                             child: ElevatedButton(
