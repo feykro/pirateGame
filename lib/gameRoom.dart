@@ -8,8 +8,7 @@ import 'globals.dart' as globals;
 import 'gamesUtils.dart' as gameUtils;
 
 class GameRoomPage extends StatefulWidget {
-  const GameRoomPage({Key? key, required this.roomName, required this.roomId})
-      : super(key: key);
+  const GameRoomPage({Key? key, required this.roomName, required this.roomId}) : super(key: key);
 
   final String roomName;
   final String roomId;
@@ -63,15 +62,15 @@ class _GameRoomPageState extends State<GameRoomPage> {
             },
           )),
       floatingActionButton: FloatingActionButton.extended(
-        label:
-            isReady ? const Text("Attendez !") : const Text("Je suis pret !"),
-        icon: isReady
-            ? const Icon(Icons.cancel_outlined)
-            : const Icon(Icons.check),
+        label: isReady ? const Text("Attendez !") : const Text("Je suis pret !"),
+        icon: isReady ? const Icon(Icons.cancel_outlined) : const Icon(Icons.check),
         onPressed: () {
           setState(() {
             isReady = !isReady;
-            final postData = {'name': globals.username, 'isReady': isReady};
+            final postData = {
+              'name': globals.username,
+              'isReady': isReady
+            };
             final Map<String, Map> updates = {};
             updates[globals.userId] = postData;
             ref.update(updates);
@@ -85,8 +84,7 @@ class _GameRoomPageState extends State<GameRoomPage> {
         color: Colors.blueAccent,
         child: InkWell(
           onTap: () async {
-            ref =
-                FirebaseDatabase.instance.ref('rooms/${widget.roomId}/players');
+            ref = FirebaseDatabase.instance.ref('rooms/${widget.roomId}/players');
             final snapshot = await ref.get();
             if (snapshot.exists) {
               Map players = snapshot.value as Map;
@@ -112,8 +110,7 @@ class _GameRoomPageState extends State<GameRoomPage> {
           Flexible(
             child: FirebaseAnimatedList(
                 query: ref,
-                itemBuilder: (BuildContext context, DataSnapshot snapshot_,
-                    Animation<double> animation, int index) {
+                itemBuilder: (BuildContext context, DataSnapshot snapshot_, Animation<double> animation, int index) {
                   Map players = snapshot_.value as Map;
                   players['key'] = snapshot_.key;
                   return FutureBuilder<DataSnapshot>(
@@ -122,13 +119,9 @@ class _GameRoomPageState extends State<GameRoomPage> {
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           ListTile(
-                            leading: Icon(players['isReady']
-                                ? Icons.check_circle
-                                : Icons.person_outline),
+                            leading: Icon(players['isReady'] ? Icons.check_circle : Icons.person_outline),
                             title: Text(players['name']),
-                            subtitle: Text(players['isReady']
-                                ? 'is ready'
-                                : 'is not ready yet'),
+                            subtitle: Text(players['isReady'] ? 'is ready' : 'is not ready yet'),
                           ),
                         ],
                       );
