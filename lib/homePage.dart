@@ -206,7 +206,7 @@ class _HomePageState extends State<HomePage> {
                                     Padding(
                                       padding: const EdgeInsets.only(bottom: 10.0, right: 10.0),
                                       child: TextButton(
-                                        child: const Text('Join room', style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.w500)),
+                                        child: const Text('Join room', style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500)),
                                         onPressed: () {
                                           if (nb_players < 6) {
                                             if (rooms['hasPassword'] as bool) {
