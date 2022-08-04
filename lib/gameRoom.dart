@@ -58,7 +58,7 @@ class _GameRoomPageState extends State<GameRoomPage> {
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
               deletePlayerFromRoom();
-              //Navigator.pop(context);
+              Navigator.pop(context);
             },
           )),
       floatingActionButton: FloatingActionButton.extended(
