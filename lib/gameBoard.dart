@@ -81,13 +81,11 @@ class _GameBoardPageState extends State<GameBoardPage> {
             // Check qui win le tour, lui donner le point et le désigner en startPlayerIndex
             colorForTurn = '';
             isPauseTime = true;
-            print('ISPAUSETIME $isPauseTime');
             turn += 1;
             Future.delayed(Duration(seconds: 3), () {
               setState(() {
                 playedCards = [];
                 isPauseTime = false;
-                print('ISPAUSETIME $isPauseTime');
               });
             });
             if (turn - 1 == round) {
@@ -95,7 +93,6 @@ class _GameBoardPageState extends State<GameBoardPage> {
               Future.delayed(Duration(seconds: 3), () {
                 newTurn();
                 isPauseTime = false;
-                print('ISPAUSETIME $isPauseTime');
               });
             }
           }
