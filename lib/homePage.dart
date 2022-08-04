@@ -186,7 +186,7 @@ class _HomePageState extends State<HomePage> {
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.dstATop),
-                                image: AssetImage("images/login_page_image.png"),
+                                image: Image.network("https://www.ethanproductions.com/boardgames-newDB/images/nocode20160904171246854-back.jpg").image,
                                 fit: BoxFit.fitWidth,
                                 alignment: Alignment.topCenter,
                               ),
