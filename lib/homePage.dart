@@ -183,15 +183,49 @@ class _HomePageState extends State<HomePage> {
                     builder: (BuildContext context, snapshot) {
                       return Card(
                         child: Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: Image.network("https://cdn.shopify.com/s/files/1/0565/3230/4053/products/skull-king-family-games-grandpa-beck_s-games-united-states-product-gallery-_6_1200x775.jpg?v=1651003672").image,
-                              fit: BoxFit.fitWidth,
-                              alignment: Alignment.topCenter,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: Image.network("https://cdn.shopify.com/s/files/1/0565/3230/4053/products/skull-king-family-games-grandpa-beck_s-games-united-states-product-gallery-_6_1200x775.jpg?v=1651003672").image,
+                                fit: BoxFit.fitWidth,
+                                alignment: Alignment.topCenter,
+                              ),
                             ),
-                          ),
-                          child: Text("YOUR TEXT"),
-                        ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                ListTile(
+                                  leading: Icon(rooms['hasPassword'] ? Icons.lock : Icons.lock_open),
+                                  title: Text(rooms['name']),
+                                  subtitle: Text("owner : ${rooms['owner']}"),
+                                  trailing: Text('$nb_players/6', style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500)),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 10.0, right: 10.0),
+                                      child: TextButton(
+                                        child: const Text('Join room'),
+                                        onPressed: () {
+                                          if (nb_players < 6) {
+                                            if (rooms['hasPassword'] as bool) {
+                                              // display modal
+                                              showModalBottomSheet(
+                                                  context: context,
+                                                  builder: (BuildContext context) {
+                                                    return buildModalScaffold(rooms, joinRoom);
+                                                  });
+                                            } else {
+                                              joinRoom(rooms);
+                                            }
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            )),
                       );
                       /*
                       return Card(
