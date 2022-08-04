@@ -75,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
             color: Color(0xFF14181B),
             image: DecorationImage(
               fit: BoxFit.cover,
-              image: AssetImage("images/login_page_image.ping"),
+              image: AssetImage("images/login_page_image.png"),
             ),
           ),
           child: Container(
