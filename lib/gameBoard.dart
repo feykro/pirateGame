@@ -28,6 +28,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
   int round = 1;
   int turn = 1;
   String colorForTurn = '';
+  bool isPauseTime = false;
   bool haveSuit = false;
 
   List<int> cards = [];
@@ -79,16 +80,19 @@ class _GameBoardPageState extends State<GameBoardPage> {
           if (playedCards.length == players.length) {
             // Check qui win le tour, lui donner le point et le désigner en startPlayerIndex
             colorForTurn = '';
+            isPauseTime = true;
             turn += 1;
             Future.delayed(Duration(seconds: 3), () {
               setState(() {
                 playedCards = [];
+                isPauseTime = false;
               });
             });
             if (turn - 1 == round) {
               round += 1;
               Future.delayed(Duration(seconds: 3), () {
                 newTurn();
+                isPauseTime = false;
               });
             }
           }
@@ -264,7 +268,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                                                       ),
                                                       borderRadius: BorderRadius.circular(10)),
                                                   child: const SizedBox()),
-                                              if (playersListInPlayOrder[(startPlayerIndex + playedCards.length) % playersListInPlayOrder.length] == globals.userId) ...[
+                                              if (isPauseTime == false && playersListInPlayOrder[(startPlayerIndex + playedCards.length) % playersListInPlayOrder.length] == globals.userId) ...[
                                                 const SizedBox(
                                                   height: 25,
                                                 ),
