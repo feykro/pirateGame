@@ -130,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                                 Visibility(
                                   visible: !lockedRoom,
                                   child: Container(
-                                    height: 30,
+                                    height: 35,
                                   ),
                                 ),
                               ],
