@@ -75,8 +75,8 @@ class _LoginPageState extends State<LoginPage> {
             color: Color(0xFF14181B),
             image: DecorationImage(
               fit: BoxFit.cover,
-              image: Image.network(
-                'https://cf.geekdo-images.com/jiL3MIGH_w3g6El3OHVVig__opengraph/img/GI-QYAT26x67jcGYQkx79BgJrgw=/fit-in/1200x630/filters:strip_icc()/pic6137456.png',
+              image: Image.asset(
+                'images/login_page_image.ping',
               ).image,
             ),
           ),
