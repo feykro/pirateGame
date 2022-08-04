@@ -131,6 +131,7 @@ class _LoginPageState extends State<LoginPage> {
                                           child: TextFormField(
                                             controller: _inputController,
                                             obscureText: false,
+                                            keyboardType: TextInputType.name,
                                             decoration: InputDecoration(
                                               labelText: 'Name',
                                               labelStyle: TextStyle(
