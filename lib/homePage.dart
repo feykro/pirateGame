@@ -139,7 +139,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         // Bouton pour valider modal et naviguer vers la salle en question
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                          padding: const EdgeInsets.all(20),
                           child: ElevatedButton(
                               style: ButtonStyle(
                                 shape: MaterialStateProperty.all(
