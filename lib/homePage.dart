@@ -186,7 +186,7 @@ class _HomePageState extends State<HomePage> {
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.dstATop),
-                                image: Image.network("images/login_page_image.png").image,
+                                image: AssetImage("images/login_page_image.png"),
                                 fit: BoxFit.fitWidth,
                                 alignment: Alignment.topCenter,
                               ),
