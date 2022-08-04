@@ -198,7 +198,7 @@ class _HomePageState extends State<HomePage> {
                                   leading: Icon(rooms['hasPassword'] ? Icons.lock : Icons.lock_open),
                                   title: Text(rooms['name']),
                                   subtitle: Text("owner : ${rooms['owner']}"),
-                                  trailing: Text('$nb_players/6', style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500)),
+                                  trailing: Text('$nb_players/6'),
                                 ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
