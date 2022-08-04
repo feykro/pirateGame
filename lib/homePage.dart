@@ -197,7 +197,7 @@ class _HomePageState extends State<HomePage> {
                                 ListTile(
                                   leading: Icon(rooms['hasPassword'] ? Icons.lock : Icons.lock_open),
                                   title: Text(rooms['name'], style: const TextStyle(fontSize: 25.0, fontWeight: FontWeight.w500)),
-                                  subtitle: Text("owner : ${rooms['owner']}", style: const TextStyle(fontSize: 10.0, fontWeight: FontWeight.w300)),
+                                  subtitle: Text("owner : ${rooms['owner']}", style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.w300)),
                                   trailing: Text('$nb_players/6', style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500)),
                                 ),
                                 Row(
