@@ -186,8 +186,8 @@ class _HomePageState extends State<HomePage> {
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.dstATop),
-                                image: Image.network("https://www.adayagame.fr/images/SKULLKING/SKULLKING%20-%20AdayAgame.webp").image,
-                                fit: BoxFit.fitWidth,
+                                image: Image.network("https://m.media-amazon.com/images/S/aplus-media-library-service-media/729e029c-1a4b-4cd4-a04f-c0b815c9868f.__CR0,0,970,300_PT0_SX970_V1___.png").image,
+                                fit: BoxFit.cover,
                                 alignment: Alignment.topCenter,
                               ),
                             ),
