@@ -76,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
             image: DecorationImage(
               fit: BoxFit.cover,
               image: Image.asset(
-                'images/login_page_image.ping',
+                'images/login_page_image.png',
               ).image,
             ),
           ),
