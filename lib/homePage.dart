@@ -164,74 +164,88 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     ),
                                   ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 0),
-                                    child: InkWell(
-                                      onTap: () async {},
-                                      child: Container(
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                          color: Color(0xFFF1F4F8),
-                                          borderRadius: BorderRadius.circular(12),
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsetsDirectional.fromSTEB(8, 8, 12, 8),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: [
-                                              Icon(
-                                                Icons.lock_outline,
-                                                color: Colors.black,
-                                                size: 50,
-                                              ),
-                                              Expanded(
-                                                child: Column(
-                                                  mainAxisSize: MainAxisSize.max,
-                                                  children: [
-                                                    Padding(
-                                                      padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
-                                                      child: Row(
-                                                        mainAxisSize: MainAxisSize.max,
-                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                        children: [
-                                                          Text(
-                                                            'Room1',
-                                                            style: TextStyle(fontSize: 20),
+                                  Flexible(
+                                    child: FirebaseAnimatedList(
+                                        query: ref,
+                                        itemBuilder: (BuildContext context, DataSnapshot snapshot_, Animation<double> animation, int index) {
+                                          Map rooms = snapshot_.value as Map;
+                                          rooms['key'] = snapshot_.key;
+                                          int nb_players = 0;
+                                          if (rooms['players'] != null) {
+                                            nb_players = (rooms['players'] as Map).length;
+                                          }
+                                          return FutureBuilder<DataSnapshot>(builder: (BuildContext context, snapshot) {
+                                            return Padding(
+                                              padding: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 0),
+                                              child: InkWell(
+                                                onTap: () async {},
+                                                child: Container(
+                                                  width: double.infinity,
+                                                  decoration: BoxDecoration(
+                                                    color: Color(0xFFF1F4F8),
+                                                    borderRadius: BorderRadius.circular(12),
+                                                  ),
+                                                  child: Padding(
+                                                    padding: EdgeInsetsDirectional.fromSTEB(8, 8, 12, 8),
+                                                    child: Row(
+                                                      mainAxisSize: MainAxisSize.max,
+                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                      children: [
+                                                        Icon(
+                                                          Icons.lock_outline,
+                                                          color: Colors.black,
+                                                          size: 50,
+                                                        ),
+                                                        Expanded(
+                                                          child: Column(
+                                                            mainAxisSize: MainAxisSize.max,
+                                                            children: [
+                                                              Padding(
+                                                                padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
+                                                                child: Row(
+                                                                  mainAxisSize: MainAxisSize.max,
+                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                  children: [
+                                                                    Text(
+                                                                      'Room1',
+                                                                      style: TextStyle(fontSize: 20),
+                                                                    ),
+                                                                    Text(
+                                                                      '6/6',
+                                                                      style: TextStyle(fontSize: 15),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                              Padding(
+                                                                padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 16),
+                                                                child: Row(
+                                                                  mainAxisSize: MainAxisSize.max,
+                                                                  children: [
+                                                                    Text(
+                                                                      'created by Tom',
+                                                                      style: TextStyle(
+                                                                        fontFamily: 'Outfit',
+                                                                        color: Color(0xFF57636C),
+                                                                        fontSize: 12,
+                                                                        fontWeight: FontWeight.normal,
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ],
                                                           ),
-                                                          Text(
-                                                            '6/6',
-                                                            style: TextStyle(fontSize: 15),
-                                                          ),
-                                                        ],
-                                                      ),
+                                                        ),
+                                                      ],
                                                     ),
-                                                    Padding(
-                                                      padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 16),
-                                                      child: Row(
-                                                        mainAxisSize: MainAxisSize.max,
-                                                        children: [
-                                                          Text(
-                                                            'created by Tom',
-                                                            style: TextStyle(
-                                                              fontFamily: 'Outfit',
-                                                              color: Color(0xFF57636C),
-                                                              fontSize: 12,
-                                                              fontWeight: FontWeight.normal,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
+                                                  ),
                                                 ),
                                               ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                            );
+                                          });
+                                        }),
+                                  )
                                 ],
                               ),
                             ),
