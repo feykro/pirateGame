@@ -87,6 +87,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
               setState(() {
                 playedCards = [];
                 isPauseTime = false;
+                print('ISPAUSETIME $isPauseTime');
               });
             });
             if (turn - 1 == round) {
@@ -94,6 +95,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
               Future.delayed(Duration(seconds: 3), () {
                 newTurn();
                 isPauseTime = false;
+                print('ISPAUSETIME $isPauseTime');
               });
             }
           }
