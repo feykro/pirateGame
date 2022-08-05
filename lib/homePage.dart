@@ -182,7 +182,8 @@ class _HomePageState extends State<HomePage> {
                   return FutureBuilder<DataSnapshot>(
                     builder: (BuildContext context, snapshot) {
                       return Card(
-                        color: Colors.grey,
+                        color: Color(0xFFF1F4F8),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
