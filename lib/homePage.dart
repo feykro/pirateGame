@@ -243,7 +243,7 @@ class _HomePageState extends State<HomePage> {
                                                   Text(
                                                     '$nb_players/6',
                                                     style: TextStyle(
-                                                      fontFamily: 'Poppins',
+                                                      fontFamily: 'Outfit',
                                                       fontSize: 16,
                                                       color: Color(0xFF57636C),
                                                       fontWeight: FontWeight.w600,
