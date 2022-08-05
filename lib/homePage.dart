@@ -289,116 +289,117 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                               ),
-                              Flexible(
-                                child: FirebaseAnimatedList(
-                                    query: ref,
-                                    itemBuilder: (BuildContext context, DataSnapshot snapshot_, Animation<double> animation, int index) {
-                                      Map rooms = snapshot_.value as Map;
-                                      rooms['key'] = snapshot_.key;
-                                      int nb_players = 0;
-                                      if (rooms['players'] != null) {
-                                        nb_players = (rooms['players'] as Map).length;
-                                      }
-                                      return FutureBuilder<DataSnapshot>(
-                                        builder: (BuildContext context, snapshot) {
-                                          return Card(
-                                              elevation: 0,
-                                              margin: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 0),
-                                              color: Color(0xFFF1F4F8),
-                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                              child: Padding(
-                                                padding: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 0),
-                                                child: InkWell(
-                                                  onTap: () {
-                                                    if (nb_players < 6) {
-                                                      if (rooms['hasPassword'] as bool) {
-                                                        // display modal
-                                                        showModalBottomSheet(
-                                                            context: context,
-                                                            builder: (BuildContext context) {
-                                                              return buildModalScaffold(rooms, joinRoom);
-                                                            });
-                                                      } else {
-                                                        joinRoom(rooms);
+                              Column(children: [
+                                Flexible(
+                                  child: FirebaseAnimatedList(
+                                      query: ref,
+                                      itemBuilder: (BuildContext context, DataSnapshot snapshot_, Animation<double> animation, int index) {
+                                        Map rooms = snapshot_.value as Map;
+                                        rooms['key'] = snapshot_.key;
+                                        int nb_players = 0;
+                                        if (rooms['players'] != null) {
+                                          nb_players = (rooms['players'] as Map).length;
+                                        }
+                                        return FutureBuilder<DataSnapshot>(
+                                          builder: (BuildContext context, snapshot) {
+                                            return Card(
+                                                elevation: 0,
+                                                margin: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 0),
+                                                color: Color(0xFFF1F4F8),
+                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                                child: Padding(
+                                                  padding: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 0),
+                                                  child: InkWell(
+                                                    onTap: () {
+                                                      if (nb_players < 6) {
+                                                        if (rooms['hasPassword'] as bool) {
+                                                          // display modal
+                                                          showModalBottomSheet(
+                                                              context: context,
+                                                              builder: (BuildContext context) {
+                                                                return buildModalScaffold(rooms, joinRoom);
+                                                              });
+                                                        } else {
+                                                          joinRoom(rooms);
+                                                        }
                                                       }
-                                                    }
-                                                  },
-                                                  child: Container(
-                                                    width: double.infinity,
-                                                    decoration: BoxDecoration(
-                                                      color: Color(0xFFF1F4F8),
-                                                      borderRadius: BorderRadius.circular(12),
-                                                    ),
-                                                    child: Padding(
-                                                      padding: EdgeInsetsDirectional.fromSTEB(5, 8, 5, 8),
-                                                      child: Row(
-                                                        mainAxisSize: MainAxisSize.max,
-                                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                                        children: [
-                                                          Icon(
-                                                            rooms['hasPassword'] ? Icons.lock_outline : Icons.lock_open_outlined,
-                                                            color: Colors.black,
-                                                            size: 50,
-                                                          ),
-                                                          Expanded(
-                                                            child: Column(
-                                                              mainAxisSize: MainAxisSize.max,
-                                                              children: [
-                                                                Padding(
-                                                                  padding: EdgeInsetsDirectional.fromSTEB(10, 12, 10, 0),
-                                                                  child: Row(
-                                                                    mainAxisSize: MainAxisSize.max,
-                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                    children: [
-                                                                      Flexible(
-                                                                          child: Text(
-                                                                        rooms['name'],
-                                                                        overflow: TextOverflow.ellipsis,
-                                                                        style: TextStyle(
-                                                                          fontFamily: 'Outfit',
-                                                                          fontSize: 24,
-                                                                          fontWeight: FontWeight.w700,
-                                                                        ),
-                                                                      )),
-                                                                      Text(
-                                                                        '$nb_players/6',
-                                                                        style: TextStyle(
-                                                                          fontFamily: 'Outfit',
-                                                                          fontSize: 17,
-                                                                          color: Color(0xFF57636C),
-                                                                          fontWeight: FontWeight.w600,
-                                                                        ),
-                                                                      )
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                                Padding(
-                                                                  padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 16),
-                                                                  child: Row(
-                                                                    mainAxisSize: MainAxisSize.max,
-                                                                    children: [
-                                                                      Text(
-                                                                        'Created by ${rooms['owner']}',
-                                                                        style: TextStyle(
-                                                                          fontFamily: 'Outfit',
-                                                                          color: Color(0xFF57636C),
-                                                                          fontSize: 12,
-                                                                          fontWeight: FontWeight.normal,
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                              ],
+                                                    },
+                                                    child: Container(
+                                                      width: double.infinity,
+                                                      decoration: BoxDecoration(
+                                                        color: Color(0xFFF1F4F8),
+                                                        borderRadius: BorderRadius.circular(12),
+                                                      ),
+                                                      child: Padding(
+                                                        padding: EdgeInsetsDirectional.fromSTEB(5, 8, 5, 8),
+                                                        child: Row(
+                                                          mainAxisSize: MainAxisSize.max,
+                                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                                          children: [
+                                                            Icon(
+                                                              rooms['hasPassword'] ? Icons.lock_outline : Icons.lock_open_outlined,
+                                                              color: Colors.black,
+                                                              size: 50,
                                                             ),
-                                                          ),
-                                                        ],
+                                                            Expanded(
+                                                              child: Column(
+                                                                mainAxisSize: MainAxisSize.max,
+                                                                children: [
+                                                                  Padding(
+                                                                    padding: EdgeInsetsDirectional.fromSTEB(10, 12, 10, 0),
+                                                                    child: Row(
+                                                                      mainAxisSize: MainAxisSize.max,
+                                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                      children: [
+                                                                        Flexible(
+                                                                            child: Text(
+                                                                          rooms['name'],
+                                                                          overflow: TextOverflow.ellipsis,
+                                                                          style: TextStyle(
+                                                                            fontFamily: 'Outfit',
+                                                                            fontSize: 24,
+                                                                            fontWeight: FontWeight.w700,
+                                                                          ),
+                                                                        )),
+                                                                        Text(
+                                                                          '$nb_players/6',
+                                                                          style: TextStyle(
+                                                                            fontFamily: 'Outfit',
+                                                                            fontSize: 17,
+                                                                            color: Color(0xFF57636C),
+                                                                            fontWeight: FontWeight.w600,
+                                                                          ),
+                                                                        )
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                  Padding(
+                                                                    padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 16),
+                                                                    child: Row(
+                                                                      mainAxisSize: MainAxisSize.max,
+                                                                      children: [
+                                                                        Text(
+                                                                          'Created by ${rooms['owner']}',
+                                                                          style: TextStyle(
+                                                                            fontFamily: 'Outfit',
+                                                                            color: Color(0xFF57636C),
+                                                                            fontSize: 12,
+                                                                            fontWeight: FontWeight.normal,
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
-                                                ),
-                                              )
-                                              /*
+                                                )
+                                                /*
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
@@ -435,11 +436,12 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ],
                         ),*/
-                                              );
-                                        },
-                                      );
-                                    }),
-                              )
+                                                );
+                                          },
+                                        );
+                                      }),
+                                )
+                              ])
                             ],
                           ),
                         ),
