@@ -53,14 +53,34 @@ class _GameRoomPageState extends State<GameRoomPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text(widget.roomName),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              deletePlayerFromRoom();
-              Navigator.pop(context);
-            },
-          )),
+        backgroundColor: Color(0xFFF1F4F8),
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          splashRadius: 30,
+          iconSize: 60,
+          icon: Icon(
+            Icons.arrow_back_rounded,
+            color: Colors.black,
+            size: 30,
+          ),
+          onPressed: () async {
+            Navigator.pop(context);
+          },
+        ),
+        title: Text(
+          'RoomName',
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            color: Color(0xFF14181B),
+            fontSize: 28,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+        actions: [],
+        centerTitle: false,
+        elevation: 0,
+      ),
+      backgroundColor: Color(0xFFF1F4F8),
       floatingActionButton: FloatingActionButton.extended(
         label: isReady ? const Text("Attendez !") : const Text("Je suis pret !"),
         icon: isReady ? const Icon(Icons.cancel_outlined) : const Icon(Icons.check),
