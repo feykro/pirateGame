@@ -29,6 +29,7 @@ class _HomePageState extends State<HomePage> {
 
     final _roomNameController = TextEditingController();
     final _roomPasswordController = TextEditingController();
+    TextEditingController searchController = TextEditingController();
 
     void joinRoom(Map rooms) {
       DatabaseReference playerRef = ref.child('${rooms['key']}/players').push();
@@ -55,12 +56,6 @@ class _HomePageState extends State<HomePage> {
         automaticallyImplyLeading: false,
         leading: IconButton(
           splashRadius: 30,
-          /*
-    borderColor: Colors.transparent,
-    borderRadius: 30,
-    borderWidth: 1,
-    buttonSize: 60,
-    */
           iconSize: 60,
           icon: Icon(
             Icons.arrow_back_rounded,
@@ -200,6 +195,55 @@ class _HomePageState extends State<HomePage> {
           }),
       body: Column(
         children: [
+          Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
+              child: TextFormField(
+                controller: searchController,
+                obscureText: false,
+                decoration: InputDecoration(
+                  labelText: 'Search for rooms',
+                  labelStyle: TextStyle(
+                    fontFamily: 'Outfit',
+                    color: Color(0xFF57636C),
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                  ),
+                  hintStyle: TextStyle(
+                    fontFamily: 'Outfit',
+                    color: Color(0xFF57636C),
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFFE0E3E7),
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFFE0E3E7),
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  filled: true,
+                  fillColor: Color(0xFFF1F4F8),
+                  contentPadding: EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: Color(0xFF57636C),
+                    size: 16,
+                  ),
+                ),
+                style: TextStyle(
+                  fontFamily: 'Outfit',
+                  color: Color(0xFF1D2429),
+                  fontSize: 14,
+                  fontWeight: FontWeight.normal,
+                ),
+              )),
           //TextButton(onPressed: () {}, child: const Text("Ici searchbar")),
           Flexible(
             child: FirebaseAnimatedList(
