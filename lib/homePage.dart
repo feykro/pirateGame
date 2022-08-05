@@ -50,7 +50,36 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Welcome, ${globals.username}"),
+        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          /*
+    borderColor: Colors.transparent,
+    borderRadius: 30,
+    borderWidth: 1,
+    buttonSize: 60,
+    */
+          iconSize: 60,
+          icon: Icon(
+            Icons.arrow_back_rounded,
+            color: Color(0xFF1D2429),
+            size: 30,
+          ),
+          onPressed: () async {
+            Navigator.pop(context);
+          },
+        ),
+        title: Text(
+          'Rooms',
+          style: TextStyle(
+            fontFamily: 'Outfit',
+            fontSize: 28,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+        actions: [],
+        centerTitle: false,
+        elevation: 0,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       floatingActionButton: FloatingActionButton.extended(
