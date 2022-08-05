@@ -240,7 +240,15 @@ class _HomePageState extends State<HomePage> {
                                                       fontWeight: FontWeight.w700,
                                                     ),
                                                   )),
-                                                  Text('$nb_players/6')
+                                                  Text(
+                                                    '$nb_players/6',
+                                                    style: TextStyle(
+                                                      fontFamily: 'Outfit',
+                                                      fontSize: 18,
+                                                      color: Color(0xFF57636C),
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                  )
                                                 ],
                                               ),
                                             ),
