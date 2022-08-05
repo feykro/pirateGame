@@ -225,7 +225,7 @@ class _HomePageState extends State<HomePage> {
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
                                             Padding(
-                                              padding: EdgeInsetsDirectional.fromSTEB(10, 12, 10, 0),
+                                              padding: EdgeInsetsDirectional.fromSTEB(5, 12, 5, 0),
                                               child: Row(
                                                 mainAxisSize: MainAxisSize.max,
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
