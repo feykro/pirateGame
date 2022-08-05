@@ -258,7 +258,7 @@ class _HomePageState extends State<HomePage> {
                 'SkullKing Rooms',
                 style: TextStyle(
                   fontFamily: 'Outfit',
-                  color: Color(0xFF1D2429),
+                  color: Colors.blueAccent,
                   fontSize: 20,
                   fontWeight: FontWeight.normal,
                 ),
