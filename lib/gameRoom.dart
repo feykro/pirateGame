@@ -53,14 +53,35 @@ class _GameRoomPageState extends State<GameRoomPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text(widget.roomName),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              deletePlayerFromRoom();
-              Navigator.pop(context);
-            },
-          )),
+        backgroundColor: Color(0xFFF1F4F8),
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          splashRadius: 30,
+          iconSize: 60,
+          icon: Icon(
+            Icons.arrow_back_rounded,
+            color: Colors.black,
+            size: 30,
+          ),
+          onPressed: () async {
+            deletePlayerFromRoom();
+            Navigator.pop(context);
+          },
+        ),
+        title: Text(
+          widget.roomName,
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            color: Color(0xFF14181B),
+            fontSize: 28,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+        actions: [],
+        centerTitle: false,
+        elevation: 0,
+      ),
+      backgroundColor: Color(0xFFF1F4F8),
       floatingActionButton: FloatingActionButton.extended(
         label: isReady ? const Text("Attendez !") : const Text("Je suis pret !"),
         icon: isReady ? const Icon(Icons.cancel_outlined) : const Icon(Icons.check),
@@ -107,6 +128,7 @@ class _GameRoomPageState extends State<GameRoomPage> {
       ),
       body: Column(
         children: [
+          SizedBox(height: 15),
           Flexible(
             child: FirebaseAnimatedList(
                 query: ref,
@@ -115,6 +137,66 @@ class _GameRoomPageState extends State<GameRoomPage> {
                   players['key'] = snapshot_.key;
                   return FutureBuilder<DataSnapshot>(
                     builder: (BuildContext context, snapshot) {
+                      return Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 12),
+                          child: Container(
+                            width: 100,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 5,
+                                  color: Color(0x1F000000),
+                                  offset: Offset(0, 2),
+                                )
+                              ],
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          players['name'],
+                                          style: TextStyle(
+                                            fontFamily: 'Outfit',
+                                            color: Color(0xFF14181B),
+                                            fontSize: 28,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                        ),
+                                        Icon(
+                                          players['isReady'] ? Icons.check : Icons.close,
+                                          color: Colors.black,
+                                          size: 24,
+                                        ),
+                                      ],
+                                    )),
+                                Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 16),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Text(
+                                          players['isReady'] ? 'is ready' : 'is not ready yet',
+                                          style: TextStyle(
+                                            fontFamily: 'Outfit',
+                                            color: Color(0xFF57636C),
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                        ),
+                                      ],
+                                    )),
+                              ],
+                            ),
+                          ));
+                      /*
                       return Column(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
@@ -125,6 +207,7 @@ class _GameRoomPageState extends State<GameRoomPage> {
                           ),
                         ],
                       );
+                      */
                     },
                   );
                 }),

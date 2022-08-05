@@ -29,6 +29,7 @@ class _HomePageState extends State<HomePage> {
 
     final _roomNameController = TextEditingController();
     final _roomPasswordController = TextEditingController();
+    TextEditingController searchController = TextEditingController();
 
     void joinRoom(Map rooms) {
       DatabaseReference playerRef = ref.child('${rooms['key']}/players').push();
@@ -49,8 +50,34 @@ class _HomePageState extends State<HomePage> {
     }
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("Welcome, ${globals.username}"),
+        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          splashRadius: 30,
+          iconSize: 60,
+          icon: Icon(
+            Icons.arrow_back_rounded,
+            color: Color(0xFF1D2429),
+            size: 30,
+          ),
+          onPressed: () async {
+            Navigator.pop(context);
+          },
+        ),
+        title: Text(
+          'Rooms',
+          style: TextStyle(
+            fontFamily: 'Outfit',
+            color: Colors.black,
+            fontSize: 28,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+        actions: [],
+        centerTitle: false,
+        elevation: 0,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       floatingActionButton: FloatingActionButton.extended(
@@ -168,7 +195,76 @@ class _HomePageState extends State<HomePage> {
           }),
       body: Column(
         children: [
+          Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
+              child: TextFormField(
+                controller: searchController,
+                obscureText: false,
+                decoration: InputDecoration(
+                  labelText: 'Search for rooms',
+                  labelStyle: TextStyle(
+                    fontFamily: 'Outfit',
+                    color: Color(0xFF57636C),
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                  ),
+                  hintStyle: TextStyle(
+                    fontFamily: 'Outfit',
+                    color: Color(0xFF57636C),
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFFE0E3E7),
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFFE0E3E7),
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  filled: true,
+                  fillColor: Color(0xFFF1F4F8),
+                  contentPadding: EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: Color(0xFF57636C),
+                    size: 16,
+                  ),
+                ),
+                style: TextStyle(
+                  fontFamily: 'Outfit',
+                  color: Color(0xFF1D2429),
+                  fontSize: 14,
+                  fontWeight: FontWeight.normal,
+                ),
+              )),
           //TextButton(onPressed: () {}, child: const Text("Ici searchbar")),
+          Container(
+            decoration: BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(
+              color: Colors.blueAccent,
+              width: 1.0, // Underline thickness
+            ))),
+            child: Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(100, 16, 100, 5),
+              child: Text(
+                'SkullKing Rooms',
+                style: TextStyle(
+                  fontFamily: 'Outfit',
+                  color: Colors.blueAccent,
+                  fontSize: 20,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+            ),
+          ),
           Flexible(
             child: FirebaseAnimatedList(
                 query: ref,
@@ -182,6 +278,103 @@ class _HomePageState extends State<HomePage> {
                   return FutureBuilder<DataSnapshot>(
                     builder: (BuildContext context, snapshot) {
                       return Card(
+                          elevation: 0,
+                          margin: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 0),
+                          color: Color(0xFFF1F4F8),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          child: Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 0),
+                            child: InkWell(
+                              onTap: () {
+                                if (nb_players < 6) {
+                                  if (rooms['hasPassword'] as bool) {
+                                    // display modal
+                                    showModalBottomSheet(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return buildModalScaffold(rooms, joinRoom);
+                                        });
+                                  } else {
+                                    joinRoom(rooms);
+                                  }
+                                }
+                              },
+                              child: Container(
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: Color(0xFFF1F4F8),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(5, 8, 5, 8),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        rooms['hasPassword'] ? Icons.lock_outline : Icons.lock_open_outlined,
+                                        color: Colors.black,
+                                        size: 50,
+                                      ),
+                                      Expanded(
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsetsDirectional.fromSTEB(10, 12, 10, 0),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Flexible(
+                                                      child: Text(
+                                                    rooms['name'],
+                                                    overflow: TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                      fontFamily: 'Outfit',
+                                                      fontSize: 24,
+                                                      fontWeight: FontWeight.w700,
+                                                    ),
+                                                  )),
+                                                  Text(
+                                                    '$nb_players/6',
+                                                    style: TextStyle(
+                                                      fontFamily: 'Outfit',
+                                                      fontSize: 17,
+                                                      color: Color(0xFF57636C),
+                                                      fontWeight: FontWeight.w600,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 16),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  Text(
+                                                    'Created by ${rooms['owner']}',
+                                                    style: TextStyle(
+                                                      fontFamily: 'Outfit',
+                                                      color: Color(0xFF57636C),
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.normal,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                          /*
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
@@ -217,8 +410,8 @@ class _HomePageState extends State<HomePage> {
                               ],
                             ),
                           ],
-                        ),
-                      );
+                        ),*/
+                          );
                     },
                   );
                 }),
