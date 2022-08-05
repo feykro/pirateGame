@@ -253,7 +253,7 @@ class _HomePageState extends State<HomePage> {
               width: 1.0, // Underline thickness
             ))),
             child: Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(16, 100, 100, 5),
+              padding: EdgeInsetsDirectional.fromSTEB(100, 16, 100, 5),
               child: Text(
                 'SkullKing Rooms',
                 style: TextStyle(
