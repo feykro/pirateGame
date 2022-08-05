@@ -161,7 +161,7 @@ class _GameRoomPageState extends State<GameRoomPage> {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          'Dorian',
+                                          players['name'],
                                           style: TextStyle(
                                             fontFamily: 'Outfit',
                                             color: Color(0xFF14181B),
@@ -170,7 +170,7 @@ class _GameRoomPageState extends State<GameRoomPage> {
                                           ),
                                         ),
                                         Icon(
-                                          Icons.check,
+                                          players['isReady'] ? Icons.check : Icons.close,
                                           color: Colors.black,
                                           size: 24,
                                         ),
@@ -182,7 +182,7 @@ class _GameRoomPageState extends State<GameRoomPage> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Text(
-                                          'is ready',
+                                          players['isReady'] ? 'is ready' : 'is not ready yet',
                                           style: TextStyle(
                                             fontFamily: 'Outfit',
                                             color: Color(0xFF57636C),
