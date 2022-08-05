@@ -230,10 +230,15 @@ class _HomePageState extends State<HomePage> {
                                                 mainAxisSize: MainAxisSize.max,
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
-                                                  Text(rooms['name']),
                                                   Text(
-                                                    '6/6',
+                                                    rooms['name'],
+                                                    style: TextStyle(
+                                                      fontFamily: 'Outfit',
+                                                      fontSize: 24,
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
                                                   ),
+                                                  Text('$nb_players/6')
                                                 ],
                                               ),
                                             ),
