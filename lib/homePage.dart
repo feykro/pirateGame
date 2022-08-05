@@ -249,11 +249,11 @@ class _HomePageState extends State<HomePage> {
             decoration: BoxDecoration(
                 border: Border(
                     bottom: BorderSide(
-              color: Colors.amber,
+              color: Colors.blueAccent,
               width: 1.0, // Underline thickness
             ))),
             child: Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(16, 16, 0, 0),
+              padding: EdgeInsetsDirectional.fromSTEB(16, 100, 100, 5),
               child: Text(
                 'SkullKing Rooms',
                 style: TextStyle(
