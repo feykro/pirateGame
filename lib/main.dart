@@ -67,7 +67,6 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       backgroundColor: Color(0xFF14181B),
       body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height * 1,
