@@ -137,75 +137,64 @@ class _GameRoomPageState extends State<GameRoomPage> {
                   return FutureBuilder<DataSnapshot>(
                     builder: (BuildContext context, snapshot) {
                       return Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 44),
-                        child: ListView(
-                          padding: EdgeInsets.zero,
-                          primary: false,
-                          shrinkWrap: true,
-                          scrollDirection: Axis.vertical,
-                          children: [
-                            Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 12),
-                                child: Container(
-                                  width: 100,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        blurRadius: 5,
-                                        color: Color(0x1F000000),
-                                        offset: Offset(0, 2),
-                                      )
-                                    ],
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Padding(
-                                          padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                'Dorian',
-                                                style: TextStyle(
-                                                  fontFamily: 'Outfit',
-                                                  color: Color(0xFF14181B),
-                                                  fontSize: 28,
-                                                  fontWeight: FontWeight.normal,
-                                                ),
-                                              ),
-                                              Icon(
-                                                Icons.check,
-                                                color: Colors.black,
-                                                size: 24,
-                                              ),
-                                            ],
-                                          )),
-                                      Padding(
-                                          padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 16),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              Text(
-                                                'is ready',
-                                                style: TextStyle(
-                                                  fontFamily: 'Outfit',
-                                                  color: Color(0xFF57636C),
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.normal,
-                                                ),
-                                              ),
-                                            ],
-                                          )),
-                                    ],
-                                  ),
-                                )),
-                          ],
-                        ),
-                      );
+                          padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 12),
+                          child: Container(
+                            width: 100,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 5,
+                                  color: Color(0x1F000000),
+                                  offset: Offset(0, 2),
+                                )
+                              ],
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Dorian',
+                                          style: TextStyle(
+                                            fontFamily: 'Outfit',
+                                            color: Color(0xFF14181B),
+                                            fontSize: 28,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                        ),
+                                        Icon(
+                                          Icons.check,
+                                          color: Colors.black,
+                                          size: 24,
+                                        ),
+                                      ],
+                                    )),
+                                Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 16),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Text(
+                                          'is ready',
+                                          style: TextStyle(
+                                            fontFamily: 'Outfit',
+                                            color: Color(0xFF57636C),
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                        ),
+                                      ],
+                                    )),
+                              ],
+                            ),
+                          ));
                       /*
                       return Column(
                         mainAxisSize: MainAxisSize.min,
