@@ -245,15 +245,23 @@ class _HomePageState extends State<HomePage> {
                 ),
               )),
           //TextButton(onPressed: () {}, child: const Text("Ici searchbar")),
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(16, 16, 0, 0),
-            child: Text(
-              'SkullKing Rooms',
-              style: TextStyle(
-                fontFamily: 'Outfit',
-                color: Color(0xFF1D2429),
-                fontSize: 20,
-                fontWeight: FontWeight.normal,
+          Container(
+            decoration: BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(
+              color: Colors.amber,
+              width: 1.0, // Underline thickness
+            ))),
+            child: Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(16, 16, 0, 0),
+              child: Text(
+                'SkullKing Rooms',
+                style: TextStyle(
+                  fontFamily: 'Outfit',
+                  color: Color(0xFF1D2429),
+                  fontSize: 20,
+                  fontWeight: FontWeight.normal,
+                ),
               ),
             ),
           ),
