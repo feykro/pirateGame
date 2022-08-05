@@ -246,7 +246,7 @@ class _HomePageState extends State<HomePage> {
                                                       fontFamily: 'Outfit',
                                                       fontSize: 18,
                                                       color: Color(0xFF57636C),
-                                                      fontWeight: FontWeight.w500,
+                                                      fontWeight: FontWeight.w700,
                                                     ),
                                                   )
                                                 ],
