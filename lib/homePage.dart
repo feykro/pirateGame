@@ -203,7 +203,7 @@ class _HomePageState extends State<HomePage> {
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       Icon(
-                                        Icons.lock_outline,
+                                        rooms['hasPassword'] ? Icons.lock_outline : Icons.lock_open_outlined,
                                         color: Colors.black,
                                         size: 50,
                                       ),
