@@ -245,22 +245,17 @@ class _HomePageState extends State<HomePage> {
                 ),
               )),
           //TextButton(onPressed: () {}, child: const Text("Ici searchbar")),
-          TabBar(
-            labelColor: Colors.blueAccent,
-            unselectedLabelColor: Color(0xFF57636C),
-            labelStyle: TextStyle(
-              fontFamily: 'Outfit',
-              color: Color(0xFF1D2429),
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
+          Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(16, 16, 0, 0),
+            child: Text(
+              'SkullKing Rooms',
+              style: TextStyle(
+                fontFamily: 'Outfit',
+                color: Color(0xFF1D2429),
+                fontSize: 20,
+                fontWeight: FontWeight.normal,
+              ),
             ),
-            indicatorColor: Colors.blueAccent,
-            tabs: [
-              Tab(
-                text: 'SkullKing',
-                iconMargin: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
-              )
-            ],
           ),
           Flexible(
             child: FirebaseAnimatedList(
