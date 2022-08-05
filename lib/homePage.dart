@@ -237,7 +237,7 @@ class _HomePageState extends State<HomePage> {
                                                     style: TextStyle(
                                                       fontFamily: 'Outfit',
                                                       fontSize: 24,
-                                                      fontWeight: FontWeight.normal,
+                                                      fontWeight: FontWeight.w700,
                                                     ),
                                                   )),
                                                   Text('$nb_players/6')
