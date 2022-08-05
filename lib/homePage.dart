@@ -182,6 +182,7 @@ class _HomePageState extends State<HomePage> {
                   return FutureBuilder<DataSnapshot>(
                     builder: (BuildContext context, snapshot) {
                       return Card(
+                        color: Colors.grey,
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
