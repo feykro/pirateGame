@@ -235,7 +235,7 @@ class _HomePageState extends State<HomePage> {
                                                     style: TextStyle(
                                                       overflow: TextOverflow.ellipsis,
                                                       fontFamily: 'Outfit',
-                                                      fontSize: 20,
+                                                      fontSize: 24,
                                                       fontWeight: FontWeight.bold,
                                                     ),
                                                   ),
