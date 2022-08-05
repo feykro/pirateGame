@@ -235,7 +235,7 @@ class _HomePageState extends State<HomePage> {
                                                     rooms['name'],
                                                     style: TextStyle(
                                                       fontFamily: 'Outfit',
-                                                      fontSize: 24,
+                                                      fontSize: 30,
                                                       fontWeight: FontWeight.bold,
                                                     ),
                                                   )),
