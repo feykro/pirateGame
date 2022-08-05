@@ -54,6 +54,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
         leading: IconButton(
+          splashRadius: 30,
           /*
     borderColor: Colors.transparent,
     borderRadius: 30,
