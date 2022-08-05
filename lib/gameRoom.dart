@@ -128,6 +128,7 @@ class _GameRoomPageState extends State<GameRoomPage> {
       ),
       body: Column(
         children: [
+          SizedBox(height: 15),
           Flexible(
             child: FirebaseAnimatedList(
                 query: ref,
