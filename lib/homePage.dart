@@ -189,7 +189,20 @@ class _HomePageState extends State<HomePage> {
                           child: Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 0),
                             child: InkWell(
-                              onTap: () async {},
+                              onTap: () {
+                                if (nb_players < 6) {
+                                  if (rooms['hasPassword'] as bool) {
+                                    // display modal
+                                    showModalBottomSheet(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return buildModalScaffold(rooms, joinRoom);
+                                        });
+                                  } else {
+                                    joinRoom(rooms);
+                                  }
+                                }
+                              },
                               child: Container(
                                 width: double.infinity,
                                 decoration: BoxDecoration(
@@ -217,9 +230,7 @@ class _HomePageState extends State<HomePage> {
                                                 mainAxisSize: MainAxisSize.max,
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
-                                                  Text(
-                                                    'Room1',
-                                                  ),
+                                                  Text(rooms['name']),
                                                   Text(
                                                     '6/6',
                                                   ),
@@ -232,7 +243,7 @@ class _HomePageState extends State<HomePage> {
                                                 mainAxisSize: MainAxisSize.max,
                                                 children: [
                                                   Text(
-                                                    'created by Tom',
+                                                    'Created by ${rooms['owner']}',
                                                     style: TextStyle(
                                                       fontFamily: 'Outfit',
                                                       color: Color(0xFF57636C),
