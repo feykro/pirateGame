@@ -233,6 +233,7 @@ class _HomePageState extends State<HomePage> {
                                                   Flexible(
                                                       child: Text(
                                                     rooms['name'],
+                                                    overflow: TextOverflow.ellipsis,
                                                     style: TextStyle(
                                                       fontFamily: 'Outfit',
                                                       fontSize: 30,
