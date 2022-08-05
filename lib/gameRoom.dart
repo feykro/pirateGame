@@ -68,7 +68,7 @@ class _GameRoomPageState extends State<GameRoomPage> {
           },
         ),
         title: Text(
-          'RoomName',
+          widget.roomName,
           style: TextStyle(
             fontFamily: 'Poppins',
             color: Color(0xFF14181B),
