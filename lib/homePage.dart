@@ -35,16 +35,13 @@ class _HomePageState extends State<HomePage> {
       DatabaseReference playerRef = ref.child('${rooms['key']}/players').push();
       globals.userId = playerRef.key!;
       playerRef.set(
-        {
-          "name": globals.username,
-          "isReady": false,
-          "vote": -1
-        },
+        {"name": globals.username, "isReady": false, "vote": -1},
       );
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => GameRoomPage(roomName: rooms['name'], roomId: rooms['key']),
+          builder: (context) =>
+              GameRoomPage(roomName: rooms['name'], roomId: rooms['key']),
         ),
       );
     }
@@ -57,7 +54,7 @@ class _HomePageState extends State<HomePage> {
         leading: IconButton(
           splashRadius: 30,
           iconSize: 60,
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_rounded,
             color: Color(0xFF1D2429),
             size: 30,
@@ -66,7 +63,7 @@ class _HomePageState extends State<HomePage> {
             Navigator.pop(context);
           },
         ),
-        title: Text(
+        title: const Text(
           'Rooms',
           style: TextStyle(
             fontFamily: 'Outfit',
@@ -79,7 +76,7 @@ class _HomePageState extends State<HomePage> {
         centerTitle: false,
         elevation: 0,
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton.extended(
           elevation: 10.0,
           label: const Text("Create room"),
@@ -113,16 +110,16 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         StatefulBuilder(
-                          builder: (BuildContext context, StateSetter stateSetter) {
+                          builder:
+                              (BuildContext context, StateSetter stateSetter) {
                             return Column(
                               children: [
                                 AnimatedSegment(
-                                  segmentNames: const [
-                                    "Public",
-                                    "Private"
-                                  ],
+                                  segmentNames: const ["Public", "Private"],
                                   onSegmentChanged: (index) {
-                                    stateSetter(() => index == 0 ? lockedRoom = false : lockedRoom = true);
+                                    stateSetter(() => index == 0
+                                        ? lockedRoom = false
+                                        : lockedRoom = true);
                                   },
                                   backgroundColor: Colors.blueGrey,
                                   segmentTextColor: Colors.white,
@@ -142,7 +139,8 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 */
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15.0),
                                   child: Visibility(
                                     visible: lockedRoom,
                                     child: TextField(
@@ -168,7 +166,8 @@ class _HomePageState extends State<HomePage> {
                         SizedBox(
                           height: 50,
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 15.0),
                             child: ElevatedButton(
                                 style: ButtonStyle(
                                   shape: MaterialStateProperty.all(
@@ -178,7 +177,11 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                                 onPressed: () {
-                                  GameRoom room = GameRoom(_roomNameController.text, globals.username, lockedRoom, _roomPasswordController.text);
+                                  GameRoom room = GameRoom(
+                                      _roomNameController.text,
+                                      globals.username,
+                                      lockedRoom,
+                                      _roomPasswordController.text);
                                   createRoom(room);
                                   setState(() {
                                     lockedRoom = false;
@@ -196,48 +199,49 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         children: [
           Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
+              padding: const EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
               child: TextFormField(
                 controller: searchController,
                 obscureText: false,
                 decoration: InputDecoration(
                   labelText: 'Search for rooms',
-                  labelStyle: TextStyle(
+                  labelStyle: const TextStyle(
                     fontFamily: 'Outfit',
                     color: Color(0xFF57636C),
                     fontSize: 14,
                     fontWeight: FontWeight.normal,
                   ),
-                  hintStyle: TextStyle(
+                  hintStyle: const TextStyle(
                     fontFamily: 'Outfit',
                     color: Color(0xFF57636C),
                     fontSize: 14,
                     fontWeight: FontWeight.normal,
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                       color: Color(0xFFE0E3E7),
                       width: 2,
                     ),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                       color: Color(0xFFE0E3E7),
                       width: 2,
                     ),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   filled: true,
-                  fillColor: Color(0xFFF1F4F8),
-                  contentPadding: EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
-                  prefixIcon: Icon(
+                  fillColor: const Color(0xFFF1F4F8),
+                  contentPadding:
+                      const EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
+                  prefixIcon: const Icon(
                     Icons.search,
                     color: Color(0xFF57636C),
                     size: 16,
                   ),
                 ),
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Outfit',
                   color: Color(0xFF1D2429),
                   fontSize: 14,
@@ -246,13 +250,13 @@ class _HomePageState extends State<HomePage> {
               )),
           //TextButton(onPressed: () {}, child: const Text("Ici searchbar")),
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 border: Border(
                     bottom: BorderSide(
               color: Colors.blueAccent,
               width: 1.0, // Underline thickness
             ))),
-            child: Padding(
+            child: const Padding(
               padding: EdgeInsetsDirectional.fromSTEB(100, 16, 100, 5),
               child: Text(
                 'SkullKing Rooms',
@@ -268,7 +272,8 @@ class _HomePageState extends State<HomePage> {
           Flexible(
             child: FirebaseAnimatedList(
                 query: ref,
-                itemBuilder: (BuildContext context, DataSnapshot snapshot_, Animation<double> animation, int index) {
+                itemBuilder: (BuildContext context, DataSnapshot snapshot_,
+                    Animation<double> animation, int index) {
                   Map rooms = snapshot_.value as Map;
                   rooms['key'] = snapshot_.key;
                   int nb_players = 0;
@@ -279,11 +284,14 @@ class _HomePageState extends State<HomePage> {
                     builder: (BuildContext context, snapshot) {
                       return Card(
                           elevation: 0,
-                          margin: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 0),
-                          color: Color(0xFFF1F4F8),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          margin: const EdgeInsetsDirectional.fromSTEB(
+                              16, 8, 16, 0),
+                          color: const Color(0xFFF1F4F8),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12)),
                           child: Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 0),
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                16, 8, 16, 0),
                             child: InkWell(
                               onTap: () {
                                 if (nb_players < 6) {
@@ -292,7 +300,8 @@ class _HomePageState extends State<HomePage> {
                                     showModalBottomSheet(
                                         context: context,
                                         builder: (BuildContext context) {
-                                          return buildModalScaffold(rooms, joinRoom);
+                                          return buildModalScaffold(
+                                              rooms, joinRoom);
                                         });
                                   } else {
                                     joinRoom(rooms);
@@ -302,17 +311,21 @@ class _HomePageState extends State<HomePage> {
                               child: Container(
                                 width: double.infinity,
                                 decoration: BoxDecoration(
-                                  color: Color(0xFFF1F4F8),
+                                  color: const Color(0xFFF1F4F8),
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(5, 8, 5, 8),
+                                  padding: const EdgeInsetsDirectional.fromSTEB(
+                                      5, 8, 5, 8),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Icon(
-                                        rooms['hasPassword'] ? Icons.lock_outline : Icons.lock_open_outlined,
+                                        rooms['hasPassword']
+                                            ? Icons.lock_outline
+                                            : Icons.lock_open_outlined,
                                         color: Colors.black,
                                         size: 50,
                                       ),
@@ -321,45 +334,55 @@ class _HomePageState extends State<HomePage> {
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
                                             Padding(
-                                              padding: EdgeInsetsDirectional.fromSTEB(10, 12, 10, 0),
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .fromSTEB(10, 12, 10, 0),
                                               child: Row(
                                                 mainAxisSize: MainAxisSize.max,
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                 children: [
                                                   Flexible(
                                                       child: Text(
                                                     rooms['name'],
-                                                    overflow: TextOverflow.ellipsis,
-                                                    style: TextStyle(
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: const TextStyle(
                                                       fontFamily: 'Outfit',
                                                       fontSize: 24,
-                                                      fontWeight: FontWeight.w700,
+                                                      fontWeight:
+                                                          FontWeight.w700,
                                                     ),
                                                   )),
                                                   Text(
                                                     '$nb_players/6',
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                       fontFamily: 'Outfit',
                                                       fontSize: 17,
                                                       color: Color(0xFF57636C),
-                                                      fontWeight: FontWeight.w600,
+                                                      fontWeight:
+                                                          FontWeight.w600,
                                                     ),
                                                   )
                                                 ],
                                               ),
                                             ),
                                             Padding(
-                                              padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 16),
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .fromSTEB(16, 0, 16, 16),
                                               child: Row(
                                                 mainAxisSize: MainAxisSize.max,
                                                 children: [
                                                   Text(
                                                     'Created by ${rooms['owner']}',
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                       fontFamily: 'Outfit',
                                                       color: Color(0xFF57636C),
                                                       fontSize: 12,
-                                                      fontWeight: FontWeight.normal,
+                                                      fontWeight:
+                                                          FontWeight.normal,
                                                     ),
                                                   ),
                                                 ],
@@ -454,7 +477,8 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.symmetric(horizontal: 15.0),
             child: ElevatedButton(
                 onPressed: () {
-                  if (rooms["password"] as String == _textEditingController.text) {
+                  if (rooms["password"] as String ==
+                      _textEditingController.text) {
                     Navigator.of(context).pop();
                     joinRoom(rooms);
                   } else {
@@ -463,7 +487,8 @@ class _HomePageState extends State<HomePage> {
                         builder: (BuildContext context) {
                           return AlertDialog(
                             title: const Text("Erreur"),
-                            content: Text("Le mot de passe est incorrect."),
+                            content:
+                                const Text("Le mot de passe est incorrect."),
                             actions: [
                               TextButton(
                                 child: const Text("ok"),
@@ -509,7 +534,9 @@ class RoomCard extends StatelessWidget {
   bool hasPassword;
   String? password;
 
-  RoomCard(this.roomName, this.ownerName, this.hasPassword, this.password, {Key? key}) : super(key: key);
+  RoomCard(this.roomName, this.ownerName, this.hasPassword, this.password,
+      {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -533,7 +560,8 @@ class RoomCard extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => GameRoomPage(roomName: roomName, roomId: ''),
+                        builder: (context) =>
+                            GameRoomPage(roomName: roomName, roomId: ''),
                       ),
                     );
                   },

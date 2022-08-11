@@ -17,7 +17,7 @@ Future<void> start() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Skull King App',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
@@ -65,149 +65,154 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final _inputController = TextEditingController();
     return Scaffold(
-      backgroundColor: Color(0xFF14181B),
+      backgroundColor: const Color(0xFF14181B),
       body: GestureDetector(
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height * 1,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Color(0xFF14181B),
             image: DecorationImage(
               fit: BoxFit.cover,
               image: AssetImage("images/login_page_image.png"),
             ),
           ),
-          child: Container(
-            width: 100,
-            height: 100,
-            decoration: BoxDecoration(
-              color: Color(0x990F1113),
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: Image.network(
-                  '',
-                ).image,
-              ),
-            ),
-            child: Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(0, 200, 0, 0),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(
-                    child: DefaultTabController(
-                      length: 1,
-                      initialIndex: 0,
-                      child: Column(
-                        children: [
-                          TabBar(
-                            isScrollable: true,
-                            labelColor: Colors.white,
-                            labelStyle: TextStyle(
-                              fontFamily: 'Outfit',
-                              color: Color(0xFF0F1113),
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
+          child: Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(0, 200, 0, 0),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Expanded(
+                  child: DefaultTabController(
+                    length: 1,
+                    initialIndex: 0,
+                    child: Column(
+                      children: [
+                        const TabBar(
+                          isScrollable: true,
+                          labelColor: Colors.white,
+                          labelStyle: TextStyle(
+                            fontFamily: 'Outfit',
+                            color: Color(0xFF0F1113),
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          indicatorColor: Colors.white,
+                          tabs: [
+                            Tab(
+                              text: 'Sign In',
                             ),
-                            indicatorColor: Colors.white,
-                            tabs: [
-                              Tab(
-                                text: 'Sign In',
+                          ],
+                        ),
+                        Expanded(
+                          child: TabBarView(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsetsDirectional.fromSTEB(
+                                    44, 0, 44, 0),
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsetsDirectional
+                                            .fromSTEB(0, 20, 0, 0),
+                                        child: TextFormField(
+                                          controller: _inputController,
+                                          obscureText: false,
+                                          keyboardType: TextInputType.name,
+                                          decoration: InputDecoration(
+                                            labelText: 'Name',
+                                            labelStyle: const TextStyle(
+                                              fontFamily: 'Lexend Deca',
+                                              color: Color(0xFF95A1AC),
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                            hintText: 'Enter your name...',
+                                            hintStyle: const TextStyle(
+                                              fontFamily: 'Lexend Deca',
+                                              color: Color(0xFF95A1AC),
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                            enabledBorder: UnderlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                color: Color(0x00000000),
+                                                width: 1,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            focusedBorder: UnderlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                color: Color(0x00000000),
+                                                width: 1,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            filled: true,
+                                            fillColor: Colors.white,
+                                            contentPadding:
+                                                const EdgeInsetsDirectional
+                                                    .fromSTEB(20, 24, 20, 24),
+                                            prefixIcon: const Icon(
+                                              Icons.tag,
+                                            ),
+                                          ),
+                                          style: const TextStyle(
+                                            fontFamily: 'Outfit',
+                                            color: Color(0xFF0F1113),
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                        ),
+                                      ),
+                                      ValueListenableBuilder<TextEditingValue>(
+                                        valueListenable: _inputController,
+                                        builder: (context, value, child) {
+                                          return Padding(
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .fromSTEB(0, 24, 0, 0),
+                                              child: ElevatedButton(
+                                                child: const Text('Login'),
+                                                style: ElevatedButton.styleFrom(
+                                                  fixedSize:
+                                                      const Size(230, 50),
+                                                  shape:
+                                                      const BeveledRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          5))),
+                                                ),
+                                                onPressed: value.text.isNotEmpty
+                                                    ? () {
+                                                        globals.username =
+                                                            _inputController
+                                                                .text;
+                                                        Navigator.pushNamed(
+                                                            context, '/home');
+                                                      }
+                                                    : null,
+                                              ));
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                ),
                               ),
                             ],
                           ),
-                          Expanded(
-                            child: TabBarView(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(44, 0, 44, 0),
-                                  child: SingleChildScrollView(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-                                          child: TextFormField(
-                                            controller: _inputController,
-                                            obscureText: false,
-                                            keyboardType: TextInputType.name,
-                                            decoration: InputDecoration(
-                                              labelText: 'Name',
-                                              labelStyle: TextStyle(
-                                                fontFamily: 'Lexend Deca',
-                                                color: Color(0xFF95A1AC),
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.normal,
-                                              ),
-                                              hintText: 'Enter your name...',
-                                              hintStyle: TextStyle(
-                                                fontFamily: 'Lexend Deca',
-                                                color: Color(0xFF95A1AC),
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.normal,
-                                              ),
-                                              enabledBorder: UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Color(0x00000000),
-                                                  width: 1,
-                                                ),
-                                                borderRadius: BorderRadius.circular(8),
-                                              ),
-                                              focusedBorder: UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Color(0x00000000),
-                                                  width: 1,
-                                                ),
-                                                borderRadius: BorderRadius.circular(8),
-                                              ),
-                                              filled: true,
-                                              fillColor: Colors.white,
-                                              contentPadding: EdgeInsetsDirectional.fromSTEB(20, 24, 20, 24),
-                                              prefixIcon: Icon(
-                                                Icons.tag,
-                                              ),
-                                            ),
-                                            style: TextStyle(
-                                              fontFamily: 'Outfit',
-                                              color: Color(0xFF0F1113),
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.normal,
-                                            ),
-                                          ),
-                                        ),
-                                        ValueListenableBuilder<TextEditingValue>(
-                                          valueListenable: _inputController,
-                                          builder: (context, value, child) {
-                                            return Padding(
-                                                padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
-                                                child: ElevatedButton(
-                                                  child: Text('Login'),
-                                                  style: ElevatedButton.styleFrom(
-                                                    fixedSize: Size(230, 50),
-                                                    shape: const BeveledRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
-                                                  ),
-                                                  onPressed: value.text.isNotEmpty
-                                                      ? () {
-                                                          globals.username = _inputController.text;
-                                                          Navigator.pushNamed(context, '/home');
-                                                        }
-                                                      : null,
-                                                ));
-                                          },
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
