@@ -88,10 +88,9 @@ class _GameBoardPageState extends State<GameBoardPage> {
             int winnerIndex = gameUtils.getWinner(playedCards);
             startPlayerIndex =
                 (startPlayerIndex + winnerIndex) % players.length;
-            print(winnerIndex);
-            print(gameUtils.deck[playedCards[winnerIndex]]!.type);
-            print(gameUtils.deck[playedCards[winnerIndex]]?.color);
-            print(gameUtils.deck[playedCards[winnerIndex]]?.value);
+            players[playersListInPlayOrder[
+                (startPlayerIndex + playedCards.length) %
+                    playersListInPlayOrder.length]]!['win'] += 1;
             colorForTurn = '';
             isPauseTime = true;
             turn += 1;
@@ -104,6 +103,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
             if (turn - 1 == round) {
               round += 1;
               Future.delayed(const Duration(seconds: 3), () {
+                countPointForAllPlayers();
                 newTurn();
                 isPauseTime = false;
               });
@@ -157,164 +157,105 @@ class _GameBoardPageState extends State<GameBoardPage> {
       my_score = players[globals.userId]!['points'].toString() + ' Points';
     }
     return Scaffold(
-      body: Center(
-          child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 50.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: playersListInPlayOrder
-                        .map((_player) {
-                          Map player = players[_player] as Map;
-                          if (_player == globals.userId) {
-                            return Container(color: Colors.black);
-                          }
-                          String ScoreText = '';
-                          if (player['vote'] != -1 && player['win'] != null) {
-                            ScoreText = 'Win: ' +
-                                player['win'].toString() +
-                                '/' +
-                                player['vote'].toString();
-                          }
-                          String pointText = '';
-                          if (player['points'] != null) {
-                            pointText = player['points'].toString() + ' Points';
-                          }
-                          return Container(
-                              child: Column(
-                                children: [
-                                  Text(player['name']),
-                                  Container(
-                                      margin: const EdgeInsets.all(15.0),
-                                      padding: const EdgeInsets.all(10.0),
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: Colors.blueAccent)),
-                                      child: const Text('5')),
-                                  Text(ScoreText),
-                                  Text(pointText)
-                                ],
-                              ),
-                              decoration: _player ==
-                                      playersListInPlayOrder[(startPlayerIndex +
-                                              playedCards.length) %
-                                          playersListInPlayOrder.length]
-                                  ? BoxDecoration(
-                                      border:
-                                          Border.all(color: Colors.blueAccent))
-                                  : null);
-                        })
-                        .where((element) => element.color != Colors.black)
-                        .toList(),
-                  ),
-                  Wrap(
-                    alignment: WrapAlignment.center,
-                    spacing: -30.0,
-                    runSpacing: -50.0,
-                    children: playedCards.map((card) {
-                      return Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 50),
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage(gameUtils.deck[card]!.link),
-                                fit: BoxFit.cover,
-                              ),
-                              borderRadius: BorderRadius.circular(10)),
-                          child: const SizedBox());
-                    }).toList(),
-                  ),
-                  Wrap(
-                    alignment: WrapAlignment.center,
-                    spacing: -30.0,
-                    runSpacing: -50.0,
-                    children: cards.map((card) {
-                      haveSuit = haveSuitColor(cards);
-                      if (haveSuit &&
-                          gameUtils.deck[card]!.type == 'classic' &&
-                          gameUtils.deck[card]!.color != colorForTurn) {
-                        return InkWell(
-                          child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 30, vertical: 50),
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image:
-                                        AssetImage(gameUtils.deck[card]!.link),
-                                    fit: BoxFit.cover,
-                                    colorFilter: const ColorFilter.mode(
-                                        Colors.grey, BlendMode.saturation),
-                                  ),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: const SizedBox()),
-                          onTap: () {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return Center(
-                                    child: Material(
-                                      type: MaterialType.transparency,
-                                      child: Container(
+        body: Center(
+            child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 50.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: playersListInPlayOrder
+                          .map((_player) {
+                            Map player = players[_player] as Map;
+                            if (_player == globals.userId) {
+                              return Container(color: Colors.black);
+                            }
+                            String ScoreText = '';
+                            if (player['vote'] != -1 && player['win'] != null) {
+                              ScoreText = 'Win: ' +
+                                  player['win'].toString() +
+                                  '/' +
+                                  player['vote'].toString();
+                            }
+                            String pointText = '';
+                            if (player['points'] != null) {
+                              pointText =
+                                  player['points'].toString() + ' Points';
+                            }
+                            return Container(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Column(
+                                  children: [
+                                    Text(player['name']),
+                                    Container(
+                                        margin: const EdgeInsets.all(15.0),
+                                        padding: const EdgeInsets.all(10.0),
                                         decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: Colors.white,
+                                          color: Colors.greenAccent,
                                         ),
-                                        padding: const EdgeInsets.all(15),
-                                        height: 300,
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.7,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: <Widget>[
-                                            Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 60,
-                                                        vertical: 100),
-                                                decoration: BoxDecoration(
-                                                    image: DecorationImage(
-                                                      image: AssetImage(
-                                                          gameUtils.deck[card]!
-                                                              .link),
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10)),
-                                                child: const SizedBox()),
-                                          ],
-                                        ),
-                                      ),
+                                        child: const Text('')),
+                                    Text(ScoreText),
+                                    Text(pointText)
+                                  ],
+                                ),
+                                decoration: _player ==
+                                        playersListInPlayOrder[
+                                            (startPlayerIndex +
+                                                    playedCards.length) %
+                                                playersListInPlayOrder.length]
+                                    ? BoxDecoration(
+                                        color: Colors.grey[200],
+                                        borderRadius: BorderRadius.circular(10))
+                                    : null);
+                          })
+                          .where((element) => element.color != Colors.black)
+                          .toList(),
+                    ),
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: -30.0,
+                      runSpacing: -50.0,
+                      children: playedCards.map((card) {
+                        return Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 30, vertical: 50),
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage(gameUtils.deck[card]!.link),
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: const SizedBox());
+                      }).toList(),
+                    ),
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: -30.0,
+                      runSpacing: -50.0,
+                      children: cards.map((card) {
+                        haveSuit = haveSuitColor(cards);
+                        if (haveSuit &&
+                            gameUtils.deck[card]!.type == 'classic' &&
+                            gameUtils.deck[card]!.color != colorForTurn) {
+                          return InkWell(
+                            child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 30, vertical: 50),
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: AssetImage(
+                                          gameUtils.deck[card]!.link),
+                                      fit: BoxFit.cover,
+                                      colorFilter: const ColorFilter.mode(
+                                          Colors.grey, BlendMode.saturation),
                                     ),
-                                  );
-                                });
-                          },
-                        );
-                      } else {
-                        return InkWell(
-                          child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 30, vertical: 50),
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image:
-                                        AssetImage(gameUtils.deck[card]!.link),
-                                    fit: BoxFit.cover,
-                                  ),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: const SizedBox()),
-                          onTap: () {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  int selected = -1;
-                                  if (gameUtils.deck[card]!.type !=
-                                      'scary-mary') {
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: const SizedBox()),
+                            onTap: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
                                     return Center(
                                       child: Material(
                                         type: MaterialType.transparency,
@@ -351,228 +292,301 @@ class _GameBoardPageState extends State<GameBoardPage> {
                                                           BorderRadius.circular(
                                                               10)),
                                                   child: const SizedBox()),
-                                              if (isPauseTime == false &&
-                                                  playersListInPlayOrder[
-                                                          (startPlayerIndex +
-                                                                  playedCards
-                                                                      .length) %
-                                                              playersListInPlayOrder
-                                                                  .length] ==
-                                                      globals.userId) ...[
-                                                const SizedBox(
-                                                  height: 25,
-                                                ),
-                                                TextButton(
-                                                  child: const Text(
-                                                    'PLAY THIS CARD',
-                                                    style:
-                                                        TextStyle(fontSize: 20),
-                                                  ),
-                                                  style: ButtonStyle(
-                                                    foregroundColor:
-                                                        MaterialStateProperty
-                                                            .all(Colors
-                                                                .lightBlueAccent),
-                                                    backgroundColor:
-                                                        MaterialStateProperty
-                                                            .all(Colors.white),
-                                                    shape: MaterialStateProperty.all<
-                                                            RoundedRectangleBorder>(
-                                                        RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10),
-                                                            side: const BorderSide(
-                                                                color: Colors
-                                                                    .lightBlueAccent))),
-                                                  ),
-                                                  onPressed: () {
-                                                    playCard(card);
-                                                    Navigator.pop(context);
-                                                  },
-                                                )
-                                              ]
                                             ],
                                           ),
                                         ),
                                       ),
                                     );
-                                  } else {
-                                    return StatefulBuilder(
-                                      builder: (context, setState) {
-                                        return Center(
-                                          child: Material(
-                                            type: MaterialType.transparency,
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                color: Colors.white,
-                                              ),
-                                              padding: const EdgeInsets.all(15),
-                                              height: 300,
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.9,
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: <Widget>[
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceEvenly,
-                                                    children: [
-                                                      InkWell(
-                                                          onTap: () {
-                                                            setState(() {
-                                                              selected = 0;
-                                                            });
-                                                          },
-                                                          child: Container(
-                                                              padding: const EdgeInsets
-                                                                      .symmetric(
-                                                                  horizontal:
-                                                                      60,
-                                                                  vertical:
-                                                                      100),
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                      image:
-                                                                          DecorationImage(
-                                                                        image: AssetImage(gameUtils
-                                                                            .deck[card]!
-                                                                            .link),
-                                                                        fit: BoxFit
-                                                                            .cover,
-                                                                      ),
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              10),
-                                                                      border: selected ==
-                                                                              0
-                                                                          ? Border.all(
-                                                                              width: 5,
-                                                                              color: Colors.red)
-                                                                          : null),
-                                                              child: const SizedBox())),
-                                                      InkWell(
-                                                          onTap: () {
-                                                            setState(() {
-                                                              selected = 1;
-                                                            });
-                                                          },
-                                                          child: Container(
-                                                              padding: const EdgeInsets
-                                                                      .symmetric(
-                                                                  horizontal:
-                                                                      60,
-                                                                  vertical:
-                                                                      100),
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                      image:
-                                                                          DecorationImage(
-                                                                        image: AssetImage(gameUtils
-                                                                            .deck[card]!
-                                                                            .link),
-                                                                        fit: BoxFit
-                                                                            .cover,
-                                                                      ),
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              10),
-                                                                      border: selected ==
-                                                                              1
-                                                                          ? Border.all(
-                                                                              width: 5,
-                                                                              color: Colors.red)
-                                                                          : null),
-                                                              child: const SizedBox())),
-                                                    ],
+                                  });
+                            },
+                          );
+                        } else {
+                          return InkWell(
+                            child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 30, vertical: 50),
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: AssetImage(
+                                          gameUtils.deck[card]!.link),
+                                      fit: BoxFit.cover,
+                                    ),
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: const SizedBox()),
+                            onTap: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    int selected = -1;
+                                    if (gameUtils.deck[card]!.type !=
+                                        'scary-mary') {
+                                      return Center(
+                                        child: Material(
+                                          type: MaterialType.transparency,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              color: Colors.white,
+                                            ),
+                                            padding: const EdgeInsets.all(15),
+                                            height: 300,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.7,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: <Widget>[
+                                                Container(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        horizontal: 60,
+                                                        vertical: 100),
+                                                    decoration: BoxDecoration(
+                                                        image: DecorationImage(
+                                                          image: AssetImage(
+                                                              gameUtils
+                                                                  .deck[card]!
+                                                                  .link),
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10)),
+                                                    child: const SizedBox()),
+                                                if (isPauseTime == false &&
+                                                    playersListInPlayOrder[
+                                                            (startPlayerIndex +
+                                                                    playedCards
+                                                                        .length) %
+                                                                playersListInPlayOrder
+                                                                    .length] ==
+                                                        globals.userId) ...[
+                                                  const SizedBox(
+                                                    height: 25,
                                                   ),
-                                                  if (playersListInPlayOrder[
-                                                          (startPlayerIndex +
-                                                                  playedCards
-                                                                      .length) %
-                                                              playersListInPlayOrder
-                                                                  .length] ==
-                                                      globals.userId) ...[
-                                                    const SizedBox(
-                                                      height: 25,
+                                                  TextButton(
+                                                    child: const Text(
+                                                      'PLAY THIS CARD',
+                                                      style: TextStyle(
+                                                          fontSize: 20),
                                                     ),
-                                                    TextButton(
-                                                      child: const Text(
-                                                        'PLAY THIS CARD',
-                                                        style: TextStyle(
-                                                            fontSize: 20),
-                                                      ),
-                                                      style: ButtonStyle(
-                                                        foregroundColor:
-                                                            MaterialStateProperty
-                                                                .all(Colors
-                                                                    .lightBlueAccent),
-                                                        backgroundColor:
-                                                            MaterialStateProperty
-                                                                .all(Colors
-                                                                    .white),
-                                                        shape: MaterialStateProperty.all<
-                                                                RoundedRectangleBorder>(
-                                                            RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10),
-                                                                side: const BorderSide(
-                                                                    color: Colors
-                                                                        .lightBlueAccent))),
-                                                      ),
-                                                      onPressed: () {
-                                                        if (selected == 0) {
-                                                          playCard(66);
-                                                          Navigator.pop(
-                                                              context);
-                                                        }
-                                                        if (selected == 1) {
-                                                          playCard(67);
-                                                          Navigator.pop(
-                                                              context);
-                                                        }
-                                                      },
-                                                    )
-                                                  ]
-                                                ],
-                                              ),
+                                                    style: ButtonStyle(
+                                                      foregroundColor:
+                                                          MaterialStateProperty
+                                                              .all(Colors
+                                                                  .lightBlueAccent),
+                                                      backgroundColor:
+                                                          MaterialStateProperty
+                                                              .all(
+                                                                  Colors.white),
+                                                      shape: MaterialStateProperty.all<
+                                                              RoundedRectangleBorder>(
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10),
+                                                              side: const BorderSide(
+                                                                  color: Colors
+                                                                      .lightBlueAccent))),
+                                                    ),
+                                                    onPressed: () {
+                                                      playCard(card);
+                                                      Navigator.pop(context);
+                                                    },
+                                                  )
+                                                ]
+                                              ],
                                             ),
                                           ),
-                                        );
-                                      },
-                                    );
-                                  }
-                                });
-                          },
-                        );
-                      }
-                    }).toList(),
-                  ),
-                ],
-              ))),
-      bottomSheet: Container(
-          alignment: Alignment.center,
-          height: 50,
-          decoration: const BoxDecoration(
-              gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.white,
-              Colors.blue,
-            ],
-          )),
-          child: Text(my_score)),
-    );
+                                        ),
+                                      );
+                                    } else {
+                                      return StatefulBuilder(
+                                        builder: (context, setState) {
+                                          return Center(
+                                            child: Material(
+                                              type: MaterialType.transparency,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  color: Colors.white,
+                                                ),
+                                                padding:
+                                                    const EdgeInsets.all(15),
+                                                height: 300,
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.9,
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: <Widget>[
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceEvenly,
+                                                      children: [
+                                                        InkWell(
+                                                            onTap: () {
+                                                              setState(() {
+                                                                selected = 0;
+                                                              });
+                                                            },
+                                                            child: Container(
+                                                                padding: const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        60,
+                                                                    vertical:
+                                                                        100),
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                        image:
+                                                                            DecorationImage(
+                                                                          image: AssetImage(gameUtils
+                                                                              .deck[card]!
+                                                                              .link),
+                                                                          fit: BoxFit
+                                                                              .cover,
+                                                                        ),
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                                10),
+                                                                        border: selected ==
+                                                                                0
+                                                                            ? Border.all(
+                                                                                width: 5,
+                                                                                color: Colors.red)
+                                                                            : null),
+                                                                child: const SizedBox())),
+                                                        InkWell(
+                                                            onTap: () {
+                                                              setState(() {
+                                                                selected = 1;
+                                                              });
+                                                            },
+                                                            child: Container(
+                                                                padding: const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        60,
+                                                                    vertical:
+                                                                        100),
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                        image:
+                                                                            DecorationImage(
+                                                                          image: AssetImage(gameUtils
+                                                                              .deck[card]!
+                                                                              .link),
+                                                                          fit: BoxFit
+                                                                              .cover,
+                                                                        ),
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                                10),
+                                                                        border: selected ==
+                                                                                1
+                                                                            ? Border.all(
+                                                                                width: 5,
+                                                                                color: Colors.red)
+                                                                            : null),
+                                                                child: const SizedBox())),
+                                                      ],
+                                                    ),
+                                                    if (playersListInPlayOrder[
+                                                            (startPlayerIndex +
+                                                                    playedCards
+                                                                        .length) %
+                                                                playersListInPlayOrder
+                                                                    .length] ==
+                                                        globals.userId) ...[
+                                                      const SizedBox(
+                                                        height: 25,
+                                                      ),
+                                                      TextButton(
+                                                        child: const Text(
+                                                          'PLAY THIS CARD',
+                                                          style: TextStyle(
+                                                              fontSize: 20),
+                                                        ),
+                                                        style: ButtonStyle(
+                                                          foregroundColor:
+                                                              MaterialStateProperty
+                                                                  .all(Colors
+                                                                      .lightBlueAccent),
+                                                          backgroundColor:
+                                                              MaterialStateProperty
+                                                                  .all(Colors
+                                                                      .white),
+                                                          shape: MaterialStateProperty.all<
+                                                                  RoundedRectangleBorder>(
+                                                              RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10),
+                                                                  side: const BorderSide(
+                                                                      color: Colors
+                                                                          .lightBlueAccent))),
+                                                        ),
+                                                        onPressed: () {
+                                                          if (selected == 0) {
+                                                            playCard(66);
+                                                            Navigator.pop(
+                                                                context);
+                                                          }
+                                                          if (selected == 1) {
+                                                            playCard(67);
+                                                            Navigator.pop(
+                                                                context);
+                                                          }
+                                                        },
+                                                      )
+                                                    ]
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    }
+                                  });
+                            },
+                          );
+                        }
+                      }).toList(),
+                    ),
+                  ],
+                ))),
+        bottomSheet: Container(
+            alignment: Alignment.center,
+            height: 45,
+            decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(10)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(my_score),
+                Text(players[globals.userId] != null &&
+                        players[globals.userId]!["vote"] != null &&
+                        players[globals.userId]!["win"] != null &&
+                        players[globals.userId]!["vote"] != -1
+                    ? (players[globals.userId]!["win"].toString() +
+                        "/" +
+                        players[globals.userId]!["vote"].toString() +
+                        " win")
+                    : "")
+              ],
+            )));
   }
 
   bool haveSuitColor(List cards) {
